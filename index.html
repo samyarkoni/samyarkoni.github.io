@@ -1,0 +1,641 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Samuel Yarkoni: Computer Science, Data Science and Economics at Rutgers Honors College. Bayesian modeling, research and software projects.">
+<title>Samuel Yarkoni</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+body { margin: 0; }
+[hidden] { display: none !important; }
+img { max-width: 100%; }
+html { scroll-behavior: smooth; }
+/* Layout: single measured column on cool "lab notebook" paper; the hero pairs the name with a live MCMC sampler, every later section is data-driven from one JS profile object. */
+:root {
+  --paper: #f2f4f8;
+  --panel: #ffffff;
+  --ink: #131a2e;
+  --muted: #56607a;
+  --rule: #d6dbe6;
+  --accent: #2743c9;      /* cobalt: links, controls, trace */
+  --accent-soft: #e3e8fb;
+  --warm: #c77a00;        /* amber: posterior / highlights */
+  --warm-soft: #fbefd9;
+  --good: #1d7a4c;
+  --bad: #b3261e;
+  --display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --body: "Public Sans", "Helvetica Neue", Arial, system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --step--1: 0.82rem; --step-0: 1rem; --step-1: 1.2rem; --step-2: 1.6rem; --step-3: clamp(2.4rem, 6vw, 4.2rem);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0d1220; --panel: #151c30; --ink: #e7ebf4; --muted: #9aa4bd; --rule: #283252;
+    --accent: #8ea3ff; --accent-soft: #1f2a52; --warm: #f2b441; --warm-soft: #3a2c10;
+    --good: #5fd39a; --bad: #ff8a80; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0d1220; --panel: #151c30; --ink: #e7ebf4; --muted: #9aa4bd; --rule: #283252;
+  --accent: #8ea3ff; --accent-soft: #1f2a52; --warm: #f2b441; --warm-soft: #3a2c10;
+  --good: #5fd39a; --bad: #ff8a80; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--paper); color: var(--ink);
+  font-family: var(--body); font-size: var(--step-0); line-height: 1.6;
+  background-image: linear-gradient(var(--rule) 1px, transparent 1px), linear-gradient(90deg, var(--rule) 1px, transparent 1px);
+  background-size: 32px 32px; background-attachment: fixed;
+}
+body::before { content: ""; position: fixed; inset: 0; background: var(--paper); opacity: .86; pointer-events: none; z-index: -1; }
+a { color: var(--accent); text-underline-offset: 3px; }
+a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+h1, h2, h3 { font-family: var(--display); text-wrap: balance; line-height: 1.1; margin: 0; }
+h2 { font-size: var(--step-2); font-weight: 700; letter-spacing: -0.01em; }
+h3 { font-size: var(--step-1); font-weight: 700; }
+p { margin: 0; }
+.wrap { max-width: 1080px; margin: 0 auto; padding-inline: 20px; }
+.label { font-family: var(--mono); font-size: var(--step--1); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+
+/* nav */
+header.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10; background: color-mix(in srgb, var(--paper) 88%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--rule); }
+header.top .wrap { display: flex; align-items: center; gap: 16px; padding-block: 10px; }
+.mark { font-family: var(--display); font-weight: 800; font-size: 1.15rem; text-decoration: none; color: var(--ink); }
+.mark span { color: var(--warm); }
+nav.links { display: flex; gap: 18px; margin-left: auto; flex-wrap: wrap; }
+nav.links a { color: var(--muted); text-decoration: none; font-size: .92rem; }
+nav.links a:hover { color: var(--ink); }
+.iconbtn { border: 1px solid var(--rule); background: var(--panel); color: var(--ink); border-radius: 999px; padding: 4px 10px; font: 500 .8rem var(--mono); cursor: pointer; }
+@media (max-width: 640px) { nav.links { display: none; } .iconbtn { margin-left: auto; } }
+
+/* hero */
+.hero { display: grid; grid-template-columns: 1.05fr 1fr; gap: 40px; align-items: center; padding-block: 56px 40px; }
+.hero > * { min-width: 0; }
+.hero h1 { font-size: var(--step-3); font-weight: 800; letter-spacing: -0.03em; }
+.hero h1 em { font-style: normal; color: var(--accent); }
+.hero .lede { font-size: var(--step-1); color: var(--muted); max-width: 34ch; margin-top: 16px; }
+.rotator { font-family: var(--mono); color: var(--ink); margin-top: 20px; font-size: .95rem; min-height: 1.6em; }
+.rotator b { color: var(--warm); font-weight: 500; }
+.stats { display: flex; gap: 28px; flex-wrap: wrap; margin-top: 28px; }
+.stats div { display: grid; }
+.stats strong { font-family: var(--display); font-size: 1.7rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+.stats span { font-size: .85rem; color: var(--muted); }
+.cta { display: flex; gap: 12px; margin-top: 28px; flex-wrap: wrap; }
+.btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 8px; font-weight: 600; text-decoration: none; border: 1px solid var(--accent); cursor: pointer; font-family: var(--body); font-size: .95rem; }
+.btn.primary { background: var(--accent); color: var(--paper); }
+.btn.ghost { background: transparent; color: var(--accent); }
+
+.sampler { background: var(--panel); border: 1px solid var(--rule); border-radius: 12px; padding: 16px; box-shadow: 0 18px 40px -28px rgba(19, 26, 46, .45); }
+.sampler .head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.sampler canvas { width: 100%; display: block; }
+#trace { height: 110px; margin-top: 10px; }
+#hist { height: 150px; margin-top: 6px; }
+.readout { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 10px; border-top: 1px dashed var(--rule); padding-top: 10px; }
+.readout div { display: grid; }
+.readout strong { font-family: var(--mono); font-weight: 500; font-variant-numeric: tabular-nums; }
+.controls { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; margin-top: 10px; font-size: .88rem; color: var(--muted); }
+.controls label { display: flex; gap: 8px; align-items: center; }
+.controls input[type=range] { width: 110px; accent-color: var(--accent); }
+@media (max-width: 860px) { .hero { grid-template-columns: 1fr; padding-block: 36px 24px; } }
+
+/* sections */
+section.block { padding-block: 48px; border-top: 1px solid var(--rule); }
+.sechead { display: flex; justify-content: space-between; align-items: end; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; }
+.sechead p { color: var(--muted); max-width: 52ch; }
+
+.chips { display: flex; gap: 8px; flex-wrap: wrap; }
+.chip { border: 1px solid var(--rule); background: var(--panel); color: var(--ink); padding: 5px 12px; border-radius: 999px; font: 500 .82rem var(--mono); cursor: pointer; transition: background .15s, border-color .15s; }
+.chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--paper); }
+.chip.hit { background: var(--warm-soft); border-color: var(--warm); }
+
+.projects { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; }
+.proj { background: var(--panel); border: 1px solid var(--rule); border-radius: 10px; padding: 20px; display: grid; grid-template-rows: auto auto 1fr auto; gap: 10px; transition: opacity .25s, transform .25s, border-color .2s; min-width: 0; }
+.proj:hover { border-color: var(--accent); }
+.proj.dim { opacity: .28; transform: scale(.985); }
+.proj .meta { display: flex; justify-content: space-between; gap: 10px; }
+.proj ul { margin: 0; padding-left: 18px; color: var(--muted); font-size: .93rem; }
+.proj ul li + li { margin-top: 4px; }
+.proj .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.tag { font: .74rem var(--mono); padding: 2px 8px; border-radius: 4px; background: var(--accent-soft); color: var(--ink); }
+.tag.on { background: var(--warm); color: var(--paper); }
+.proj .foot { display: flex; justify-content: space-between; align-items: center; gap: 10px; font-size: .88rem; }
+.empty { color: var(--muted); font-style: italic; }
+
+/* EV lab */
+.lab { display: grid; grid-template-columns: 1fr 1.1fr; gap: 28px; background: var(--panel); border: 1px solid var(--rule); border-radius: 12px; padding: 24px; }
+.lab > * { min-width: 0; }
+.field { display: grid; gap: 6px; margin-bottom: 18px; }
+.field label { font-weight: 600; font-size: .92rem; }
+.field .row { display: flex; gap: 12px; align-items: center; }
+.field input[type=range] { flex: 1; accent-color: var(--accent); min-width: 0; }
+.field input[type=number] { width: 110px; padding: 8px 10px; border: 1px solid var(--rule); border-radius: 6px; background: var(--paper); color: var(--ink); font: 500 1rem var(--mono); }
+.verdict { font-family: var(--display); font-size: 1.5rem; font-weight: 700; }
+.verdict.pos { color: var(--good); } .verdict.neg { color: var(--bad); }
+.kv { display: grid; grid-template-columns: 1fr auto; gap: 8px 16px; margin-top: 14px; font-size: .93rem; }
+.kv dt { color: var(--muted); } .kv dd { margin: 0; font-family: var(--mono); font-variant-numeric: tabular-nums; text-align: right; }
+.bar { position: relative; height: 26px; border-radius: 6px; background: var(--accent-soft); margin-top: 16px; overflow: hidden; }
+.bar i { position: absolute; top: 0; bottom: 0; width: 2px; }
+.bar .imp { background: var(--ink); } .bar .mod { background: var(--warm); width: 4px; }
+.bar .gap { position: absolute; top: 0; bottom: 0; opacity: .35; }
+.legend { display: flex; gap: 16px; font-size: .8rem; color: var(--muted); margin-top: 6px; flex-wrap: wrap; }
+.legend span::before { content: ""; display: inline-block; width: 10px; height: 10px; margin-right: 6px; vertical-align: -1px; border-radius: 2px; background: var(--c); }
+.note { font-size: .82rem; color: var(--muted); margin-top: 14px; }
+@media (max-width: 760px) { .lab { grid-template-columns: 1fr; padding: 18px; } }
+
+/* timeline */
+.timeline { display: grid; gap: 0; }
+.role { display: grid; grid-template-columns: 170px 1fr; gap: 24px; padding-block: 20px; border-bottom: 1px dashed var(--rule); }
+.role:last-child { border-bottom: 0; }
+.role > * { min-width: 0; }
+.role .when { font-family: var(--mono); font-size: .85rem; color: var(--muted); }
+.role .when .live { display: inline-block; margin-top: 6px; padding: 1px 8px; border-radius: 999px; background: var(--warm-soft); color: var(--ink); font-size: .75rem; }
+.role h3 { font-size: 1.1rem; }
+.role .org { color: var(--muted); font-size: .92rem; margin-top: 2px; }
+.role .flag { font-weight: 600; font-size: .88rem; color: var(--warm); margin-top: 6px; }
+.role ul { margin: 10px 0 0; padding-left: 18px; }
+.role ul li + li { margin-top: 4px; }
+.more { background: none; border: 0; color: var(--accent); font: 600 .88rem var(--body); cursor: pointer; padding: 0; margin-top: 8px; }
+@media (max-width: 640px) { .role { grid-template-columns: 1fr; gap: 6px; } }
+
+/* education + skills */
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+.two > * { min-width: 0; }
+.edu { background: var(--panel); border: 1px solid var(--rule); border-radius: 10px; padding: 22px; }
+.edu .gpa { display: flex; align-items: baseline; gap: 10px; margin-top: 14px; }
+.edu .gpa strong { font-family: var(--display); font-size: 2.4rem; font-weight: 800; }
+.meter { height: 6px; background: var(--accent-soft); border-radius: 3px; margin-top: 6px; overflow: hidden; }
+.meter span { display: block; height: 100%; background: var(--accent); }
+.edu ul { padding-left: 18px; margin: 14px 0 0; color: var(--muted); font-size: .93rem; }
+.courses { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+.skillgroup + .skillgroup { margin-top: 18px; }
+.skillgroup .label { margin-bottom: 8px; display: block; }
+.hint { font-size: .85rem; color: var(--muted); margin-top: 16px; }
+@media (max-width: 760px) { .two { grid-template-columns: 1fr; } }
+
+.beyond { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.beyond > div { min-width: 0; }
+.beyond p { color: var(--muted); margin-top: 8px; }
+@media (max-width: 760px) { .beyond { grid-template-columns: 1fr; } }
+
+/* contact */
+.contact { display: grid; grid-template-columns: 1.2fr 1fr; gap: 28px; align-items: center; }
+.contact > * { min-width: 0; }
+.contact h2 { font-size: clamp(1.8rem, 4vw, 2.6rem); }
+.contact p { color: var(--muted); margin-top: 10px; max-width: 46ch; }
+.clist { display: grid; gap: 10px; }
+.citem { display: flex; justify-content: space-between; align-items: center; gap: 12px; background: var(--panel); border: 1px solid var(--rule); border-radius: 8px; padding: 12px 14px; }
+.citem .v { font-family: var(--mono); font-size: .9rem; overflow-wrap: anywhere; user-select: all; }
+@media (max-width: 760px) { .contact { grid-template-columns: 1fr; } }
+footer { padding-block: 28px 40px; color: var(--muted); font-size: .85rem; border-top: 1px solid var(--rule); }
+
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="mark" href="#top">S<span>.</span>Yarkoni</a>
+    <nav class="links" aria-label="Sections">
+      <a href="#projects">Projects</a>
+      <a href="#lab">EV Lab</a>
+      <a href="#experience">Experience</a>
+      <a href="#skills">Skills</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <button class="iconbtn" id="themeBtn" type="button" aria-label="Toggle color theme">theme</button>
+  </div>
+</header>
+
+<main id="top">
+  <div class="wrap hero">
+    <div>
+      <p class="label">CS · Data Science · Economics — Rutgers Honors College, '28</p>
+      <h1>Samuel Yarkoni builds models that turn <em>noisy data</em> into decisions.</h1>
+      <p class="lede">I work where statistics meets code: Bayesian sports models, genomic data pipelines, and econometric research.</p>
+      <p class="rotator" aria-live="polite">currently: <b id="rot">sampling NFL win probabilities with MCMC</b></p>
+      <div class="stats">
+        <div><strong class="mono">3.97</strong><span>GPA, Dean's List</span></div>
+        <div><strong class="mono">1 / 36</strong><span>CSI fellows from 550+</span></div>
+        <div><strong class="mono">100+</strong><span>students mentored</span></div>
+      </div>
+      <div class="cta">
+        <a class="btn primary" href="#projects">See the work</a>
+        <a class="btn ghost" href="https://github.com/samyarkoni" target="_blank" rel="noopener">GitHub ↗</a>
+      </div>
+    </div>
+
+    <figure class="sampler" aria-label="Live Metropolis–Hastings sampler estimating a team's win probability">
+      <div class="head">
+        <span class="label">Live posterior · Metropolis–Hastings</span>
+        <button class="iconbtn" id="resetBtn" type="button">restart chain</button>
+      </div>
+      <canvas id="trace" aria-hidden="true"></canvas>
+      <canvas id="hist" aria-hidden="true"></canvas>
+      <div class="readout">
+        <div><span class="label">draws</span><strong id="rN">0</strong></div>
+        <div><span class="label">E[p]</span><strong id="rMean">—</strong></div>
+        <div><span class="label">95% CrI</span><strong id="rCI">—</strong></div>
+      </div>
+      <div class="controls">
+        <label for="wins">wins <input id="wins" type="range" min="0" max="17" value="11"><span class="mono" id="winsV">11</span></label>
+        <label for="losses">losses <input id="losses" type="range" min="0" max="17" value="6"><span class="mono" id="lossV">6</span></label>
+      </div>
+    </figure>
+  </div>
+
+  <section class="block" id="projects">
+    <div class="wrap">
+      <div class="sechead">
+        <div>
+          <p class="label">Selected work</p>
+          <h2>Projects &amp; research</h2>
+        </div>
+        <div class="chips" id="filters" role="group" aria-label="Filter projects"></div>
+      </div>
+      <div class="projects" id="projGrid"></div>
+      <p class="empty" id="projEmpty" hidden>No projects match that filter.</p>
+    </div>
+  </section>
+
+  <section class="block" id="lab">
+    <div class="wrap">
+      <div class="sechead">
+        <div>
+          <p class="label">Interactive demo · the idea behind Quantum Route</p>
+          <h2>Is this bet mispriced?</h2>
+        </div>
+        <p>Quantum Route compares model-implied probabilities with sportsbook prices. Try it with your own numbers.</p>
+      </div>
+      <div class="lab">
+        <div>
+          <div class="field">
+            <label for="pModel">Model win probability</label>
+            <div class="row"><input id="pModel" type="range" min="1" max="99" value="58"><span class="mono" id="pModelV">58%</span></div>
+          </div>
+          <div class="field">
+            <label for="odds">Sportsbook price (American odds)</label>
+            <div class="row"><input id="odds" type="number" value="-110" step="5"><span class="label" id="oddsHint">e.g. -110, +150</span></div>
+          </div>
+          <div class="field">
+            <label for="stake">Stake ($)</label>
+            <div class="row"><input id="stake" type="number" value="100" min="1" step="10"></div>
+          </div>
+        </div>
+        <div>
+          <p class="label">Result</p>
+          <p class="verdict" id="verdict">—</p>
+          <div class="bar" aria-hidden="true"><span class="gap" id="gapBar"></span><i class="imp" id="impMark"></i><i class="mod" id="modMark"></i></div>
+          <div class="legend"><span style="--c: var(--ink)">book implied</span><span style="--c: var(--warm)">model</span></div>
+          <dl class="kv">
+            <dt>Book implied probability</dt><dd id="oImp">—</dd>
+            <dt>Edge (model − book)</dt><dd id="oEdge">—</dd>
+            <dt>Expected value</dt><dd id="oEV">—</dd>
+            <dt>Kelly fraction of bankroll</dt><dd id="oKelly">—</dd>
+          </dl>
+          <p class="note">A teaching demo with sample numbers, not betting advice.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="experience">
+    <div class="wrap">
+      <div class="sechead">
+        <div>
+          <p class="label">Research &amp; work</p>
+          <h2>Experience</h2>
+        </div>
+      </div>
+      <div class="timeline" id="timeline"></div>
+    </div>
+  </section>
+
+  <section class="block" id="skills">
+    <div class="wrap two">
+      <div class="edu">
+        <p class="label">Education</p>
+        <h3 style="margin-top:8px">Rutgers University — Honors College</h3>
+        <p style="color:var(--muted);margin-top:4px">B.S. Computer Science, Data Science &amp; Economics · expected May 2028</p>
+        <div class="gpa"><strong class="mono">3.97</strong><span class="label">/ 4.00 GPA</span></div>
+        <div class="meter" aria-hidden="true"><span style="width:99.25%"></span></div>
+        <ul>
+          <li>Rutgers Excellence Award</li>
+          <li>Data101 Hall of Fame</li>
+          <li>Omicron Delta Epsilon (economics honor society)</li>
+          <li>RU Campus President</li>
+        </ul>
+        <p class="label" style="margin-top:18px">Coursework</p>
+        <div class="courses" id="courses"></div>
+      </div>
+      <div>
+        <p class="label">Toolkit</p>
+        <h2 style="margin-top:8px;margin-bottom:18px">Skills</h2>
+        <div id="skillGroups"></div>
+        <p class="hint">Tap a skill to highlight the projects that use it.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="wrap">
+      <p class="label">Beyond the code</p>
+      <h2 style="margin-block:8px 22px">Off the keyboard</h2>
+      <div class="beyond">
+        <div><h3>Involvement</h3><p>Quant Finance Club, HackMIT, MHacks, SEEDS2S, Chabad, intramural soccer, and the Cheese Club.</p></div>
+        <div><h3>Languages</h3><p>Conversational Spanish and beginner Hebrew, alongside Python, R, SQL, Java, C and RISC-V assembly.</p></div>
+        <div><h3>Interests</h3><p>Soccer, basketball, sprinting, the NFL, poker, viola, cooking, and speed-solving the Rubik's Cube.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="contact">
+    <div class="wrap contact">
+      <div>
+        <p class="label">Contact</p>
+        <h2>Looking for internships in quant, data science and software.</h2>
+        <p>Based in Hillsborough and New Brunswick, NJ. Email is the fastest way to reach me.</p>
+      </div>
+      <div class="clist">
+        <div class="citem"><span class="v" id="emailV">samyarkoni@gmail.com</span><button class="iconbtn" id="copyBtn" type="button">copy</button></div>
+        <div class="citem"><span class="v">linkedin.com/in/syark</span><a href="https://www.linkedin.com/in/syark" target="_blank" rel="noopener">open ↗</a></div>
+        <div class="citem"><span class="v">github.com/samyarkoni</span><a href="https://github.com/samyarkoni" target="_blank" rel="noopener">open ↗</a></div>
+      </div>
+    </div>
+  </section>
+</main>
+<footer><div class="wrap">© 2026 Samuel Yarkoni · Every chart on this page is computed live in your browser.</div></footer>
+
+<script>
+/* ---------- content ---------- */
+const PROFILE = {
+  rotator: [
+    "sampling NFL win probabilities with MCMC",
+    "clustering 130+ yeast strains by evolutionary predictability",
+    "writing a game-theory paper for the RECONS Review",
+    "teaching Python and Java at The Coder School"
+  ],
+  projects: [
+    { title: "Quantum Route", role: "Founder & lead developer", cat: ["Quant", "Sports"], year: "2026",
+      points: ["Bayesian inference engine that uses MCMC sampling to refine NFL win-probability models.",
+               "Expected-value and simulation framework that flags sportsbook markets the model thinks are mispriced."],
+      skills: ["Python", "pandas", "NumPy", "Bayesian inference", "MCMC", "Simulation"],
+      link: "https://github.com/samyarkoni/Quantum-Route", linkText: "Source" },
+    { title: "Evolutionary Predictability", role: "CSI Research Fellow", cat: ["Research"], year: "2026",
+      points: ["Python pipelines that parse and group large genomic datasets from multi-cohort evolution experiments.",
+               "Jaccard similarity and Shannon entropy feeding complete-linkage hierarchical clustering of 130+ strains."],
+      skills: ["Python", "pandas", "NumPy", "scipy", "Clustering", "Regex"],
+      link: "https://github.com/samyarkoni/Predicting-Evolutionary-Biology-Public", linkText: "Source" },
+    { title: "Game Theory × Behavioral Econ", role: "RECONS Research Fellow", cat: ["Research", "Quant"], year: "2026",
+      points: ["Econometric study at the intersection of game theory and behavioral economics.",
+               "Paper in progress for the RECONS Review, with weekly faculty reviews."],
+      skills: ["Econometrics", "R", "Game theory", "LaTeX"],
+      link: null, linkText: "In progress" },
+    { title: "Must-See NFL Trend", role: "Sports analytics", cat: ["Sports"], year: "2026",
+      points: ["Measures home-field advantage and how stadium wind conditions change NFL game outcomes.",
+               "Statistical analysis and visualization in R."],
+      skills: ["R", "Regression", "Data visualization"],
+      link: "https://github.com/samyarkoni/-Must-See-NFL-Trend-", linkText: "Source" },
+    { title: "Nyte", role: "iOS app", cat: ["Apps"], year: "2026",
+      points: ["“Your subconscious friend”: a Swift app project.",
+               "Native iOS development alongside the data work."],
+      skills: ["Swift", "Git"],
+      link: "https://github.com/samyarkoni/Nyte", linkText: "Source" }
+  ],
+  experience: [
+    { title: "Research Fellow, Evolutionary Predictability", org: "Rutgers Chancellor Signature Initiatives (CSI) · Piscataway, NJ",
+      when: "May 2026 – Present", live: true, flag: "6% acceptance rate: 1 of 36 selected from 550+ applicants",
+      points: ["Engineered Python data pipelines that automate parsing, filtering and grouping of large-scale genomic datasets from multi-cohort evolution experiments.",
+               "Built regex-driven cleaning that maps 130+ ancestral and environmental yeast strains and filters out synonymous mutations and experimental anomalies.",
+               "Computed Jaccard similarity matrices and Shannon entropy to build complete-linkage agglomerative clustering profiles of evolutionary predictability.",
+               "Gave a lightning talk to 80+ research and industry professionals and presented at the CSI & SURE symposium to 200+."] },
+    { title: "Research Fellow, Fall 2026 Cohort", org: "Rutgers Economics Society (RECONS) · Piscataway, NJ",
+      when: "Sep 2026 – Present", live: true,
+      points: ["Applying econometric and statistical methods to a question at the intersection of game theory and behavioral economics.",
+               "Refining model specifications in weekly reviews with a faculty advisor and an interdisciplinary cohort.",
+               "Writing up results as a formal paper for publication in the RECONS Review."] },
+    { title: "Programming Instructor", org: "The Coder School · Montgomery, NJ",
+      when: "Jul 2025 – Present", live: true,
+      points: ["Mentored 100+ students through project-based work in Python, Java and Scratch.",
+               "Wrote 10+ lesson plans tailored to student interests, raising participation and project completion."] }
+  ],
+  skills: {
+    "Languages": ["Python", "R", "SQL", "Java", "C", "RISC-V Assembly", "Swift"],
+    "Libraries": ["pandas", "NumPy", "scipy", "scikit-learn", "matplotlib", "seaborn"],
+    "Methods": ["Bayesian inference", "MCMC", "Simulation", "Clustering", "Econometrics", "Regression", "Game theory"],
+    "Tools": ["Git", "GitHub", "Claude Code", "LaTeX", "Microsoft Office"]
+  },
+  courses: ["Data Structures", "Algorithms", "Computer Architecture", "Discrete Math", "Linear Algebra", "Probability", "Game Theory", "Econometrics", "Intermediate Econ Analysis"]
+};
+
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const css = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+
+/* ---------- theme ---------- */
+(function theme() {
+  const root = document.documentElement;
+  try { const t = localStorage.getItem("sy-theme"); if (t) root.dataset.theme = t; } catch (e) {}
+  const isDark = () => root.dataset.theme ? root.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+  const label = () => { $("themeBtn").textContent = isDark() ? "☀ light" : "☾ dark"; };
+  label();
+  $("themeBtn").addEventListener("click", () => {
+    root.dataset.theme = isDark() ? "light" : "dark";
+    try { localStorage.setItem("sy-theme", root.dataset.theme); } catch (e) {}
+    label(); drawSampler();
+  });
+})();
+
+/* ---------- rotator ---------- */
+(function rotator() {
+  let i = 0;
+  if (reduced) return;
+  setInterval(() => {
+    i = (i + 1) % PROFILE.rotator.length;
+    $("rot").textContent = PROFILE.rotator[i];
+  }, 3200);
+})();
+
+/* ---------- projects + skill cross-linking ---------- */
+let activeCat = "All", activeSkill = null;
+function renderFilters() {
+  const cats = ["All", ...new Set(PROFILE.projects.flatMap(p => p.cat))];
+  $("filters").innerHTML = cats.map(c => `<button class="chip" type="button" data-cat="${esc(c)}" aria-pressed="${c === activeCat}">${esc(c)}</button>`).join("");
+}
+function renderProjects() {
+  let shown = 0;
+  $("projGrid").innerHTML = PROFILE.projects.map(p => {
+    const catOk = activeCat === "All" || p.cat.includes(activeCat);
+    if (!catOk) return "";
+    shown++;
+    const dim = activeSkill && !p.skills.includes(activeSkill);
+    return `<article class="proj${dim ? " dim" : ""}">
+      <div class="meta"><span class="label">${esc(p.cat.join(" · "))}</span><span class="label">${esc(p.year)}</span></div>
+      <div><h3>${esc(p.title)}</h3><p style="color:var(--muted);font-size:.9rem">${esc(p.role)}</p></div>
+      <ul>${p.points.map(t => `<li>${esc(t)}</li>`).join("")}</ul>
+      <div class="foot">
+        <div class="tags">${p.skills.map(s => `<span class="tag${s === activeSkill ? " on" : ""}">${esc(s)}</span>`).join("")}</div>
+        ${p.link ? `<a href="${esc(p.link)}" target="_blank" rel="noopener">${esc(p.linkText)}&nbsp;↗</a>` : `<span class="label">${esc(p.linkText)}</span>`}
+      </div>
+    </article>`;
+  }).join("");
+  $("projEmpty").hidden = shown > 0;
+}
+function renderSkills() {
+  const used = new Set(PROFILE.projects.flatMap(p => p.skills));
+  $("skillGroups").innerHTML = Object.entries(PROFILE.skills).map(([g, list]) => `
+    <div class="skillgroup"><span class="label">${esc(g)}</span>
+      <div class="chips">${list.map(s => `<button class="chip${used.has(s) && s === activeSkill ? " hit" : ""}" type="button" data-skill="${esc(s)}" aria-pressed="false">${esc(s)}</button>`).join("")}</div>
+    </div>`).join("");
+  $("courses").innerHTML = PROFILE.courses.map(c => `<span class="tag">${esc(c)}</span>`).join("");
+}
+$("filters").addEventListener("click", e => {
+  const b = e.target.closest("[data-cat]"); if (!b) return;
+  activeCat = b.dataset.cat; renderFilters(); renderProjects();
+});
+$("skillGroups").addEventListener("click", e => {
+  const b = e.target.closest("[data-skill]"); if (!b) return;
+  activeSkill = activeSkill === b.dataset.skill ? null : b.dataset.skill;
+  activeCat = "All"; renderFilters(); renderSkills(); renderProjects();
+  if (activeSkill) document.getElementById("projects").scrollIntoView({ behavior: reduced ? "auto" : "smooth" });
+});
+
+/* ---------- experience ---------- */
+function renderExperience() {
+  $("timeline").innerHTML = PROFILE.experience.map((r, i) => `
+    <div class="role">
+      <div class="when">${esc(r.when)}${r.live ? `<br><span class="live">current</span>` : ""}</div>
+      <div>
+        <h3>${esc(r.title)}</h3>
+        <p class="org">${esc(r.org)}</p>
+        ${r.flag ? `<p class="flag">${esc(r.flag)}</p>` : ""}
+        <ul>${r.points.map((t, j) => `<li${j >= 2 ? ' data-extra hidden' : ""}>${esc(t)}</li>`).join("")}</ul>
+        ${r.points.length > 2 ? `<button class="more" type="button" data-i="${i}" aria-expanded="false">Show ${r.points.length - 2} more</button>` : ""}
+      </div>
+    </div>`).join("");
+}
+$("timeline").addEventListener("click", e => {
+  const b = e.target.closest(".more"); if (!b) return;
+  const open = b.getAttribute("aria-expanded") !== "true";
+  b.closest("div").querySelectorAll("[data-extra]").forEach(li => li.hidden = !open);
+  b.setAttribute("aria-expanded", open);
+  b.textContent = open ? "Show less" : `Show ${b.closest("div").querySelectorAll("[data-extra]").length} more`;
+});
+
+/* ---------- EV lab ---------- */
+function impliedFromAmerican(o) { return o < 0 ? -o / (-o + 100) : 100 / (o + 100); }
+function netPayout(o) { return o < 0 ? 100 / -o : o / 100; } // profit per $1 staked
+const pct = (x, d = 1) => (x * 100).toFixed(d) + "%";
+function updateLab() {
+  const p = +$("pModel").value / 100;
+  $("pModelV").textContent = pct(p, 0);
+  const o = +$("odds").value, stake = Math.max(0, +$("stake").value || 0);
+  const valid = Number.isFinite(o) && Math.abs(o) >= 100;
+  $("oddsHint").textContent = valid ? (o < 0 ? "favorite" : "underdog") : "use ≤ -100 or ≥ +100";
+  if (!valid) { ["oImp", "oEdge", "oEV", "oKelly"].forEach(id => $(id).textContent = "—"); $("verdict").textContent = "Enter valid odds"; $("verdict").className = "verdict"; return; }
+  const q = impliedFromAmerican(o), b = netPayout(o);
+  const ev = stake * (p * b - (1 - p));
+  const kelly = Math.max(0, (b * p - (1 - p)) / b);
+  $("oImp").textContent = pct(q);
+  $("oEdge").textContent = (p - q >= 0 ? "+" : "") + ((p - q) * 100).toFixed(1) + " pts";
+  $("oEV").textContent = (ev >= 0 ? "+$" : "−$") + Math.abs(ev).toFixed(2);
+  $("oKelly").textContent = pct(kelly);
+  const pos = ev > 0;
+  $("verdict").textContent = pos ? "Positive EV: the model sees value" : "Negative EV: pass on this one";
+  $("verdict").className = "verdict " + (pos ? "pos" : "neg");
+  $("impMark").style.left = `calc(${q * 100}% - 1px)`;
+  $("modMark").style.left = `calc(${p * 100}% - 2px)`;
+  const lo = Math.min(p, q), hi = Math.max(p, q);
+  Object.assign($("gapBar").style, { left: lo * 100 + "%", width: (hi - lo) * 100 + "%", background: pos ? "var(--good)" : "var(--bad)" });
+}
+["pModel", "odds", "stake"].forEach(id => $(id).addEventListener("input", updateLab));
+
+/* ---------- MCMC sampler ---------- */
+let W = 11, L = 6, chain = [], cur = 0.5, accepted = 0, raf = null;
+const logPost = x => (x <= 0 || x >= 1) ? -Infinity : W * Math.log(x) + L * Math.log(1 - x); // Beta(1,1) prior
+function randn() { let u = 0, v = 0; while (!u) u = Math.random(); while (!v) v = Math.random(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); }
+function step() {
+  const prop = cur + 0.09 * randn();
+  if (Math.log(Math.random()) < logPost(prop) - logPost(cur)) { cur = prop; accepted++; }
+  chain.push(cur);
+}
+function sizeCanvas(c) {
+  const r = c.getBoundingClientRect(), d = window.devicePixelRatio || 1;
+  if (c.width !== Math.round(r.width * d)) { c.width = Math.round(r.width * d); c.height = Math.round(r.height * d); }
+  const ctx = c.getContext("2d"); ctx.setTransform(d, 0, 0, d, 0, 0);
+  return [ctx, r.width, r.height];
+}
+function drawSampler() {
+  const ink = css("--ink"), muted = css("--muted"), rule = css("--rule"), accent = css("--accent"), warm = css("--warm");
+  const font = "11px " + css("--mono");
+  // trace
+  let [ctx, w, h] = sizeCanvas($("trace"));
+  ctx.clearRect(0, 0, w, h);
+  const padL = 30, padB = 4;
+  ctx.strokeStyle = rule; ctx.lineWidth = 1; ctx.fillStyle = muted; ctx.font = font; ctx.textBaseline = "middle";
+  [0, 0.5, 1].forEach(v => { const y = (1 - v) * (h - padB - 8) + 4; ctx.beginPath(); ctx.moveTo(padL, y); ctx.lineTo(w, y); ctx.stroke(); ctx.fillText(v.toFixed(1), 2, y); });
+  const tail = chain.slice(-240);
+  if (tail.length > 1) {
+    ctx.strokeStyle = accent; ctx.lineWidth = 1.3; ctx.beginPath();
+    tail.forEach((v, i) => { const x = padL + (i / 239) * (w - padL - 6), y = (1 - v) * (h - padB - 8) + 4; i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); });
+    ctx.stroke();
+    const lx = padL + ((tail.length - 1) / 239) * (w - padL - 6), ly = (1 - tail[tail.length - 1]) * (h - padB - 8) + 4;
+    ctx.fillStyle = warm; ctx.beginPath(); ctx.arc(lx, ly, 3.5, 0, 7); ctx.fill();
+  }
+  ctx.fillStyle = muted; ctx.textAlign = "right"; ctx.fillText("trace: p (win prob.)", w - 4, 10); ctx.textAlign = "left";
+  // histogram vs exact Beta(W+1, L+1)
+  [ctx, w, h] = sizeCanvas($("hist"));
+  ctx.clearRect(0, 0, w, h);
+  const bins = 40, counts = new Array(bins).fill(0), burn = Math.min(200, Math.floor(chain.length / 5)), post = chain.slice(burn);
+  post.forEach(v => counts[Math.min(bins - 1, Math.floor(v * bins))]++);
+  const grid = [], G = 200; let area = 0;
+  for (let i = 0; i <= G; i++) { const x = i / G, d = x > 0 && x < 1 ? Math.exp(W * Math.log(x) + L * Math.log(1 - x)) : 0; grid.push(d); area += d / G; }
+  const exact = grid.map(d => d / (area || 1));
+  const histD = counts.map(c => post.length ? c / post.length * bins : 0);
+  const yMax = Math.max(...exact, ...histD, 1) * 1.08, top = 6, base = h - 18, px = x => padL + x * (w - padL - 6), py = d => base - (d / yMax) * (base - top);
+  ctx.strokeStyle = rule; ctx.beginPath(); ctx.moveTo(padL, base); ctx.lineTo(w - 6, base); ctx.stroke();
+  ctx.fillStyle = muted; ctx.font = font; ctx.textAlign = "center"; ctx.textBaseline = "alphabetic";
+  [0, .25, .5, .75, 1].forEach(v => ctx.fillText(v, px(v), h - 4));
+  ctx.fillStyle = warm; ctx.globalAlpha = .55;
+  histD.forEach((d, i) => { const x0 = px(i / bins), x1 = px((i + 1) / bins); ctx.fillRect(x0 + .5, py(d), x1 - x0 - 1, base - py(d)); });
+  ctx.globalAlpha = 1; ctx.strokeStyle = ink; ctx.lineWidth = 1.5; ctx.beginPath();
+  exact.forEach((d, i) => { const x = px(i / G), y = py(d); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }); ctx.stroke();
+  ctx.textAlign = "right"; ctx.fillStyle = muted; ctx.fillText(`samples vs exact Beta(${W + 1}, ${L + 1})`, w - 4, 12); ctx.textAlign = "left";
+  // readout
+  $("rN").textContent = chain.length.toLocaleString();
+  if (post.length > 20) {
+    const s = [...post].sort((a, b) => a - b), mean = post.reduce((a, b) => a + b, 0) / post.length;
+    $("rMean").textContent = mean.toFixed(3);
+    $("rCI").textContent = `${s[Math.floor(.025 * s.length)].toFixed(2)}–${s[Math.floor(.975 * s.length)].toFixed(2)}`;
+  } else { $("rMean").textContent = "—"; $("rCI").textContent = "—"; }
+}
+function restart() {
+  cancelAnimationFrame(raf); chain = []; cur = 0.5; accepted = 0;
+  if (reduced) { for (let i = 0; i < 4000; i++) step(); drawSampler(); return; }
+  for (let i = 0; i < 60; i++) step();
+  const tick = () => { for (let i = 0; i < 6; i++) step(); drawSampler(); if (chain.length < 6000) raf = requestAnimationFrame(tick); };
+  tick();
+}
+function syncData() { W = +$("wins").value; L = +$("losses").value; $("winsV").textContent = W; $("lossV").textContent = L; restart(); }
+$("wins").addEventListener("input", syncData);
+$("losses").addEventListener("input", syncData);
+$("resetBtn").addEventListener("click", restart);
+addEventListener("resize", drawSampler);
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", drawSampler);
+
+/* ---------- contact ---------- */
+$("copyBtn").addEventListener("click", () => {
+  const t = $("emailV").textContent;
+  const done = () => { $("copyBtn").textContent = "copied"; setTimeout(() => $("copyBtn").textContent = "copy", 1600); };
+  const fallback = () => { const r = document.createRange(); r.selectNodeContents($("emailV")); const s = getSelection(); s.removeAllRanges(); s.addRange(r); $("copyBtn").textContent = "selected"; };
+  try { navigator.clipboard.writeText(t).then(done, fallback); } catch (e) { fallback(); }
+});
+
+renderFilters(); renderProjects(); renderSkills(); renderExperience(); updateLab(); restart();
+</script>
+</body>
+</html>
