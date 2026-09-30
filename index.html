@@ -30,6 +30,7 @@ html { scroll-behavior: smooth; }
   --bad: #b3261e;
   --shadow: rgba(15, 27, 51, .14);
   --hero-bg: #0f1b33; --hero-ink: #f3f5fa; --hero-muted: #b3bdd1; --hero-rule: #2a3a5e; --gold: #d4ae66;
+  --grid-minor: rgba(15, 27, 51, .035); --grid-major: rgba(15, 27, 51, .06);
   --seg-coach: #1d3a78; --seg-qb: #a8792b; --seg-rest: #b7c0d0;
   --display: "IBM Plex Serif", Georgia, "Times New Roman", serif;
   --body: "IBM Plex Sans", "Helvetica Neue", Arial, system-ui, sans-serif;
@@ -41,14 +42,14 @@ html { scroll-behavior: smooth; }
     --paper: #0a1120; --panel: #111a2e; --ink: #e8ecf3; --muted: #98a2b6; --rule: #22304d;
     --accent: #9db4ff; --accent-soft: #1a2747; --warm: #d9b26a; --warm-soft: #2e2615;
     --good: #5fd39a; --bad: #ff8a80; --shadow: rgba(0, 0, 0, .45); color-scheme: dark;
-    --hero-bg: #0c1528; --hero-rule: #22304d; --seg-coach: #7f9cf0; --seg-qb: #d9b26a; --seg-rest: #4a5877;
+    --hero-bg: #0c1528; --hero-rule: #22304d; --grid-minor: rgba(157, 180, 255, .03); --grid-major: rgba(157, 180, 255, .055); --seg-coach: #7f9cf0; --seg-qb: #d9b26a; --seg-rest: #4a5877;
   }
 }
 :root[data-theme="dark"] {
   --paper: #0a1120; --panel: #111a2e; --ink: #e8ecf3; --muted: #98a2b6; --rule: #22304d;
   --accent: #9db4ff; --accent-soft: #1a2747; --warm: #d9b26a; --warm-soft: #2e2615;
   --good: #5fd39a; --bad: #ff8a80; --shadow: rgba(0, 0, 0, .45); color-scheme: dark;
-    --hero-bg: #0c1528; --hero-rule: #22304d; --seg-coach: #7f9cf0; --seg-qb: #d9b26a; --seg-rest: #4a5877;
+    --hero-bg: #0c1528; --hero-rule: #22304d; --grid-minor: rgba(157, 180, 255, .03); --grid-major: rgba(157, 180, 255, .055); --seg-coach: #7f9cf0; --seg-qb: #d9b26a; --seg-rest: #4a5877;
 }
 * { box-sizing: border-box; }
 body {
@@ -142,18 +143,20 @@ nav.links a[aria-current="true"] { color: var(--hero-ink); box-shadow: inset 0 -
 .js-anim [data-reveal].in { opacity: 1; transform: none; }
 .js-anim .projects .proj.dim.in, .proj.dim { opacity: .28; transform: scale(.985); }
 
-/* theoretical background: Hamiltonian-style flow around a drifting Gaussian-mixture posterior, with equations from the work */
-.field { position: fixed; inset: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; display: block; }
+/* theoretical background: the hero is a coordinate plane where a 2-D posterior contracts as observations arrive; the rest of the page sits on a faint measured grid */
+body {
+  background-image:
+    linear-gradient(var(--grid-major) 1px, transparent 1px), linear-gradient(90deg, var(--grid-major) 1px, transparent 1px),
+    linear-gradient(var(--grid-minor) 1px, transparent 1px), linear-gradient(90deg, var(--grid-minor) 1px, transparent 1px);
+  background-size: 120px 120px, 120px 120px, 24px 24px, 24px 24px;
+  background-position: -1px -1px;
+}
 .heroband { position: relative; overflow: hidden; isolation: isolate; }
-.heroband .field { position: absolute; z-index: 0; }
+.plane { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; display: block; }
 .heroband .hero { position: relative; z-index: 1; }
-.heroband::after { content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none; background: linear-gradient(90deg, var(--hero-bg) 0%, color-mix(in srgb, var(--hero-bg) 70%, transparent) 45%, transparent 75%); }
-.eqs { position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
-.heroband .eqs { position: absolute; z-index: 0; }
-.eqs span { position: absolute; font-family: var(--display); font-style: italic; white-space: nowrap; color: var(--accent); opacity: .09; font-size: clamp(.9rem, 1.6vw, 1.35rem); animation: drift var(--t, 40s) ease-in-out infinite alternate; }
-.heroband .eqs span { color: var(--gold); opacity: .28; }
-@keyframes drift { from { transform: translate(0, 0) rotate(var(--r, 0deg)); } to { transform: translate(var(--dx, 40px), var(--dy, -30px)) rotate(var(--r, 0deg)); } }
-@media (prefers-reduced-motion: reduce) { .eqs span { animation: none; } }
+.heroband::after { content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none; background: linear-gradient(90deg, var(--hero-bg) 0%, color-mix(in srgb, var(--hero-bg) 82%, transparent) 38%, color-mix(in srgb, var(--hero-bg) 20%, transparent) 70%, transparent 100%); }
+.plane-note { position: absolute; right: 20px; bottom: 12px; z-index: 1; margin: 0; font: .72rem var(--mono); color: var(--hero-muted); opacity: .75; font-variant-numeric: tabular-nums; }
+@media (max-width: 640px) { .plane-note { display: none; } }
 
 /* sections */
 section.block { padding-block: 64px; border-top: 1px solid var(--rule); }
@@ -279,8 +282,6 @@ footer { padding-block: 28px 40px; color: var(--muted); font-size: .85rem; borde
 </head>
 <body>
 <script>try { if (!matchMedia("(prefers-reduced-motion: reduce)").matches && "IntersectionObserver" in window) document.documentElement.classList.add("js-anim"); } catch (e) {}</script>
-<canvas class="field" id="fieldPage" aria-hidden="true"></canvas>
-<div class="eqs" id="eqsPage" aria-hidden="true"></div>
 <div class="progress" id="prog" aria-hidden="true"></div>
 <a class="btn primary totop" id="totop" href="#top" aria-label="Back to top">↑ Top</a>
 <header class="top">
@@ -300,8 +301,8 @@ footer { padding-block: 28px 40px; color: var(--muted); font-size: .85rem; borde
 
 <main id="top">
   <div class="heroband">
-  <canvas class="field" id="fieldHero" aria-hidden="true"></canvas>
-  <div class="eqs" id="eqsHero" aria-hidden="true"></div>
+  <canvas class="plane" id="plane" aria-hidden="true"></canvas>
+  <p class="plane-note" id="planeNote" aria-live="off">Background: a two-parameter posterior tightening as noisy observations arrive</p>
   <div class="wrap hero">
     <div>
       <div class="who">
@@ -782,100 +783,99 @@ $("resetBtn").addEventListener("click", restart);
 addEventListener("resize", drawSampler);
 matchMedia("(prefers-color-scheme: dark)").addEventListener("change", drawSampler);
 
-/* ---------- theoretical background ---------- */
-(function field() {
-  const EQS = ["p(θ | x) ∝ p(x | θ) · p(θ)", "α = min{1, π(θ′) / π(θ)}", "H(X) = −Σ p(x) log p(x)", "J(A, B) = |A ∩ B| / |A ∪ B|",
-    "EV = p·b − (1 − p)", "f* = (bp − q) / b", "R̂ → 1", "dθ/dt = ∂H/∂ρ,  dρ/dt = −∂H/∂θ", "EPA = EPₜ₊₁ − EPₜ", "Var(y) = σ²_coach + σ²_QB + σ²_ε",
-    "θₜ₊₁ ~ q(· | θₜ)", "Beta(w + 1, ℓ + 1)"];
-  function placeEqs(host, n, seed) {
-    let r = seed; const rnd = () => (r = (r * 16807) % 2147483647) / 2147483647;
-    host.innerHTML = Array.from({ length: n }, (_, i) => {
-      const e = EQS[(i + seed) % EQS.length];
-      return `<span style="left:${(rnd() * 88).toFixed(1)}%;top:${(4 + rnd() * 88).toFixed(1)}%;--t:${30 + rnd() * 30 | 0}s;--dx:${(rnd() * 80 - 40) | 0}px;--dy:${(rnd() * 60 - 30) | 0}px;--r:${(rnd() * 10 - 5).toFixed(1)}deg">${esc(e)}</span>`;
-    }).join("");
+/* ---------- theoretical background: Bayesian updating on a coordinate plane ---------- */
+(function plane() {
+  const cv = $("plane"), ctx = cv.getContext("2d"), note = $("planeNote");
+  let w = 0, h = 0, col = {};
+  const K = [[1.177, "50%"], [2.146, "90%"], [3.035, "99%"]]; // sqrt of chi-square(2) quantiles
+  const readCol = () => { col = { bg: css("--hero-bg"), grid: css("--hero-rule"), ink: css("--hero-muted"), gold: css("--gold"), hi: css("--hero-ink") }; };
+  const resize = () => { const d = Math.min(2, devicePixelRatio || 1); w = cv.clientWidth; h = cv.clientHeight; cv.width = Math.round(w * d); cv.height = Math.round(h * d); ctx.setTransform(d, 0, 0, d, 0, 0); };
+  // world coordinates: θ ∈ [-4, 4] × [-3, 3], mapped onto the band
+  const X = x => w * (0.5 + x / 9.5), Y = y => h * (0.5 - y / 7.2), S = () => w / 9.5;
+  const inv = m => { const d = m[0] * m[3] - m[1] * m[2]; return [m[3] / d, -m[1] / d, -m[2] / d, m[0] / d]; };
+  const add = (a, b) => a.map((v, i) => v + b[i]);
+  const mv = (m, v) => [m[0] * v[0] + m[1] * v[1], m[2] * v[0] + m[3] * v[1]];
+  const randn = () => { let u = 0; while (!u) u = Math.random(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * Math.random()); };
+  // placed so the prior starts above the sampler card and the posterior settles in the open space below it
+  const F = (fx, fy) => [(fx - 0.5) * 9.5, (0.5 - fy) * 7.2];
+  const mu0 = F(0.66, 0.2), S0 = [1.4, -0.55, -0.55, 1.0], Sl = [0.8, -0.25, -0.25, 0.4]; // prior mean/cov, observation noise cov
+  const P0 = inv(S0), Pl = inv(Sl);
+  const Ll = (() => { const a = Math.sqrt(Sl[0]), b = Sl[1] / a; return [a, 0, b, Math.sqrt(Sl[3] - b * b)]; })(); // Cholesky of noise
+  let truth, obs, target, shown, phase, t0;
+  const posterior = () => {
+    const n = obs.length, sum = obs.reduce((a, o) => [a[0] + o[0], a[1] + o[1]], [0, 0]);
+    const Pn = add(P0, Pl.map(v => v * n)), Sn = inv(Pn);
+    return { mu: mv(Sn, add(mv(P0, mu0), mv(Pl, sum))), cov: Sn };
+  };
+  const reset = () => {
+    const tr = F(0.84 + (Math.random() - .5) * .06, 0.85 + (Math.random() - .5) * .03); truth = [tr[0], tr[1]];
+    obs = []; target = { mu: mu0.slice(), cov: S0.slice() }; shown = { mu: mu0.slice(), cov: S0.slice() }; phase = "run"; t0 = performance.now();
+  };
+  const ellipse = (mu, c, k) => {
+    const tr = c[0] + c[3], det = c[0] * c[3] - c[1] * c[1], disc = Math.sqrt(Math.max(0, tr * tr / 4 - det));
+    const l1 = tr / 2 + disc, l2 = tr / 2 - disc, ang = Math.atan2(l1 - c[0], c[1] || 1e-9);
+    ctx.beginPath(); ctx.ellipse(X(mu[0]), Y(mu[1]), Math.sqrt(l1) * k * S(), Math.sqrt(Math.max(l2, 1e-6)) * k * S(), -ang, 0, Math.PI * 2);
+  };
+  const draw = fade => {
+    ctx.clearRect(0, 0, w, h);
+    ctx.lineWidth = 1; ctx.font = "11px " + css("--mono"); ctx.textBaseline = "top";
+    // grid: minor every 0.5, major every 1, axes through origin
+    for (let gx = -5; gx <= 5; gx += 0.5) { ctx.globalAlpha = Number.isInteger(gx) ? .55 : .22; ctx.strokeStyle = col.grid; ctx.beginPath(); ctx.moveTo(X(gx), 0); ctx.lineTo(X(gx), h); ctx.stroke(); }
+    for (let gy = -4; gy <= 4; gy += 0.5) { ctx.globalAlpha = Number.isInteger(gy) ? .55 : .22; ctx.beginPath(); ctx.moveTo(0, Y(gy)); ctx.lineTo(w, Y(gy)); ctx.stroke(); }
+    if (w < 860) { note.textContent = ""; ctx.globalAlpha = 1; return; } // phones: measured grid only
+    ctx.globalAlpha = .5; ctx.strokeStyle = col.ink; ctx.beginPath(); ctx.moveTo(0, Y(0)); ctx.lineTo(w, Y(0)); ctx.moveTo(X(0), 0); ctx.lineTo(X(0), h); ctx.stroke();
+    ctx.fillStyle = col.ink; ctx.globalAlpha = .6;
+    for (let gx = 1; gx <= 4; gx++) ctx.fillText(gx, X(gx) + 3, Y(0) + 4);
+    for (let gy = -3; gy <= 3; gy++) if (gy) ctx.fillText(gy, X(0) + 4, Y(gy) + 3);
+    ctx.fillText("θ₁", w - 22, Y(0) + 4); ctx.fillText("θ₂", X(0) + 6, 8);
+    ctx.globalAlpha = fade;
+    // prior, faint dashed
+    ctx.setLineDash([4, 5]); ctx.strokeStyle = col.ink; ctx.globalAlpha = .35 * fade; ellipse(mu0, S0, K[1][0]); ctx.stroke(); ctx.setLineDash([]);
+    // observations
+    obs.forEach((o, i) => { ctx.globalAlpha = (i === obs.length - 1 ? .95 : .55) * fade; ctx.fillStyle = i === obs.length - 1 ? col.hi : col.ink; ctx.beginPath(); ctx.arc(X(o[0]), Y(o[1]), i === obs.length - 1 ? 3 : 2, 0, 7); ctx.fill(); });
+    // posterior credible regions
+    K.forEach(([k, lab], i) => {
+      ctx.strokeStyle = col.gold; ctx.lineWidth = i === 0 ? 1.6 : 1; ctx.globalAlpha = [.9, .6, .35][i] * fade; ellipse(shown.mu, shown.cov, k); ctx.stroke();
+    });
+    // mean crosshair + label
+    const mx = X(shown.mu[0]), my = Y(shown.mu[1]);
+    ctx.globalAlpha = fade; ctx.strokeStyle = col.gold; ctx.lineWidth = 1.2;
+    ctx.beginPath(); ctx.moveTo(mx - 7, my); ctx.lineTo(mx + 7, my); ctx.moveTo(mx, my - 7); ctx.lineTo(mx, my + 7); ctx.stroke();
+    ctx.fillStyle = col.gold; const lbl = `θ̂ = (${shown.mu[0].toFixed(2)}, ${shown.mu[1].toFixed(2)})`;
+    if (mx + 12 + ctx.measureText(lbl).width > w - 12) { ctx.textAlign = "right"; ctx.fillText(lbl, mx - 12, my + 6); ctx.textAlign = "left"; } else ctx.fillText(lbl, mx + 10, my + 6);
+    const rx = Math.sqrt(Math.max(shown.cov[0], shown.cov[3])) * K[1][0] * S();
+    ctx.globalAlpha = .7 * fade; ctx.fillText("90%", mx + rx * .72 + 4, my - rx * .72 - 12);
+    note.textContent = `Background: posterior for θ updating as noisy observations arrive · n = ${obs.length}`;
+  };
+  let lastAdd = 0, raf = 0;
+  const loop = t => {
+    const lerp = 0.06;
+    shown.mu = shown.mu.map((v, i) => v + (target.mu[i] - v) * lerp);
+    shown.cov = shown.cov.map((v, i) => v + (target.cov[i] - v) * lerp);
+    let fade = 1;
+    if (phase === "run" && t - lastAdd > 650) {
+      lastAdd = t;
+      const z = [randn(), randn()], e = mv(Ll, z);
+      obs.push([truth[0] + e[0], truth[1] + e[1]]); target = posterior();
+      if (obs.length >= 36) { phase = "hold"; t0 = t; }
+    } else if (phase === "hold") {
+      if (t - t0 > 3500) { phase = "out"; t0 = t; }
+    } else if (phase === "out") {
+      fade = Math.max(0, 1 - (t - t0) / 900); if (fade === 0) reset();
+    }
+    draw(fade);
+    raf = requestAnimationFrame(loop);
+  };
+  readCol(); resize(); reset();
+  if (reduced) { for (let i = 0; i < 24; i++) { const e = mv(Ll, [randn(), randn()]); obs.push([truth[0] + e[0], truth[1] + e[1]]); } target = posterior(); shown = { mu: target.mu.slice(), cov: target.cov.slice() }; draw(1); }
+  else {
+    const start = () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(loop); };
+    new IntersectionObserver(es => { if (es[0].isIntersecting && !document.hidden) start(); else cancelAnimationFrame(raf); }).observe(cv);
+    document.addEventListener("visibilitychange", () => document.hidden ? cancelAnimationFrame(raf) : start());
   }
-  placeEqs($("eqsPage"), innerWidth < 640 ? 6 : 12, 7);
-  placeEqs($("eqsHero"), innerWidth < 640 ? 3 : 6, 3);
-
-  const pointer = { x: -1, y: -1, on: false };
-  addEventListener("pointermove", e => { pointer.x = e.clientX; pointer.y = e.clientY; pointer.on = true; }, { passive: true });
-  addEventListener("pointerleave", () => { pointer.on = false; });
-
-  function make(canvas, hero) {
-    const ctx = canvas.getContext("2d");
-    let w = 0, h = 0, parts = [], colors = {};
-    const readColors = () => {
-      colors = hero
-        ? { bg: css("--hero-bg"), a: css("--gold"), b: css("--hero-muted") }
-        : { bg: css("--paper"), a: css("--accent"), b: css("--warm") };
-    };
-    const resize = () => {
-      const d = Math.min(1.5, devicePixelRatio || 1);
-      w = canvas.clientWidth; h = canvas.clientHeight;
-      canvas.width = Math.round(w * d); canvas.height = Math.round(h * d);
-      ctx.setTransform(d, 0, 0, d, 0, 0);
-      const n = Math.min(hero ? 170 : 240, Math.round(w * h / (hero ? 5200 : 7000)));
-      parts = Array.from({ length: n }, () => spawn());
-      ctx.fillStyle = colors.bg; ctx.fillRect(0, 0, w, h);
-    };
-    const spawn = () => ({ x: Math.random() * w, y: Math.random() * h, life: 80 + Math.random() * 220, warm: Math.random() < 0.28 });
-    // drifting mixture of Gaussians = the "posterior" the particles orbit
-    const modes = t => {
-      const s = Math.min(w, h);
-      const m = [
-        { x: w * (0.70 + 0.12 * Math.sin(t * 0.00011)), y: h * (0.45 + 0.20 * Math.cos(t * 0.00013)), s: s * 0.22, k: 1 },
-        { x: w * (0.30 + 0.14 * Math.cos(t * 0.00009)), y: h * (0.62 + 0.18 * Math.sin(t * 0.00012)), s: s * 0.18, k: -1 },
-        { x: w * (0.52 + 0.20 * Math.sin(t * 0.00007 + 2)), y: h * (0.25 + 0.15 * Math.sin(t * 0.0001 + 1)), s: s * 0.15, k: 1 }
-      ];
-      if (pointer.on) {
-        const r = canvas.getBoundingClientRect();
-        const px = pointer.x - r.left, py = pointer.y - r.top;
-        if (px > -50 && py > -50 && px < w + 50 && py < h + 50) m.push({ x: px, y: py, s: s * 0.12, k: 1.6 });
-      }
-      return m;
-    };
-    let last = 0, running = true, visible = true;
-    const step = t => {
-      if (!running || !visible) return;
-      if (t - last < 30) { requestAnimationFrame(step); return; }
-      last = t;
-      ctx.globalAlpha = hero ? 0.06 : 0.09; ctx.fillStyle = colors.bg; ctx.fillRect(0, 0, w, h);
-      advance(t, 1);
-      requestAnimationFrame(step);
-    };
-    const advance = (t, alpha) => {
-      const M = modes(t);
-      ctx.lineWidth = 1;
-      for (const p of parts) {
-        let gx = 0, gy = 0;
-        for (const m of M) {
-          const dx = p.x - m.x, dy = p.y - m.y, e = Math.exp(-(dx * dx + dy * dy) / (2 * m.s * m.s));
-          gx += -dx / (m.s * m.s) * e; gy += -dy / (m.s * m.s) * e;
-          // rotational (Hamiltonian) part: move along the level sets, direction set by the mode's spin
-          gx += m.k * dy / m.s * e * 0.9; gy += -m.k * dx / m.s * e * 0.9;
-        }
-        const mag = Math.hypot(gx, gy) || 1, sp = 1.4;
-        const nx = p.x + gx / mag * sp + (Math.random() - .5) * .35, ny = p.y + gy / mag * sp + (Math.random() - .5) * .35;
-        ctx.globalAlpha = (hero ? 0.75 : 0.2) * alpha;
-        ctx.strokeStyle = p.warm ? colors.b : colors.a;
-        ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(nx, ny); ctx.stroke();
-        p.x = nx; p.y = ny;
-        if (--p.life < 0 || p.x < -10 || p.y < -10 || p.x > w + 10 || p.y > h + 10) Object.assign(p, spawn());
-      }
-      ctx.globalAlpha = 1;
-    };
-    readColors(); resize();
-    if (reduced) { for (let i = 0; i < 160; i++) { ctx.globalAlpha = 0.05; ctx.fillStyle = colors.bg; ctx.fillRect(0, 0, w, h); advance(0, 1); } }
-    else requestAnimationFrame(step);
-    if (hero && "IntersectionObserver" in window) new IntersectionObserver(es => { visible = es[0].isIntersecting; if (visible && !reduced) requestAnimationFrame(step); }).observe(canvas);
-    document.addEventListener("visibilitychange", () => { running = !document.hidden; if (running && !reduced) requestAnimationFrame(step); });
-    let rt; addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => { resize(); if (reduced) advance(0, 1); }, 150); });
-    return { recolor() { readColors(); ctx.globalAlpha = 1; ctx.fillStyle = colors.bg; ctx.fillRect(0, 0, w, h); } };
-  }
-  const fields = [make($("fieldPage"), false), make($("fieldHero"), true)];
-  const recolor = () => fields.forEach(f => f.recolor());
+  let rt; addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => { resize(); draw(1); }, 150); });
+  const recolor = () => { readCol(); draw(1); };
   new MutationObserver(recolor).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
-  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", recolor);
 })();
 
 /* ---------- scroll motion ---------- */
