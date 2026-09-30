@@ -30,7 +30,6 @@ html { scroll-behavior: smooth; }
   --bad: #b3261e;
   --shadow: rgba(15, 27, 51, .14);
   --hero-bg: #0f1b33; --hero-ink: #f3f5fa; --hero-muted: #b3bdd1; --hero-rule: #2a3a5e; --gold: #d4ae66;
-  --grid-minor: rgba(15, 27, 51, .035); --grid-major: rgba(15, 27, 51, .06);
   --seg-coach: #1d3a78; --seg-qb: #a8792b; --seg-rest: #b7c0d0;
   --display: "IBM Plex Serif", Georgia, "Times New Roman", serif;
   --body: "IBM Plex Sans", "Helvetica Neue", Arial, system-ui, sans-serif;
@@ -42,14 +41,14 @@ html { scroll-behavior: smooth; }
     --paper: #0a1120; --panel: #111a2e; --ink: #e8ecf3; --muted: #98a2b6; --rule: #22304d;
     --accent: #9db4ff; --accent-soft: #1a2747; --warm: #d9b26a; --warm-soft: #2e2615;
     --good: #5fd39a; --bad: #ff8a80; --shadow: rgba(0, 0, 0, .45); color-scheme: dark;
-    --hero-bg: #0c1528; --hero-rule: #22304d; --grid-minor: rgba(157, 180, 255, .03); --grid-major: rgba(157, 180, 255, .055); --seg-coach: #7f9cf0; --seg-qb: #d9b26a; --seg-rest: #4a5877;
+    --hero-bg: #0c1528; --hero-rule: #22304d; --seg-coach: #7f9cf0; --seg-qb: #d9b26a; --seg-rest: #4a5877;
   }
 }
 :root[data-theme="dark"] {
   --paper: #0a1120; --panel: #111a2e; --ink: #e8ecf3; --muted: #98a2b6; --rule: #22304d;
   --accent: #9db4ff; --accent-soft: #1a2747; --warm: #d9b26a; --warm-soft: #2e2615;
   --good: #5fd39a; --bad: #ff8a80; --shadow: rgba(0, 0, 0, .45); color-scheme: dark;
-    --hero-bg: #0c1528; --hero-rule: #22304d; --grid-minor: rgba(157, 180, 255, .03); --grid-major: rgba(157, 180, 255, .055); --seg-coach: #7f9cf0; --seg-qb: #d9b26a; --seg-rest: #4a5877;
+    --hero-bg: #0c1528; --hero-rule: #22304d; --seg-coach: #7f9cf0; --seg-qb: #d9b26a; --seg-rest: #4a5877;
 }
 * { box-sizing: border-box; }
 body {
@@ -143,20 +142,16 @@ nav.links a[aria-current="true"] { color: var(--hero-ink); box-shadow: inset 0 -
 .js-anim [data-reveal].in { opacity: 1; transform: none; }
 .js-anim .projects .proj.dim.in, .proj.dim { opacity: .28; transform: scale(.985); }
 
-/* theoretical background: the hero is a coordinate plane where a 2-D posterior contracts as observations arrive; the rest of the page sits on a faint measured grid */
-body {
-  background-image:
-    linear-gradient(var(--grid-major) 1px, transparent 1px), linear-gradient(90deg, var(--grid-major) 1px, transparent 1px),
-    linear-gradient(var(--grid-minor) 1px, transparent 1px), linear-gradient(90deg, var(--grid-minor) 1px, transparent 1px);
-  background-size: 120px 120px, 120px 120px, 24px 24px, 24px 24px;
-  background-position: -1px -1px;
-}
+/* background: slowly shifting topographic contours, the terrain every model tries to map; index lines every fifth level, as on a survey map */
 .heroband { position: relative; overflow: hidden; isolation: isolate; }
-.plane { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; display: block; }
+.topo { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; display: block; }
+.topo.page { position: fixed; z-index: -1; }
 .heroband .hero { position: relative; z-index: 1; }
-.heroband::after { content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none; background: linear-gradient(90deg, var(--hero-bg) 0%, color-mix(in srgb, var(--hero-bg) 82%, transparent) 38%, color-mix(in srgb, var(--hero-bg) 20%, transparent) 70%, transparent 100%); }
-.plane-note { position: absolute; right: 20px; bottom: 12px; z-index: 1; margin: 0; font: .72rem var(--mono); color: var(--hero-muted); opacity: .75; font-variant-numeric: tabular-nums; }
-@media (max-width: 640px) { .plane-note { display: none; } }
+.heroband::after { content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none; background: radial-gradient(ellipse 70% 90% at 22% 55%, color-mix(in srgb, var(--hero-bg) 88%, transparent) 0%, color-mix(in srgb, var(--hero-bg) 40%, transparent) 60%, transparent 100%); }
+.epigraph { position: absolute; right: 20px; bottom: 14px; z-index: 1; margin: 0; text-align: right; max-width: 34ch; }
+.epigraph blockquote { margin: 0; font-family: var(--display); font-style: italic; font-size: .95rem; color: var(--hero-ink); opacity: .85; }
+.epigraph figcaption { font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--gold); margin-top: 2px; }
+@media (max-width: 860px) { .epigraph { position: relative; right: auto; bottom: auto; text-align: left; padding: 0 20px 28px; max-width: 1080px; margin: -8px auto 0; } }
 
 /* sections */
 section.block { padding-block: 64px; border-top: 1px solid var(--rule); }
@@ -282,6 +277,7 @@ footer { padding-block: 28px 40px; color: var(--muted); font-size: .85rem; borde
 </head>
 <body>
 <script>try { if (!matchMedia("(prefers-reduced-motion: reduce)").matches && "IntersectionObserver" in window) document.documentElement.classList.add("js-anim"); } catch (e) {}</script>
+<canvas class="topo page" id="topoPage" aria-hidden="true"></canvas>
 <div class="progress" id="prog" aria-hidden="true"></div>
 <a class="btn primary totop" id="totop" href="#top" aria-label="Back to top">↑ Top</a>
 <header class="top">
@@ -301,8 +297,7 @@ footer { padding-block: 28px 40px; color: var(--muted); font-size: .85rem; borde
 
 <main id="top">
   <div class="heroband">
-  <canvas class="plane" id="plane" aria-hidden="true"></canvas>
-  <p class="plane-note" id="planeNote" aria-live="off">Background: a two-parameter posterior tightening as noisy observations arrive</p>
+  <canvas class="topo" id="topoHero" aria-hidden="true"></canvas>
   <div class="wrap hero">
     <div>
       <div class="who">
@@ -345,6 +340,7 @@ footer { padding-block: 28px 40px; color: var(--muted); font-size: .85rem; borde
       </div>
     </figure>
   </div>
+  <figure class="epigraph"><blockquote>“All models are wrong, but some are useful.”</blockquote><figcaption>George E. P. Box, statistician</figcaption></figure>
   </div>
 
   <section class="block" id="projects">
@@ -783,99 +779,73 @@ $("resetBtn").addEventListener("click", restart);
 addEventListener("resize", drawSampler);
 matchMedia("(prefers-color-scheme: dark)").addEventListener("change", drawSampler);
 
-/* ---------- theoretical background: Bayesian updating on a coordinate plane ---------- */
-(function plane() {
-  const cv = $("plane"), ctx = cv.getContext("2d"), note = $("planeNote");
-  let w = 0, h = 0, col = {};
-  const K = [[1.177, "50%"], [2.146, "90%"], [3.035, "99%"]]; // sqrt of chi-square(2) quantiles
-  const readCol = () => { col = { bg: css("--hero-bg"), grid: css("--hero-rule"), ink: css("--hero-muted"), gold: css("--gold"), hi: css("--hero-ink") }; };
-  const resize = () => { const d = Math.min(2, devicePixelRatio || 1); w = cv.clientWidth; h = cv.clientHeight; cv.width = Math.round(w * d); cv.height = Math.round(h * d); ctx.setTransform(d, 0, 0, d, 0, 0); };
-  // world coordinates: θ ∈ [-4, 4] × [-3, 3], mapped onto the band
-  const X = x => w * (0.5 + x / 9.5), Y = y => h * (0.5 - y / 7.2), S = () => w / 9.5;
-  const inv = m => { const d = m[0] * m[3] - m[1] * m[2]; return [m[3] / d, -m[1] / d, -m[2] / d, m[0] / d]; };
-  const add = (a, b) => a.map((v, i) => v + b[i]);
-  const mv = (m, v) => [m[0] * v[0] + m[1] * v[1], m[2] * v[0] + m[3] * v[1]];
-  const randn = () => { let u = 0; while (!u) u = Math.random(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * Math.random()); };
-  // placed so the prior starts above the sampler card and the posterior settles in the open space below it
-  const F = (fx, fy) => [(fx - 0.5) * 9.5, (0.5 - fy) * 7.2];
-  const mu0 = F(0.66, 0.2), S0 = [1.4, -0.55, -0.55, 1.0], Sl = [0.8, -0.25, -0.25, 0.4]; // prior mean/cov, observation noise cov
-  const P0 = inv(S0), Pl = inv(Sl);
-  const Ll = (() => { const a = Math.sqrt(Sl[0]), b = Sl[1] / a; return [a, 0, b, Math.sqrt(Sl[3] - b * b)]; })(); // Cholesky of noise
-  let truth, obs, target, shown, phase, t0;
-  const posterior = () => {
-    const n = obs.length, sum = obs.reduce((a, o) => [a[0] + o[0], a[1] + o[1]], [0, 0]);
-    const Pn = add(P0, Pl.map(v => v * n)), Sn = inv(Pn);
-    return { mu: mv(Sn, add(mv(P0, mu0), mv(Pl, sum))), cov: Sn };
-  };
-  const reset = () => {
-    const tr = F(0.84 + (Math.random() - .5) * .06, 0.85 + (Math.random() - .5) * .03); truth = [tr[0], tr[1]];
-    obs = []; target = { mu: mu0.slice(), cov: S0.slice() }; shown = { mu: mu0.slice(), cov: S0.slice() }; phase = "run"; t0 = performance.now();
-  };
-  const ellipse = (mu, c, k) => {
-    const tr = c[0] + c[3], det = c[0] * c[3] - c[1] * c[1], disc = Math.sqrt(Math.max(0, tr * tr / 4 - det));
-    const l1 = tr / 2 + disc, l2 = tr / 2 - disc, ang = Math.atan2(l1 - c[0], c[1] || 1e-9);
-    ctx.beginPath(); ctx.ellipse(X(mu[0]), Y(mu[1]), Math.sqrt(l1) * k * S(), Math.sqrt(Math.max(l2, 1e-6)) * k * S(), -ang, 0, Math.PI * 2);
-  };
-  const draw = fade => {
-    ctx.clearRect(0, 0, w, h);
-    ctx.lineWidth = 1; ctx.font = "11px " + css("--mono"); ctx.textBaseline = "top";
-    // grid: minor every 0.5, major every 1, axes through origin
-    for (let gx = -5; gx <= 5; gx += 0.5) { ctx.globalAlpha = Number.isInteger(gx) ? .55 : .22; ctx.strokeStyle = col.grid; ctx.beginPath(); ctx.moveTo(X(gx), 0); ctx.lineTo(X(gx), h); ctx.stroke(); }
-    for (let gy = -4; gy <= 4; gy += 0.5) { ctx.globalAlpha = Number.isInteger(gy) ? .55 : .22; ctx.beginPath(); ctx.moveTo(0, Y(gy)); ctx.lineTo(w, Y(gy)); ctx.stroke(); }
-    if (w < 860) { note.textContent = ""; ctx.globalAlpha = 1; return; } // phones: measured grid only
-    ctx.globalAlpha = .5; ctx.strokeStyle = col.ink; ctx.beginPath(); ctx.moveTo(0, Y(0)); ctx.lineTo(w, Y(0)); ctx.moveTo(X(0), 0); ctx.lineTo(X(0), h); ctx.stroke();
-    ctx.fillStyle = col.ink; ctx.globalAlpha = .6;
-    for (let gx = 1; gx <= 4; gx++) ctx.fillText(gx, X(gx) + 3, Y(0) + 4);
-    for (let gy = -3; gy <= 3; gy++) if (gy) ctx.fillText(gy, X(0) + 4, Y(gy) + 3);
-    ctx.fillText("θ₁", w - 22, Y(0) + 4); ctx.fillText("θ₂", X(0) + 6, 8);
-    ctx.globalAlpha = fade;
-    // prior, faint dashed
-    ctx.setLineDash([4, 5]); ctx.strokeStyle = col.ink; ctx.globalAlpha = .35 * fade; ellipse(mu0, S0, K[1][0]); ctx.stroke(); ctx.setLineDash([]);
-    // observations
-    obs.forEach((o, i) => { ctx.globalAlpha = (i === obs.length - 1 ? .95 : .55) * fade; ctx.fillStyle = i === obs.length - 1 ? col.hi : col.ink; ctx.beginPath(); ctx.arc(X(o[0]), Y(o[1]), i === obs.length - 1 ? 3 : 2, 0, 7); ctx.fill(); });
-    // posterior credible regions
-    K.forEach(([k, lab], i) => {
-      ctx.strokeStyle = col.gold; ctx.lineWidth = i === 0 ? 1.6 : 1; ctx.globalAlpha = [.9, .6, .35][i] * fade; ellipse(shown.mu, shown.cov, k); ctx.stroke();
-    });
-    // mean crosshair + label
-    const mx = X(shown.mu[0]), my = Y(shown.mu[1]);
-    ctx.globalAlpha = fade; ctx.strokeStyle = col.gold; ctx.lineWidth = 1.2;
-    ctx.beginPath(); ctx.moveTo(mx - 7, my); ctx.lineTo(mx + 7, my); ctx.moveTo(mx, my - 7); ctx.lineTo(mx, my + 7); ctx.stroke();
-    ctx.fillStyle = col.gold; const lbl = `θ̂ = (${shown.mu[0].toFixed(2)}, ${shown.mu[1].toFixed(2)})`;
-    if (mx + 12 + ctx.measureText(lbl).width > w - 12) { ctx.textAlign = "right"; ctx.fillText(lbl, mx - 12, my + 6); ctx.textAlign = "left"; } else ctx.fillText(lbl, mx + 10, my + 6);
-    const rx = Math.sqrt(Math.max(shown.cov[0], shown.cov[3])) * K[1][0] * S();
-    ctx.globalAlpha = .7 * fade; ctx.fillText("90%", mx + rx * .72 + 4, my - rx * .72 - 12);
-    note.textContent = `Background: posterior for θ updating as noisy observations arrive · n = ${obs.length}`;
-  };
-  let lastAdd = 0, raf = 0;
-  const loop = t => {
-    const lerp = 0.06;
-    shown.mu = shown.mu.map((v, i) => v + (target.mu[i] - v) * lerp);
-    shown.cov = shown.cov.map((v, i) => v + (target.cov[i] - v) * lerp);
-    let fade = 1;
-    if (phase === "run" && t - lastAdd > 650) {
-      lastAdd = t;
-      const z = [randn(), randn()], e = mv(Ll, z);
-      obs.push([truth[0] + e[0], truth[1] + e[1]]); target = posterior();
-      if (obs.length >= 36) { phase = "hold"; t0 = t; }
-    } else if (phase === "hold") {
-      if (t - t0 > 3500) { phase = "out"; t0 = t; }
-    } else if (phase === "out") {
-      fade = Math.max(0, 1 - (t - t0) / 900); if (fade === 0) reset();
-    }
-    draw(fade);
-    raf = requestAnimationFrame(loop);
-  };
-  readCol(); resize(); reset();
-  if (reduced) { for (let i = 0; i < 24; i++) { const e = mv(Ll, [randn(), randn()]); obs.push([truth[0] + e[0], truth[1] + e[1]]); } target = posterior(); shown = { mu: target.mu.slice(), cov: target.cov.slice() }; draw(1); }
-  else {
-    const start = () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(loop); };
-    new IntersectionObserver(es => { if (es[0].isIntersecting && !document.hidden) start(); else cancelAnimationFrame(raf); }).observe(cv);
-    document.addEventListener("visibilitychange", () => document.hidden ? cancelAnimationFrame(raf) : start());
+/* ---------- background: topographic contours (marching squares over smooth noise) ---------- */
+(function topo() {
+  const P = new Uint8Array(512); { const p = [...Array(256).keys()]; let r = 20260930; for (let i = 255; i > 0; i--) { r = (r * 16807) % 2147483647; const j = r % (i + 1); [p[i], p[j]] = [p[j], p[i]]; } for (let i = 0; i < 512; i++) P[i] = p[i & 255]; }
+  const fade = t => t * t * t * (t * (t * 6 - 15) + 10), lerp = (a, b, t) => a + (b - a) * t;
+  const grad = (h, x, y, z) => { const u = h < 8 ? x : y, v = h < 4 ? y : (h === 12 || h === 14 ? x : z); return ((h & 1) ? -u : u) + ((h & 2) ? -v : v); };
+  function noise(x, y, z) { // classic Perlin noise, range about -1..1
+    const X = Math.floor(x) & 255, Y = Math.floor(y) & 255, Z = Math.floor(z) & 255;
+    x -= Math.floor(x); y -= Math.floor(y); z -= Math.floor(z);
+    const u = fade(x), v = fade(y), w = fade(z);
+    const A = P[X] + Y, AA = P[A] + Z, AB = P[A + 1] + Z, B = P[X + 1] + Y, BA = P[B] + Z, BB = P[B + 1] + Z;
+    return lerp(lerp(lerp(grad(P[AA] & 15, x, y, z), grad(P[BA] & 15, x - 1, y, z), u), lerp(grad(P[AB] & 15, x, y - 1, z), grad(P[BB] & 15, x - 1, y - 1, z), u), v),
+      lerp(lerp(grad(P[AA + 1] & 15, x, y, z - 1), grad(P[BA + 1] & 15, x - 1, y, z - 1), u), lerp(grad(P[AB + 1] & 15, x, y - 1, z - 1), grad(P[BB + 1] & 15, x - 1, y - 1, z - 1), u), v), w);
   }
-  let rt; addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => { resize(); draw(1); }, 150); });
-  const recolor = () => { readCol(); draw(1); };
-  new MutationObserver(recolor).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+  const field = (x, y, z) => noise(x, y, z) * 0.75 + noise(x * 2.1 + 17, y * 2.1 + 9, z * 1.3) * 0.25;
+
+  function make(cv, opt) {
+    const ctx = cv.getContext("2d");
+    let w = 0, h = 0, cols = 0, rows = 0, vals = null, color = "", raf = 0, last = 0;
+    const cell = opt.cell, levels = opt.levels;
+    const resize = () => {
+      const d = Math.min(2, devicePixelRatio || 1); w = cv.clientWidth; h = cv.clientHeight;
+      cv.width = Math.round(w * d); cv.height = Math.round(h * d); ctx.setTransform(d, 0, 0, d, 0, 0);
+      cols = Math.ceil(w / cell) + 1; rows = Math.ceil(h / cell) + 1; vals = new Float32Array(cols * rows);
+    };
+    const draw = z => {
+      const sc = opt.scale / Math.max(w, 700);
+      for (let j = 0; j < rows; j++) for (let i = 0; i < cols; i++) vals[j * cols + i] = field(i * cell * sc, j * cell * sc, z);
+      ctx.clearRect(0, 0, w, h); ctx.strokeStyle = color; ctx.lineCap = "round";
+      for (let L = 0; L < levels; L++) {
+        const t = -0.9 + 1.8 * (L + 0.5) / levels, index = L % 5 === 2;
+        ctx.globalAlpha = index ? opt.alpha * 1.9 : opt.alpha; ctx.lineWidth = index ? 1.25 : 0.8;
+        ctx.beginPath();
+        for (let j = 0; j < rows - 1; j++) for (let i = 0; i < cols - 1; i++) {
+          const a = vals[j * cols + i], b = vals[j * cols + i + 1], c = vals[(j + 1) * cols + i + 1], dd = vals[(j + 1) * cols + i];
+          const k = (a > t) | ((b > t) << 1) | ((c > t) << 2) | ((dd > t) << 3);
+          if (k === 0 || k === 15) continue;
+          const x = i * cell, y = j * cell;
+          const top = [x + cell * (t - a) / (b - a), y], right = [x + cell, y + cell * (t - b) / (c - b)];
+          const bottom = [x + cell * (t - dd) / (c - dd), y + cell], left = [x, y + cell * (t - a) / (dd - a)];
+          const seg = (p, q) => { ctx.moveTo(p[0], p[1]); ctx.lineTo(q[0], q[1]); };
+          switch (k) {
+            case 1: case 14: seg(left, top); break;
+            case 2: case 13: seg(top, right); break;
+            case 3: case 12: seg(left, right); break;
+            case 4: case 11: seg(right, bottom); break;
+            case 6: case 9: seg(top, bottom); break;
+            case 7: case 8: seg(left, bottom); break;
+            case 5: seg(left, top); seg(right, bottom); break;
+            case 10: seg(top, right); seg(bottom, left); break;
+          }
+        }
+        ctx.stroke();
+      }
+      ctx.globalAlpha = 1;
+    };
+    const loop = t => { if (t - last > 50) { last = t; draw(opt.z0 + t * opt.speed); } raf = requestAnimationFrame(loop); };
+    const start = () => { cancelAnimationFrame(raf); if (reduced || !opt.speed) draw(opt.z0); else raf = requestAnimationFrame(loop); };
+    const recolor = () => { color = css(opt.token); start(); };
+    resize(); recolor();
+    if (opt.speed && !reduced && "IntersectionObserver" in window) new IntersectionObserver(es => es[0].isIntersecting && !document.hidden ? start() : cancelAnimationFrame(raf)).observe(cv);
+    document.addEventListener("visibilitychange", () => document.hidden ? cancelAnimationFrame(raf) : start());
+    let rt; addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => { resize(); start(); }, 150); });
+    new MutationObserver(recolor).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+    matchMedia("(prefers-color-scheme: dark)").addEventListener("change", recolor);
+  }
+  make($("topoHero"), { token: "--gold", cell: 10, levels: 22, scale: 3.2, alpha: .16, speed: 0.000045, z0: 0.3 });
+  make($("topoPage"), { token: "--accent", cell: 14, levels: 16, scale: 2.4, alpha: .07, speed: 0, z0: 5.7 });
 })();
 
 /* ---------- scroll motion ---------- */
