@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
 body { margin: 0; }
+html, body { overflow-x: clip; }
 [hidden] { display: none !important; }
 img { max-width: 100%; }
 html { scroll-behavior: smooth; }
@@ -141,6 +142,19 @@ nav.links a[aria-current="true"] { color: var(--hero-ink); box-shadow: inset 0 -
 .js-anim [data-reveal].in { opacity: 1; transform: none; }
 .js-anim .projects .proj.dim.in, .proj.dim { opacity: .28; transform: scale(.985); }
 
+/* theoretical background: Hamiltonian-style flow around a drifting Gaussian-mixture posterior, with equations from the work */
+.field { position: fixed; inset: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; display: block; }
+.heroband { position: relative; overflow: hidden; isolation: isolate; }
+.heroband .field { position: absolute; z-index: 0; }
+.heroband .hero { position: relative; z-index: 1; }
+.heroband::after { content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none; background: linear-gradient(90deg, var(--hero-bg) 0%, color-mix(in srgb, var(--hero-bg) 70%, transparent) 45%, transparent 75%); }
+.eqs { position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
+.heroband .eqs { position: absolute; z-index: 0; }
+.eqs span { position: absolute; font-family: var(--display); font-style: italic; white-space: nowrap; color: var(--accent); opacity: .09; font-size: clamp(.9rem, 1.6vw, 1.35rem); animation: drift var(--t, 40s) ease-in-out infinite alternate; }
+.heroband .eqs span { color: var(--gold); opacity: .28; }
+@keyframes drift { from { transform: translate(0, 0) rotate(var(--r, 0deg)); } to { transform: translate(var(--dx, 40px), var(--dy, -30px)) rotate(var(--r, 0deg)); } }
+@media (prefers-reduced-motion: reduce) { .eqs span { animation: none; } }
+
 /* sections */
 section.block { padding-block: 64px; border-top: 1px solid var(--rule); }
 .sechead h2::before { content: ""; display: block; width: 36px; height: 3px; background: var(--warm); margin-bottom: 14px; }
@@ -184,7 +198,7 @@ section.block { padding-block: 64px; border-top: 1px solid var(--rule); }
 .split .row { display: flex; justify-content: space-between; gap: 10px; font-size: .9rem; margin-bottom: 6px; }
 .split .row b { font-weight: 600; }
 .stack { display: flex; height: 30px; border-radius: 3px; overflow: hidden; background: var(--accent-soft); }
-.seg { width: var(--w); display: grid; place-items: center; color: #fff; font: 600 .75rem var(--body); transition: width 1.1s cubic-bezier(.2, .7, .2, 1); transition-delay: calc(var(--d, 0ms) + 250ms); white-space: nowrap; overflow: hidden; }
+.seg { width: var(--w); display: grid; place-items: center; color: var(--panel); font: 600 .75rem var(--body); transition: width 1.1s cubic-bezier(.2, .7, .2, 1); transition-delay: calc(var(--d, 0ms) + 250ms); white-space: nowrap; overflow: hidden; }
 .seg.coach { background: var(--seg-coach); } .seg.qb { background: var(--seg-qb); } .seg.rest { background: var(--seg-rest); color: var(--ink); }
 .js-anim .split:not(.in) .seg { width: 0; }
 .keyfacts { margin: 18px 0 0; padding: 16px 0 0 18px; border-top: 1px dashed var(--rule); color: var(--muted); font-size: .92rem; }
@@ -265,6 +279,8 @@ footer { padding-block: 28px 40px; color: var(--muted); font-size: .85rem; borde
 </head>
 <body>
 <script>try { if (!matchMedia("(prefers-reduced-motion: reduce)").matches && "IntersectionObserver" in window) document.documentElement.classList.add("js-anim"); } catch (e) {}</script>
+<canvas class="field" id="fieldPage" aria-hidden="true"></canvas>
+<div class="eqs" id="eqsPage" aria-hidden="true"></div>
 <div class="progress" id="prog" aria-hidden="true"></div>
 <a class="btn primary totop" id="totop" href="#top" aria-label="Back to top">↑ Top</a>
 <header class="top">
@@ -284,6 +300,8 @@ footer { padding-block: 28px 40px; color: var(--muted); font-size: .85rem; borde
 
 <main id="top">
   <div class="heroband">
+  <canvas class="field" id="fieldHero" aria-hidden="true"></canvas>
+  <div class="eqs" id="eqsHero" aria-hidden="true"></div>
   <div class="wrap hero">
     <div>
       <div class="who">
@@ -763,6 +781,102 @@ $("losses").addEventListener("input", syncData);
 $("resetBtn").addEventListener("click", restart);
 addEventListener("resize", drawSampler);
 matchMedia("(prefers-color-scheme: dark)").addEventListener("change", drawSampler);
+
+/* ---------- theoretical background ---------- */
+(function field() {
+  const EQS = ["p(θ | x) ∝ p(x | θ) · p(θ)", "α = min{1, π(θ′) / π(θ)}", "H(X) = −Σ p(x) log p(x)", "J(A, B) = |A ∩ B| / |A ∪ B|",
+    "EV = p·b − (1 − p)", "f* = (bp − q) / b", "R̂ → 1", "dθ/dt = ∂H/∂ρ,  dρ/dt = −∂H/∂θ", "EPA = EPₜ₊₁ − EPₜ", "Var(y) = σ²_coach + σ²_QB + σ²_ε",
+    "θₜ₊₁ ~ q(· | θₜ)", "Beta(w + 1, ℓ + 1)"];
+  function placeEqs(host, n, seed) {
+    let r = seed; const rnd = () => (r = (r * 16807) % 2147483647) / 2147483647;
+    host.innerHTML = Array.from({ length: n }, (_, i) => {
+      const e = EQS[(i + seed) % EQS.length];
+      return `<span style="left:${(rnd() * 88).toFixed(1)}%;top:${(4 + rnd() * 88).toFixed(1)}%;--t:${30 + rnd() * 30 | 0}s;--dx:${(rnd() * 80 - 40) | 0}px;--dy:${(rnd() * 60 - 30) | 0}px;--r:${(rnd() * 10 - 5).toFixed(1)}deg">${esc(e)}</span>`;
+    }).join("");
+  }
+  placeEqs($("eqsPage"), innerWidth < 640 ? 6 : 12, 7);
+  placeEqs($("eqsHero"), innerWidth < 640 ? 3 : 6, 3);
+
+  const pointer = { x: -1, y: -1, on: false };
+  addEventListener("pointermove", e => { pointer.x = e.clientX; pointer.y = e.clientY; pointer.on = true; }, { passive: true });
+  addEventListener("pointerleave", () => { pointer.on = false; });
+
+  function make(canvas, hero) {
+    const ctx = canvas.getContext("2d");
+    let w = 0, h = 0, parts = [], colors = {};
+    const readColors = () => {
+      colors = hero
+        ? { bg: css("--hero-bg"), a: css("--gold"), b: css("--hero-muted") }
+        : { bg: css("--paper"), a: css("--accent"), b: css("--warm") };
+    };
+    const resize = () => {
+      const d = Math.min(1.5, devicePixelRatio || 1);
+      w = canvas.clientWidth; h = canvas.clientHeight;
+      canvas.width = Math.round(w * d); canvas.height = Math.round(h * d);
+      ctx.setTransform(d, 0, 0, d, 0, 0);
+      const n = Math.min(hero ? 170 : 240, Math.round(w * h / (hero ? 5200 : 7000)));
+      parts = Array.from({ length: n }, () => spawn());
+      ctx.fillStyle = colors.bg; ctx.fillRect(0, 0, w, h);
+    };
+    const spawn = () => ({ x: Math.random() * w, y: Math.random() * h, life: 80 + Math.random() * 220, warm: Math.random() < 0.28 });
+    // drifting mixture of Gaussians = the "posterior" the particles orbit
+    const modes = t => {
+      const s = Math.min(w, h);
+      const m = [
+        { x: w * (0.70 + 0.12 * Math.sin(t * 0.00011)), y: h * (0.45 + 0.20 * Math.cos(t * 0.00013)), s: s * 0.22, k: 1 },
+        { x: w * (0.30 + 0.14 * Math.cos(t * 0.00009)), y: h * (0.62 + 0.18 * Math.sin(t * 0.00012)), s: s * 0.18, k: -1 },
+        { x: w * (0.52 + 0.20 * Math.sin(t * 0.00007 + 2)), y: h * (0.25 + 0.15 * Math.sin(t * 0.0001 + 1)), s: s * 0.15, k: 1 }
+      ];
+      if (pointer.on) {
+        const r = canvas.getBoundingClientRect();
+        const px = pointer.x - r.left, py = pointer.y - r.top;
+        if (px > -50 && py > -50 && px < w + 50 && py < h + 50) m.push({ x: px, y: py, s: s * 0.12, k: 1.6 });
+      }
+      return m;
+    };
+    let last = 0, running = true, visible = true;
+    const step = t => {
+      if (!running || !visible) return;
+      if (t - last < 30) { requestAnimationFrame(step); return; }
+      last = t;
+      ctx.globalAlpha = hero ? 0.06 : 0.09; ctx.fillStyle = colors.bg; ctx.fillRect(0, 0, w, h);
+      advance(t, 1);
+      requestAnimationFrame(step);
+    };
+    const advance = (t, alpha) => {
+      const M = modes(t);
+      ctx.lineWidth = 1;
+      for (const p of parts) {
+        let gx = 0, gy = 0;
+        for (const m of M) {
+          const dx = p.x - m.x, dy = p.y - m.y, e = Math.exp(-(dx * dx + dy * dy) / (2 * m.s * m.s));
+          gx += -dx / (m.s * m.s) * e; gy += -dy / (m.s * m.s) * e;
+          // rotational (Hamiltonian) part: move along the level sets, direction set by the mode's spin
+          gx += m.k * dy / m.s * e * 0.9; gy += -m.k * dx / m.s * e * 0.9;
+        }
+        const mag = Math.hypot(gx, gy) || 1, sp = 1.4;
+        const nx = p.x + gx / mag * sp + (Math.random() - .5) * .35, ny = p.y + gy / mag * sp + (Math.random() - .5) * .35;
+        ctx.globalAlpha = (hero ? 0.75 : 0.2) * alpha;
+        ctx.strokeStyle = p.warm ? colors.b : colors.a;
+        ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(nx, ny); ctx.stroke();
+        p.x = nx; p.y = ny;
+        if (--p.life < 0 || p.x < -10 || p.y < -10 || p.x > w + 10 || p.y > h + 10) Object.assign(p, spawn());
+      }
+      ctx.globalAlpha = 1;
+    };
+    readColors(); resize();
+    if (reduced) { for (let i = 0; i < 160; i++) { ctx.globalAlpha = 0.05; ctx.fillStyle = colors.bg; ctx.fillRect(0, 0, w, h); advance(0, 1); } }
+    else requestAnimationFrame(step);
+    if (hero && "IntersectionObserver" in window) new IntersectionObserver(es => { visible = es[0].isIntersecting; if (visible && !reduced) requestAnimationFrame(step); }).observe(canvas);
+    document.addEventListener("visibilitychange", () => { running = !document.hidden; if (running && !reduced) requestAnimationFrame(step); });
+    let rt; addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => { resize(); if (reduced) advance(0, 1); }, 150); });
+    return { recolor() { readColors(); ctx.globalAlpha = 1; ctx.fillStyle = colors.bg; ctx.fillRect(0, 0, w, h); } };
+  }
+  const fields = [make($("fieldPage"), false), make($("fieldHero"), true)];
+  const recolor = () => fields.forEach(f => f.recolor());
+  new MutationObserver(recolor).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", recolor);
+})();
 
 /* ---------- scroll motion ---------- */
 const REVEALS = [
