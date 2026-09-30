@@ -3,57 +3,56 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta property="og:image" content="https://samyarkoni.github.io/images/headshot.jpg">
 <meta name="description" content="Samuel Yarkoni: Computer Science, Data Science and Economics at Rutgers Honors College. Bayesian modeling, research and software projects.">
 <title>Samuel Yarkoni</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
 body { margin: 0; }
 [hidden] { display: none !important; }
 img { max-width: 100%; }
 html { scroll-behavior: smooth; }
-/* Layout: single measured column on cool "lab notebook" paper; the hero pairs the name with a live MCMC sampler, every later section is data-driven from one JS profile object. */
+/* Layout: single measured column on clean paper in navy and muted gold (the headshot's suit and tie); the hero pairs portrait and thesis with a live MCMC sampler; sections rise, slide or zoom into frame as they scroll by. */
 :root {
-  --paper: #f2f4f8;
+  --paper: #f6f7f9;
   --panel: #ffffff;
-  --ink: #131a2e;
-  --muted: #56607a;
-  --rule: #d6dbe6;
-  --accent: #2743c9;      /* cobalt: links, controls, trace */
-  --accent-soft: #e3e8fb;
-  --warm: #c77a00;        /* amber: posterior / highlights */
-  --warm-soft: #fbefd9;
+  --ink: #0f1b33;
+  --muted: #5a6478;
+  --rule: #dfe3ea;
+  --accent: #1d3a78;      /* navy: links, controls, trace */
+  --accent-soft: #e6ebf5;
+  --warm: #a8792b;        /* muted gold: posterior / highlights */
+  --warm-soft: #f5ecdb;
   --good: #1d7a4c;
   --bad: #b3261e;
-  --display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
-  --body: "Public Sans", "Helvetica Neue", Arial, system-ui, sans-serif;
-  --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
-  --step--1: 0.82rem; --step-0: 1rem; --step-1: 1.2rem; --step-2: 1.6rem; --step-3: clamp(2.4rem, 6vw, 4.2rem);
+  --shadow: rgba(15, 27, 51, .14);
+  --display: "IBM Plex Serif", Georgia, "Times New Roman", serif;
+  --body: "IBM Plex Sans", "Helvetica Neue", Arial, system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --step--1: 0.8rem; --step-0: 1rem; --step-1: 1.18rem; --step-2: 1.75rem; --step-3: clamp(2.2rem, 5.2vw, 3.7rem);
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --paper: #0d1220; --panel: #151c30; --ink: #e7ebf4; --muted: #9aa4bd; --rule: #283252;
-    --accent: #8ea3ff; --accent-soft: #1f2a52; --warm: #f2b441; --warm-soft: #3a2c10;
-    --good: #5fd39a; --bad: #ff8a80; color-scheme: dark;
+    --paper: #0a1120; --panel: #111a2e; --ink: #e8ecf3; --muted: #98a2b6; --rule: #22304d;
+    --accent: #9db4ff; --accent-soft: #1a2747; --warm: #d9b26a; --warm-soft: #2e2615;
+    --good: #5fd39a; --bad: #ff8a80; --shadow: rgba(0, 0, 0, .45); color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --paper: #0d1220; --panel: #151c30; --ink: #e7ebf4; --muted: #9aa4bd; --rule: #283252;
-  --accent: #8ea3ff; --accent-soft: #1f2a52; --warm: #f2b441; --warm-soft: #3a2c10;
-  --good: #5fd39a; --bad: #ff8a80; color-scheme: dark;
+  --paper: #0a1120; --panel: #111a2e; --ink: #e8ecf3; --muted: #98a2b6; --rule: #22304d;
+  --accent: #9db4ff; --accent-soft: #1a2747; --warm: #d9b26a; --warm-soft: #2e2615;
+  --good: #5fd39a; --bad: #ff8a80; --shadow: rgba(0, 0, 0, .45); color-scheme: dark;
 }
 * { box-sizing: border-box; }
 body {
   background: var(--paper); color: var(--ink);
   font-family: var(--body); font-size: var(--step-0); line-height: 1.6;
-  background-image: linear-gradient(var(--rule) 1px, transparent 1px), linear-gradient(90deg, var(--rule) 1px, transparent 1px);
-  background-size: 32px 32px; background-attachment: fixed;
 }
-body::before { content: ""; position: fixed; inset: 0; background: var(--paper); opacity: .86; pointer-events: none; z-index: -1; }
 a { color: var(--accent); text-underline-offset: 3px; }
 a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
-h1, h2, h3 { font-family: var(--display); text-wrap: balance; line-height: 1.1; margin: 0; }
+h1, h2, h3 { font-family: var(--display); text-wrap: balance; line-height: 1.15; margin: 0; }
 h2 { font-size: var(--step-2); font-weight: 700; letter-spacing: -0.01em; }
 h3 { font-size: var(--step-1); font-weight: 700; }
 p { margin: 0; }
@@ -64,7 +63,7 @@ p { margin: 0; }
 /* nav */
 header.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10; background: color-mix(in srgb, var(--paper) 88%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--rule); }
 header.top .wrap { display: flex; align-items: center; gap: 16px; padding-block: 10px; }
-.mark { font-family: var(--display); font-weight: 800; font-size: 1.15rem; text-decoration: none; color: var(--ink); }
+.mark { font-family: var(--display); font-weight: 700; font-size: 1.15rem; text-decoration: none; color: var(--ink); }
 .mark span { color: var(--warm); }
 nav.links { display: flex; gap: 18px; margin-left: auto; flex-wrap: wrap; }
 nav.links a { color: var(--muted); text-decoration: none; font-size: .92rem; }
@@ -75,8 +74,8 @@ nav.links a:hover { color: var(--ink); }
 /* hero */
 .hero { display: grid; grid-template-columns: 1.05fr 1fr; gap: 40px; align-items: center; padding-block: 56px 40px; }
 .hero > * { min-width: 0; }
-.hero h1 { font-size: var(--step-3); font-weight: 800; letter-spacing: -0.03em; }
-.hero h1 em { font-style: normal; color: var(--accent); }
+.hero h1 { font-size: var(--step-3); font-weight: 600; letter-spacing: -0.015em; margin-top: 22px; }
+.hero h1 em { font-style: italic; color: var(--accent); }
 .hero .lede { font-size: var(--step-1); color: var(--muted); max-width: 34ch; margin-top: 16px; }
 .rotator { font-family: var(--mono); color: var(--ink); margin-top: 20px; font-size: .95rem; min-height: 1.6em; }
 .rotator b { color: var(--warm); font-weight: 500; }
@@ -85,11 +84,12 @@ nav.links a:hover { color: var(--ink); }
 .stats strong { font-family: var(--display); font-size: 1.7rem; font-weight: 700; font-variant-numeric: tabular-nums; }
 .stats span { font-size: .85rem; color: var(--muted); }
 .cta { display: flex; gap: 12px; margin-top: 28px; flex-wrap: wrap; }
-.btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 8px; font-weight: 600; text-decoration: none; border: 1px solid var(--accent); cursor: pointer; font-family: var(--body); font-size: .95rem; }
+.btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; border-radius: 6px; font-weight: 600; text-decoration: none; border: 1px solid var(--accent); cursor: pointer; font-family: var(--body); font-size: .95rem; }
 .btn.primary { background: var(--accent); color: var(--paper); }
 .btn.ghost { background: transparent; color: var(--accent); }
 
-.sampler { background: var(--panel); border: 1px solid var(--rule); border-radius: 12px; padding: 16px; box-shadow: 0 18px 40px -28px rgba(19, 26, 46, .45); }
+.sampler { background: var(--panel); border: 1px solid var(--rule); border-radius: 12px; padding: 16px; box-shadow: 0 24px 48px -30px var(--shadow); }
+.sampler { margin: 0; }
 .sampler .head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
 .sampler canvas { width: 100%; display: block; }
 #trace { height: 110px; margin-top: 10px; }
@@ -101,6 +101,32 @@ nav.links a:hover { color: var(--ink); }
 .controls label { display: flex; gap: 8px; align-items: center; }
 .controls input[type=range] { width: 110px; accent-color: var(--accent); }
 @media (max-width: 860px) { .hero { grid-template-columns: 1fr; padding-block: 36px 24px; } }
+
+/* hero band + portrait */
+.heroband { background: linear-gradient(180deg, var(--panel) 0%, var(--paper) 100%); border-bottom: 1px solid var(--rule); }
+.who { display: flex; align-items: center; gap: 18px; }
+.who > div { min-width: 0; }
+.portrait { width: 116px; height: 116px; border-radius: 50%; object-fit: cover; flex: none; border: 3px solid var(--panel); box-shadow: 0 0 0 2px var(--warm), 0 14px 30px -14px var(--shadow); }
+.who .name { font-family: var(--display); font-size: 1.35rem; font-weight: 600; line-height: 1.2; }
+.who .sub { color: var(--muted); font-size: .92rem; margin-top: 2px; }
+@media (max-width: 420px) { .portrait { width: 92px; height: 92px; } }
+.proj:hover, .edu:hover { box-shadow: 0 18px 36px -24px var(--shadow); }
+
+/* scroll progress + active nav */
+.progress { position: fixed; top: 0; left: 0; height: 3px; width: 100%; transform-origin: 0 50%; transform: scaleX(0); background: var(--warm); z-index: 20; pointer-events: none; }
+nav.links a[aria-current="true"] { color: var(--ink); box-shadow: inset 0 -2px 0 var(--warm); }
+.totop { position: fixed; right: 18px; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); z-index: 15; opacity: 0; transform: translateY(12px); transition: opacity .3s, transform .3s; pointer-events: none; }
+.totop.show { opacity: 1; transform: none; pointer-events: auto; }
+
+/* reveal on scroll: rise, slide from either side, or zoom into frame; reverses when it leaves */
+.js-anim [data-reveal] { opacity: 0; transition: opacity .7s ease, transform .9s cubic-bezier(.2, .7, .2, 1); transition-delay: var(--d, 0ms); will-change: transform, opacity; }
+.js-anim [data-reveal="up"] { transform: translateY(44px); }
+.js-anim [data-reveal="down"] { transform: translateY(-32px); }
+.js-anim [data-reveal="left"] { transform: translateX(-72px); }
+.js-anim [data-reveal="right"] { transform: translateX(72px); }
+.js-anim [data-reveal="zoom"] { transform: scale(.88); }
+.js-anim [data-reveal].in { opacity: 1; transform: none; }
+.js-anim .projects .proj.dim.in, .proj.dim { opacity: .28; transform: scale(.985); }
 
 /* sections */
 section.block { padding-block: 48px; border-top: 1px solid var(--rule); }
@@ -166,7 +192,7 @@ section.block { padding-block: 48px; border-top: 1px solid var(--rule); }
 .two > * { min-width: 0; }
 .edu { background: var(--panel); border: 1px solid var(--rule); border-radius: 10px; padding: 22px; }
 .edu .gpa { display: flex; align-items: baseline; gap: 10px; margin-top: 14px; }
-.edu .gpa strong { font-family: var(--display); font-size: 2.4rem; font-weight: 800; }
+.edu .gpa strong { font-family: var(--display); font-size: 2.4rem; font-weight: 700; }
 .meter { height: 6px; background: var(--accent-soft); border-radius: 3px; margin-top: 6px; overflow: hidden; }
 .meter span { display: block; height: 100%; background: var(--accent); }
 .edu ul { padding-left: 18px; margin: 14px 0 0; color: var(--muted); font-size: .93rem; }
@@ -196,6 +222,9 @@ footer { padding-block: 28px 40px; color: var(--muted); font-size: .85rem; borde
 </style>
 </head>
 <body>
+<script>try { if (!matchMedia("(prefers-reduced-motion: reduce)").matches && "IntersectionObserver" in window) document.documentElement.classList.add("js-anim"); } catch (e) {}</script>
+<div class="progress" id="prog" aria-hidden="true"></div>
+<a class="btn primary totop" id="totop" href="#top" aria-label="Back to top">↑ Top</a>
 <header class="top">
   <div class="wrap">
     <a class="mark" href="#top">S<span>.</span>Yarkoni</a>
@@ -211,10 +240,18 @@ footer { padding-block: 28px 40px; color: var(--muted); font-size: .85rem; borde
 </header>
 
 <main id="top">
+  <div class="heroband">
   <div class="wrap hero">
     <div>
-      <p class="label">CS · Data Science · Economics — Rutgers Honors College, '28</p>
-      <h1>Samuel Yarkoni builds models that turn <em>noisy data</em> into decisions.</h1>
+      <div class="who">
+        <img class="portrait" src="images/headshot.jpg" alt="Portrait of Samuel Yarkoni" width="116" height="116">
+        <div>
+          <p class="name">Samuel Yarkoni</p>
+          <p class="label">CS · Data Science · Economics</p>
+          <p class="sub">Rutgers Honors College '28 · New Jersey</p>
+        </div>
+      </div>
+      <h1>I build models that turn <em>noisy data</em> into decisions.</h1>
       <p class="lede">I work where statistics meets code: Bayesian sports models, genomic data pipelines, and econometric research.</p>
       <p class="rotator" aria-live="polite">currently: <b id="rot">sampling NFL win probabilities with MCMC</b></p>
       <div class="stats">
@@ -245,6 +282,7 @@ footer { padding-block: 28px 40px; color: var(--muted); font-size: .85rem; borde
         <label for="losses">losses <input id="losses" type="range" min="0" max="17" value="6"><span class="mono" id="lossV">6</span></label>
       </div>
     </figure>
+  </div>
   </div>
 
   <section class="block" id="projects">
@@ -495,12 +533,12 @@ function renderSkills() {
 }
 $("filters").addEventListener("click", e => {
   const b = e.target.closest("[data-cat]"); if (!b) return;
-  activeCat = b.dataset.cat; renderFilters(); renderProjects();
+  activeCat = b.dataset.cat; renderFilters(); renderProjects(); applyReveals();
 });
 $("skillGroups").addEventListener("click", e => {
   const b = e.target.closest("[data-skill]"); if (!b) return;
   activeSkill = activeSkill === b.dataset.skill ? null : b.dataset.skill;
-  activeCat = "All"; renderFilters(); renderSkills(); renderProjects();
+  activeCat = "All"; renderFilters(); renderSkills(); renderProjects(); applyReveals();
   if (activeSkill) document.getElementById("projects").scrollIntoView({ behavior: reduced ? "auto" : "smooth" });
 });
 
@@ -564,7 +602,7 @@ function step() {
   chain.push(cur);
 }
 function sizeCanvas(c) {
-  const r = c.getBoundingClientRect(), d = window.devicePixelRatio || 1;
+  const r = { width: c.clientWidth, height: c.clientHeight }, d = window.devicePixelRatio || 1;
   if (c.width !== Math.round(r.width * d)) { c.width = Math.round(r.width * d); c.height = Math.round(r.height * d); }
   const ctx = c.getContext("2d"); ctx.setTransform(d, 0, 0, d, 0, 0);
   return [ctx, r.width, r.height];
@@ -627,6 +665,42 @@ $("resetBtn").addEventListener("click", restart);
 addEventListener("resize", drawSampler);
 matchMedia("(prefers-color-scheme: dark)").addEventListener("change", drawSampler);
 
+/* ---------- scroll motion ---------- */
+const REVEALS = [
+  [".hero .who", "zoom"], [".hero h1", "up", 80], [".hero .lede", "up", 160], [".hero .rotator", "up", 220],
+  [".hero .stats > div", "up", 260, 90], [".hero .cta", "up", 480], [".hero .sampler", "right", 200],
+  [".sechead", "up"], [".proj", "zoom", 0, 90], [".lab > div:first-child", "left"], [".lab > div:last-child", "right", 120],
+  [".role", "left", 0, 110], [".edu", "left"], ["#skills .two > div:last-child", "right", 120],
+  [".beyond > div", "up", 0, 110], ["section.block:not([id]) h2", "up"], [".contact > div:first-child", "left"], [".citem", "right", 0, 90]
+];
+const revealObs = "IntersectionObserver" in window && document.documentElement.classList.contains("js-anim")
+  ? new IntersectionObserver(es => es.forEach(e => e.target.classList.toggle("in", e.isIntersecting)), { threshold: 0.12, rootMargin: "0px 0px -6% 0px" })
+  : null;
+function applyReveals() {
+  REVEALS.forEach(([sel, kind, base = 0, step = 0]) => {
+    document.querySelectorAll(sel).forEach((el, i) => {
+      if (!el.dataset.reveal) { el.dataset.reveal = kind; el.style.setProperty("--d", (base + (step ? (i % 3) * step : 0)) + "ms"); }
+      if (revealObs) revealObs.observe(el); else el.classList.add("in");
+    });
+  });
+}
+(function scrollChrome() {
+  const prog = $("prog"), top = $("totop"), links = [...document.querySelectorAll("nav.links a")];
+  let ticking = false;
+  const onScroll = () => {
+    const h = document.documentElement.scrollHeight - innerHeight;
+    prog.style.transform = `scaleX(${h > 0 ? Math.min(1, scrollY / h) : 0})`;
+    top.classList.toggle("show", scrollY > innerHeight * 0.8);
+    const mid = innerHeight * 0.35;
+    let cur = null;
+    links.forEach(a => { const sec = document.querySelector(a.getAttribute("href")); if (sec && sec.getBoundingClientRect().top <= mid) cur = a; });
+    links.forEach(a => a.setAttribute("aria-current", a === cur ? "true" : "false"));
+    ticking = false;
+  };
+  addEventListener("scroll", () => { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }, { passive: true });
+  onScroll();
+})();
+
 /* ---------- contact ---------- */
 $("copyBtn").addEventListener("click", () => {
   const t = $("emailV").textContent;
@@ -635,7 +709,7 @@ $("copyBtn").addEventListener("click", () => {
   try { navigator.clipboard.writeText(t).then(done, fallback); } catch (e) { fallback(); }
 });
 
-renderFilters(); renderProjects(); renderSkills(); renderExperience(); updateLab(); restart();
+renderFilters(); renderProjects(); renderSkills(); renderExperience(); updateLab(); restart(); applyReveals();
 </script>
 </body>
 </html>
