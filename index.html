@@ -28,6 +28,8 @@ html { scroll-behavior: smooth; }
   --good: #1d7a4c;
   --bad: #b3261e;
   --shadow: rgba(15, 27, 51, .14);
+  --hero-bg: #0f1b33; --hero-ink: #f3f5fa; --hero-muted: #b3bdd1; --hero-rule: #2a3a5e; --gold: #d4ae66;
+  --seg-coach: #1d3a78; --seg-qb: #a8792b; --seg-rest: #b7c0d0;
   --display: "IBM Plex Serif", Georgia, "Times New Roman", serif;
   --body: "IBM Plex Sans", "Helvetica Neue", Arial, system-ui, sans-serif;
   --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
@@ -38,12 +40,14 @@ html { scroll-behavior: smooth; }
     --paper: #0a1120; --panel: #111a2e; --ink: #e8ecf3; --muted: #98a2b6; --rule: #22304d;
     --accent: #9db4ff; --accent-soft: #1a2747; --warm: #d9b26a; --warm-soft: #2e2615;
     --good: #5fd39a; --bad: #ff8a80; --shadow: rgba(0, 0, 0, .45); color-scheme: dark;
+    --hero-bg: #0c1528; --hero-rule: #22304d; --seg-coach: #7f9cf0; --seg-qb: #d9b26a; --seg-rest: #4a5877;
   }
 }
 :root[data-theme="dark"] {
   --paper: #0a1120; --panel: #111a2e; --ink: #e8ecf3; --muted: #98a2b6; --rule: #22304d;
   --accent: #9db4ff; --accent-soft: #1a2747; --warm: #d9b26a; --warm-soft: #2e2615;
   --good: #5fd39a; --bad: #ff8a80; --shadow: rgba(0, 0, 0, .45); color-scheme: dark;
+    --hero-bg: #0c1528; --hero-rule: #22304d; --seg-coach: #7f9cf0; --seg-qb: #d9b26a; --seg-rest: #4a5877;
 }
 * { box-sizing: border-box; }
 body {
@@ -57,38 +61,39 @@ h2 { font-size: var(--step-2); font-weight: 700; letter-spacing: -0.01em; }
 h3 { font-size: var(--step-1); font-weight: 700; }
 p { margin: 0; }
 .wrap { max-width: 1080px; margin: 0 auto; padding-inline: 20px; }
-.label { font-family: var(--mono); font-size: var(--step--1); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.label { font-family: var(--body); font-size: .72rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
 .mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
 
 /* nav */
-header.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10; background: color-mix(in srgb, var(--paper) 88%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--rule); }
+header.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10; background: var(--hero-bg); border-bottom: 1px solid var(--hero-rule); }
 header.top .wrap { display: flex; align-items: center; gap: 16px; padding-block: 10px; }
-.mark { font-family: var(--display); font-weight: 700; font-size: 1.15rem; text-decoration: none; color: var(--ink); }
+.mark { font-family: var(--display); font-weight: 600; font-size: 1.1rem; text-decoration: none; color: var(--hero-ink); letter-spacing: .01em; }
 .mark span { color: var(--warm); }
 nav.links { display: flex; gap: 18px; margin-left: auto; flex-wrap: wrap; }
-nav.links a { color: var(--muted); text-decoration: none; font-size: .92rem; }
-nav.links a:hover { color: var(--ink); }
-.iconbtn { border: 1px solid var(--rule); background: var(--panel); color: var(--ink); border-radius: 999px; padding: 4px 10px; font: 500 .8rem var(--mono); cursor: pointer; }
+nav.links a { color: var(--hero-muted); text-decoration: none; font-size: .9rem; padding-block: 4px; }
+nav.links a:hover { color: var(--hero-ink); }
+header.top .iconbtn { background: transparent; color: var(--hero-ink); border-color: var(--hero-rule); }
+.iconbtn { border: 1px solid var(--rule); background: var(--panel); color: var(--ink); border-radius: 4px; padding: 5px 12px; font: 500 .8rem var(--body); cursor: pointer; }
 @media (max-width: 640px) { nav.links { display: none; } .iconbtn { margin-left: auto; } }
 
 /* hero */
-.hero { display: grid; grid-template-columns: 1.05fr 1fr; gap: 40px; align-items: center; padding-block: 56px 40px; }
+.hero { display: grid; grid-template-columns: 1.05fr 1fr; gap: 48px; align-items: center; padding-block: 64px 56px; }
 .hero > * { min-width: 0; }
 .hero h1 { font-size: var(--step-3); font-weight: 600; letter-spacing: -0.015em; margin-top: 22px; }
-.hero h1 em { font-style: italic; color: var(--accent); }
+.hero h1 em { font-style: italic; color: var(--gold); }
 .hero .lede { font-size: var(--step-1); color: var(--muted); max-width: 34ch; margin-top: 16px; }
-.rotator { font-family: var(--mono); color: var(--ink); margin-top: 20px; font-size: .95rem; min-height: 1.6em; }
-.rotator b { color: var(--warm); font-weight: 500; }
+.rotator { color: var(--hero-muted); margin-top: 20px; font-size: .95rem; min-height: 1.6em; }
+.rotator b { color: var(--gold); font-weight: 500; }
 .stats { display: flex; gap: 28px; flex-wrap: wrap; margin-top: 28px; }
 .stats div { display: grid; }
 .stats strong { font-family: var(--display); font-size: 1.7rem; font-weight: 700; font-variant-numeric: tabular-nums; }
 .stats span { font-size: .85rem; color: var(--muted); }
 .cta { display: flex; gap: 12px; margin-top: 28px; flex-wrap: wrap; }
-.btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; border-radius: 6px; font-weight: 600; text-decoration: none; border: 1px solid var(--accent); cursor: pointer; font-family: var(--body); font-size: .95rem; }
+.btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 20px; border-radius: 3px; font-weight: 600; text-decoration: none; border: 1px solid var(--accent); cursor: pointer; font-family: var(--body); font-size: .95rem; }
 .btn.primary { background: var(--accent); color: var(--paper); }
 .btn.ghost { background: transparent; color: var(--accent); }
 
-.sampler { background: var(--panel); border: 1px solid var(--rule); border-radius: 12px; padding: 16px; box-shadow: 0 24px 48px -30px var(--shadow); }
+.sampler { background: var(--panel); border: 1px solid var(--rule); border-radius: 6px; padding: 16px; box-shadow: 0 24px 48px -30px var(--shadow); }
 .sampler { margin: 0; }
 .sampler .head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
 .sampler canvas { width: 100%; display: block; }
@@ -103,10 +108,18 @@ nav.links a:hover { color: var(--ink); }
 @media (max-width: 860px) { .hero { grid-template-columns: 1fr; padding-block: 36px 24px; } }
 
 /* hero band + portrait */
-.heroband { background: linear-gradient(180deg, var(--panel) 0%, var(--paper) 100%); border-bottom: 1px solid var(--rule); }
+.heroband { background: var(--hero-bg); color: var(--hero-ink); }
+.heroband .label { color: var(--gold); }
+.heroband .sampler .label { color: var(--muted); }
+.heroband h1 { color: var(--hero-ink); }
+.heroband .lede, .heroband .who .sub, .heroband .stats span { color: var(--hero-muted); }
+.heroband .stats { border-top: 1px solid var(--hero-rule); padding-top: 20px; }
+.heroband .btn.primary { background: var(--gold); border-color: var(--gold); color: #0f1b33; }
+.heroband .btn.ghost { color: var(--hero-ink); border-color: var(--hero-muted); }
+.heroband .sampler { color: var(--ink); border-color: transparent; box-shadow: 0 30px 60px -30px rgba(0, 0, 0, .6); }
 .who { display: flex; align-items: center; gap: 18px; }
 .who > div { min-width: 0; }
-.portrait { width: 116px; height: 116px; border-radius: 50%; object-fit: cover; flex: none; border: 3px solid var(--panel); box-shadow: 0 0 0 2px var(--warm), 0 14px 30px -14px var(--shadow); }
+.portrait { width: 116px; height: 116px; border-radius: 50%; object-fit: cover; flex: none; border: 3px solid var(--hero-bg); box-shadow: 0 0 0 2px var(--gold), 0 14px 30px -14px rgba(0, 0, 0, .5); }
 .who .name { font-family: var(--display); font-size: 1.35rem; font-weight: 600; line-height: 1.2; }
 .who .sub { color: var(--muted); font-size: .92rem; margin-top: 2px; }
 @media (max-width: 420px) { .portrait { width: 92px; height: 92px; } }
@@ -114,7 +127,7 @@ nav.links a:hover { color: var(--ink); }
 
 /* scroll progress + active nav */
 .progress { position: fixed; top: 0; left: 0; height: 3px; width: 100%; transform-origin: 0 50%; transform: scaleX(0); background: var(--warm); z-index: 20; pointer-events: none; }
-nav.links a[aria-current="true"] { color: var(--ink); box-shadow: inset 0 -2px 0 var(--warm); }
+nav.links a[aria-current="true"] { color: var(--hero-ink); box-shadow: inset 0 -2px 0 var(--gold); }
 .totop { position: fixed; right: 18px; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); z-index: 15; opacity: 0; transform: translateY(12px); transition: opacity .3s, transform .3s; pointer-events: none; }
 .totop.show { opacity: 1; transform: none; pointer-events: auto; }
 
@@ -129,30 +142,59 @@ nav.links a[aria-current="true"] { color: var(--ink); box-shadow: inset 0 -2px 0
 .js-anim .projects .proj.dim.in, .proj.dim { opacity: .28; transform: scale(.985); }
 
 /* sections */
-section.block { padding-block: 48px; border-top: 1px solid var(--rule); }
-.sechead { display: flex; justify-content: space-between; align-items: end; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; }
+section.block { padding-block: 64px; border-top: 1px solid var(--rule); }
+.sechead h2::before { content: ""; display: block; width: 36px; height: 3px; background: var(--warm); margin-bottom: 14px; }
+.sechead { display: flex; margin-top: 0; justify-content: space-between; align-items: end; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; }
 .sechead p { color: var(--muted); max-width: 52ch; }
 
 .chips { display: flex; gap: 8px; flex-wrap: wrap; }
-.chip { border: 1px solid var(--rule); background: var(--panel); color: var(--ink); padding: 5px 12px; border-radius: 999px; font: 500 .82rem var(--mono); cursor: pointer; transition: background .15s, border-color .15s; }
+.chip { border: 1px solid var(--rule); background: var(--panel); color: var(--ink); padding: 5px 12px; border-radius: 4px; font: 500 .82rem var(--body); cursor: pointer; transition: background .15s, border-color .15s; }
 .chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--paper); }
 .chip.hit { background: var(--warm-soft); border-color: var(--warm); }
 
 .projects { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; }
-.proj { background: var(--panel); border: 1px solid var(--rule); border-radius: 10px; padding: 20px; display: grid; grid-template-rows: auto auto 1fr auto; gap: 10px; transition: opacity .25s, transform .25s, border-color .2s; min-width: 0; }
+.proj { background: var(--panel); border: 1px solid var(--rule); border-top: 3px solid var(--accent); border-radius: 4px; padding: 20px; display: grid; grid-template-rows: auto auto 1fr auto; gap: 10px; transition: opacity .25s, transform .25s, border-color .2s; min-width: 0; }
 .proj:hover { border-color: var(--accent); }
 .proj.dim { opacity: .28; transform: scale(.985); }
 .proj .meta { display: flex; justify-content: space-between; gap: 10px; }
 .proj ul { margin: 0; padding-left: 18px; color: var(--muted); font-size: .93rem; }
 .proj ul li + li { margin-top: 4px; }
 .proj .tags { display: flex; flex-wrap: wrap; gap: 6px; }
-.tag { font: .74rem var(--mono); padding: 2px 8px; border-radius: 4px; background: var(--accent-soft); color: var(--ink); }
+.tag { font: 500 .74rem var(--body); padding: 2px 8px; border-radius: 3px; background: var(--accent-soft); color: var(--ink); }
 .tag.on { background: var(--warm); color: var(--paper); }
-.proj .foot { display: flex; justify-content: space-between; align-items: center; gap: 10px; font-size: .88rem; }
+.proj .foot { display: flex; justify-content: space-between; align-items: end; gap: 10px; font-size: .88rem; }
+.plinks { display: flex; flex-direction: column; align-items: end; gap: 4px; text-align: right; flex: none; }
 .empty { color: var(--muted); font-style: italic; }
 
+/* research note */
+.research { display: grid; grid-template-columns: 1fr 1.15fr; gap: 36px; }
+.research > * { min-width: 0; }
+.steps { list-style: none; margin: 0; padding: 0; position: relative; display: grid; gap: 18px; }
+.steps::before { content: ""; position: absolute; left: 15px; top: 16px; bottom: 16px; width: 2px; background: var(--rule); }
+.steps::after { content: ""; position: absolute; left: 11px; top: 12px; width: 10px; height: 10px; border-radius: 50%; background: var(--warm); box-shadow: 0 0 0 4px var(--warm-soft); animation: flow 5s cubic-bezier(.5, 0, .5, 1) infinite; }
+@keyframes flow { 0% { top: 12px; opacity: 0; } 8% { opacity: 1; } 92% { opacity: 1; } 100% { top: calc(100% - 22px); opacity: 0; } }
+.steps li { display: grid; grid-template-columns: 32px 1fr; gap: 14px; position: relative; }
+.steps li > div { min-width: 0; }
+.steps .n { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; background: var(--panel); border: 2px solid var(--accent); color: var(--accent); font: 600 .85rem var(--body); position: relative; z-index: 1; }
+.steps strong { display: block; font-weight: 600; }
+.steps span { color: var(--muted); font-size: .9rem; }
+.finding { background: var(--panel); border: 1px solid var(--rule); border-radius: 4px; padding: 22px; }
+.finding h3 { font-size: 1.15rem; margin-top: 6px; }
+.split { margin-top: 18px; }
+.split .row { display: flex; justify-content: space-between; gap: 10px; font-size: .9rem; margin-bottom: 6px; }
+.split .row b { font-weight: 600; }
+.stack { display: flex; height: 30px; border-radius: 3px; overflow: hidden; background: var(--accent-soft); }
+.seg { width: var(--w); display: grid; place-items: center; color: #fff; font: 600 .75rem var(--body); transition: width 1.1s cubic-bezier(.2, .7, .2, 1); transition-delay: calc(var(--d, 0ms) + 250ms); white-space: nowrap; overflow: hidden; }
+.seg.coach { background: var(--seg-coach); } .seg.qb { background: var(--seg-qb); } .seg.rest { background: var(--seg-rest); color: var(--ink); }
+.js-anim .split:not(.in) .seg { width: 0; }
+.keyfacts { margin: 18px 0 0; padding: 16px 0 0 18px; border-top: 1px dashed var(--rule); color: var(--muted); font-size: .92rem; }
+.keyfacts li + li { margin-top: 6px; }
+.links-row { display: flex; gap: 18px; flex-wrap: wrap; margin-top: 16px; font-size: .92rem; font-weight: 500; }
+@media (max-width: 860px) { .research { grid-template-columns: 1fr; } }
+@media (prefers-reduced-motion: reduce) { .steps::after { display: none; } }
+
 /* EV lab */
-.lab { display: grid; grid-template-columns: 1fr 1.1fr; gap: 28px; background: var(--panel); border: 1px solid var(--rule); border-radius: 12px; padding: 24px; }
+.lab { display: grid; grid-template-columns: 1fr 1.1fr; gap: 28px; background: var(--panel); border: 1px solid var(--rule); border-radius: 6px; padding: 24px; }
 .lab > * { min-width: 0; }
 .field { display: grid; gap: 6px; margin-bottom: 18px; }
 .field label { font-weight: 600; font-size: .92rem; }
@@ -178,7 +220,7 @@ section.block { padding-block: 48px; border-top: 1px solid var(--rule); }
 .role:last-child { border-bottom: 0; }
 .role > * { min-width: 0; }
 .role .when { font-family: var(--mono); font-size: .85rem; color: var(--muted); }
-.role .when .live { display: inline-block; margin-top: 6px; padding: 1px 8px; border-radius: 999px; background: var(--warm-soft); color: var(--ink); font-size: .75rem; }
+.role .when .live { display: inline-block; margin-top: 6px; padding: 1px 8px; border-radius: 3px; background: var(--warm-soft); color: var(--ink); font-size: .75rem; }
 .role h3 { font-size: 1.1rem; }
 .role .org { color: var(--muted); font-size: .92rem; margin-top: 2px; }
 .role .flag { font-weight: 600; font-size: .88rem; color: var(--warm); margin-top: 6px; }
@@ -190,7 +232,7 @@ section.block { padding-block: 48px; border-top: 1px solid var(--rule); }
 /* education + skills */
 .two { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
 .two > * { min-width: 0; }
-.edu { background: var(--panel); border: 1px solid var(--rule); border-radius: 10px; padding: 22px; }
+.edu { background: var(--panel); border: 1px solid var(--rule); border-radius: 4px; padding: 22px; }
 .edu .gpa { display: flex; align-items: baseline; gap: 10px; margin-top: 14px; }
 .edu .gpa strong { font-family: var(--display); font-size: 2.4rem; font-weight: 700; }
 .meter { height: 6px; background: var(--accent-soft); border-radius: 3px; margin-top: 6px; overflow: hidden; }
@@ -213,7 +255,7 @@ section.block { padding-block: 48px; border-top: 1px solid var(--rule); }
 .contact h2 { font-size: clamp(1.8rem, 4vw, 2.6rem); }
 .contact p { color: var(--muted); margin-top: 10px; max-width: 46ch; }
 .clist { display: grid; gap: 10px; }
-.citem { display: flex; justify-content: space-between; align-items: center; gap: 12px; background: var(--panel); border: 1px solid var(--rule); border-radius: 8px; padding: 12px 14px; }
+.citem { display: flex; justify-content: space-between; align-items: center; gap: 12px; background: var(--panel); border: 1px solid var(--rule); border-radius: 4px; padding: 12px 14px; }
 .citem .v { font-family: var(--mono); font-size: .9rem; overflow-wrap: anywhere; user-select: all; }
 @media (max-width: 760px) { .contact { grid-template-columns: 1fr; } }
 footer { padding-block: 28px 40px; color: var(--muted); font-size: .85rem; border-top: 1px solid var(--rule); }
@@ -227,9 +269,10 @@ footer { padding-block: 28px 40px; color: var(--muted); font-size: .85rem; borde
 <a class="btn primary totop" id="totop" href="#top" aria-label="Back to top">↑ Top</a>
 <header class="top">
   <div class="wrap">
-    <a class="mark" href="#top">S<span>.</span>Yarkoni</a>
+    <a class="mark" href="#top">Samuel Yarkoni</a>
     <nav class="links" aria-label="Sections">
       <a href="#projects">Projects</a>
+      <a href="#research">Research</a>
       <a href="#lab">EV Lab</a>
       <a href="#experience">Experience</a>
       <a href="#skills">Skills</a>
@@ -253,7 +296,7 @@ footer { padding-block: 28px 40px; color: var(--muted); font-size: .85rem; borde
       </div>
       <h1>I build models that turn <em>noisy data</em> into decisions.</h1>
       <p class="lede">I work where statistics meets code: Bayesian sports models, genomic data pipelines, and econometric research.</p>
-      <p class="rotator" aria-live="polite">currently: <b id="rot">sampling NFL win probabilities with MCMC</b></p>
+      <p class="rotator" aria-live="polite">Current focus: <b id="rot">sampling NFL win probabilities with MCMC</b></p>
       <div class="stats">
         <div><strong class="mono">3.97</strong><span>GPA, Dean's List</span></div>
         <div><strong class="mono">1 / 36</strong><span>CSI fellows from 550+</span></div>
@@ -268,7 +311,7 @@ footer { padding-block: 28px 40px; color: var(--muted); font-size: .85rem; borde
     <figure class="sampler" aria-label="Live Metropolis–Hastings sampler estimating a team's win probability">
       <div class="head">
         <span class="label">Live posterior · Metropolis–Hastings</span>
-        <button class="iconbtn" id="resetBtn" type="button">restart chain</button>
+        <button class="iconbtn" id="resetBtn" type="button">Restart</button>
       </div>
       <canvas id="trace" aria-hidden="true"></canvas>
       <canvas id="hist" aria-hidden="true"></canvas>
@@ -296,6 +339,44 @@ footer { padding-block: 28px 40px; color: var(--muted); font-size: .85rem; borde
       </div>
       <div class="projects" id="projGrid"></div>
       <p class="empty" id="projEmpty" hidden>No projects match that filter.</p>
+    </div>
+  </section>
+
+  <section class="block" id="research">
+    <div class="wrap">
+      <div class="sechead">
+        <div>
+          <p class="label">Research note · Quantum Route</p>
+          <h2>Who drives an NFL offense: the coach or the quarterback?</h2>
+        </div>
+        <p>A Bayesian variance decomposition over 4,254 team-games from the 2018–2025 regular seasons, built on the Quantum Route modeling stack.</p>
+      </div>
+      <div class="research">
+        <div>
+          <p class="label" style="margin-bottom:16px">How the model is built</p>
+          <ol class="steps">
+            <li><span class="n">1</span><div><strong>Play-by-play data</strong><span>Eight seasons (2018–2025) from nflverse, one file per game and a row per play.</span></div></li>
+            <li><span class="n">2</span><div><strong>Expected points</strong><span>An EP/EPA model values every play by how it changes the scoring outlook.</span></div></li>
+            <li><span class="n">3</span><div><strong>Team strength and coaching tendencies</strong><span>Bayesian models fit with a hand-written Metropolis-within-Gibbs sampler, checked with split R-hat and effective sample size.</span></div></li>
+            <li><span class="n">4</span><div><strong>Drive and game simulator</strong><span>Simulates play calls, yardage and field goals to produce full-game outcomes.</span></div></li>
+            <li><span class="n">5</span><div><strong>Walk-forward backtest</strong><span>Each week is predicted only from earlier games, then scored against closing spreads, totals and moneylines.</span></div></li>
+          </ol>
+        </div>
+        <div class="finding">
+          <p class="label">Headline result</p>
+          <h3>Efficiency follows the quarterback. Fourth-down decisions follow the head coach.</h3>
+          <div id="splits"></div>
+          <div class="legend" style="margin-top:14px"><span style="--c: var(--seg-coach)">Head coach</span><span style="--c: var(--seg-qb)">Starting QB</span><span style="--c: var(--seg-rest)">Rest of roster and staff</span></div>
+          <ul class="keyfacts">
+            <li>One standard deviation of QB quality is worth about 0.076 EPA per play, roughly 4.7 points a game. The same for a head coach is about 0.030, or 1.9 points.</li>
+            <li>Pass rate over expected tracks the QB more than the coach, which suggests coaches shape the play mix around the quarterback they have.</li>
+          </ul>
+          <div class="links-row">
+            <a href="https://github.com/samyarkoni/Quantum-Route/blob/main/writeups/coaching_vs_player_effects.txt" target="_blank" rel="noopener">Read the research note ↗</a>
+            <a href="https://github.com/samyarkoni/Quantum-Route/blob/main/writeups/Quantum_Route_Plans_Writeup_V1.pdf" target="_blank" rel="noopener">Project write-up (PDF) ↗</a>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -381,7 +462,7 @@ footer { padding-block: 28px 40px; color: var(--muted); font-size: .85rem; borde
   <section class="block">
     <div class="wrap">
       <p class="label">Beyond the code</p>
-      <h2 style="margin-block:8px 22px">Off the keyboard</h2>
+      <h2 style="margin-block:8px 22px">Leadership &amp; interests</h2>
       <div class="beyond">
         <div><h3>Involvement</h3><p>Quant Finance Club, HackMIT, MHacks, SEEDS2S, Chabad, intramural soccer, and the Cheese Club.</p></div>
         <div><h3>Languages</h3><p>Conversational Spanish and beginner Hebrew, alongside Python, R, SQL, Java, C and RISC-V assembly.</p></div>
@@ -398,9 +479,9 @@ footer { padding-block: 28px 40px; color: var(--muted); font-size: .85rem; borde
         <p>Based in Hillsborough and New Brunswick, NJ. Email is the fastest way to reach me.</p>
       </div>
       <div class="clist">
-        <div class="citem"><span class="v" id="emailV">samyarkoni@gmail.com</span><button class="iconbtn" id="copyBtn" type="button">copy</button></div>
-        <div class="citem"><span class="v">linkedin.com/in/syark</span><a href="https://www.linkedin.com/in/syark" target="_blank" rel="noopener">open ↗</a></div>
-        <div class="citem"><span class="v">github.com/samyarkoni</span><a href="https://github.com/samyarkoni" target="_blank" rel="noopener">open ↗</a></div>
+        <div class="citem"><span class="v" id="emailV">samyarkoni@gmail.com</span><button class="iconbtn" id="copyBtn" type="button">Copy</button></div>
+        <div class="citem"><span class="v">linkedin.com/in/syark</span><a href="https://www.linkedin.com/in/syark" target="_blank" rel="noopener">Open ↗</a></div>
+        <div class="citem"><span class="v">github.com/samyarkoni</span><a href="https://github.com/samyarkoni" target="_blank" rel="noopener">Open ↗</a></div>
       </div>
     </div>
   </section>
@@ -419,29 +500,31 @@ const PROFILE = {
   projects: [
     { title: "Quantum Route", role: "Founder & lead developer", cat: ["Quant", "Sports"], year: "2026",
       points: ["Bayesian inference engine that uses MCMC sampling to refine NFL win-probability models.",
-               "Expected-value and simulation framework that flags sportsbook markets the model thinks are mispriced."],
-      skills: ["Python", "pandas", "NumPy", "Bayesian inference", "MCMC", "Simulation"],
-      link: "https://github.com/samyarkoni/Quantum-Route", linkText: "Source" },
+               "Expected-value and simulation framework that flags sportsbook markets the model thinks are mispriced.",
+               "Across 4,254 team-games, ~59% of offensive efficiency traces to the starting QB and ~59% of 4th-down aggressiveness to the head coach."],
+      skills: ["Python", "pandas", "NumPy", "Bayesian inference", "MCMC", "Simulation", "Backtesting"],
+      links: [["Source", "https://github.com/samyarkoni/Quantum-Route"], ["Research", "#research"]] },
     { title: "Evolutionary Predictability", role: "CSI Research Fellow", cat: ["Research"], year: "2026",
       points: ["Python pipelines that parse and group large genomic datasets from multi-cohort evolution experiments.",
                "Jaccard similarity and Shannon entropy feeding complete-linkage hierarchical clustering of 130+ strains."],
       skills: ["Python", "pandas", "NumPy", "scipy", "Clustering", "Regex"],
-      link: "https://github.com/samyarkoni/Predicting-Evolutionary-Biology-Public", linkText: "Source" },
+      links: [["Source", "https://github.com/samyarkoni/Predicting-Evolutionary-Biology-Public"]] },
     { title: "Game Theory × Behavioral Econ", role: "RECONS Research Fellow", cat: ["Research", "Quant"], year: "2026",
       points: ["Econometric study at the intersection of game theory and behavioral economics.",
                "Paper in progress for the RECONS Review, with weekly faculty reviews."],
       skills: ["Econometrics", "R", "Game theory", "LaTeX"],
-      link: null, linkText: "In progress" },
+      links: [], status: "In progress" },
     { title: "Must-See NFL Trend", role: "Sports analytics", cat: ["Sports"], year: "2026",
       points: ["Measures home-field advantage and how stadium wind conditions change NFL game outcomes.",
                "Statistical analysis and visualization in R."],
       skills: ["R", "Regression", "Data visualization"],
-      link: "https://github.com/samyarkoni/-Must-See-NFL-Trend-", linkText: "Source" },
-    { title: "Nyte", role: "iOS app", cat: ["Apps"], year: "2026",
-      points: ["“Your subconscious friend”: a Swift app project.",
-               "Native iOS development alongside the data work."],
-      skills: ["Swift", "Git"],
-      link: "https://github.com/samyarkoni/Nyte", linkText: "Source" }
+      links: [["Read the article", "https://github.com/samyarkoni/-Must-See-NFL-Trend-/blob/main/Article.pdf"], ["Source", "https://github.com/samyarkoni/-Must-See-NFL-Trend-"]] },
+    { title: "Nyte", role: "iOS app with an AI backend", cat: ["Apps", "AI"], year: "2026",
+      points: ["A bedtime companion: talk through ideas or worries, and Nyte spots rumination spirals and offers a reframe and grounding steps.",
+               "Turns the night's conversation into tomorrow's plan and hands research and drafting tasks to a Claude agent with web search, ready by morning.",
+               "Maps dreams into a knowledge graph of people, places and themes that connects across nights, and tracks habit streaks."],
+      skills: ["Swift", "SwiftUI", "TypeScript", "Node.js", "SQLite", "Claude API"],
+      links: [["Source", "https://github.com/samyarkoni/Nyte"]] }
   ],
   experience: [
     { title: "Research Fellow, Evolutionary Predictability", org: "Rutgers Chancellor Signature Initiatives (CSI) · Piscataway, NJ",
@@ -461,11 +544,16 @@ const PROFILE = {
                "Wrote 10+ lesson plans tailored to student interests, raising participation and project completion."] }
   ],
   skills: {
-    "Languages": ["Python", "R", "SQL", "Java", "C", "RISC-V Assembly", "Swift"],
+    "Languages": ["Python", "R", "SQL", "Java", "C", "RISC-V Assembly", "Swift", "TypeScript"],
     "Libraries": ["pandas", "NumPy", "scipy", "scikit-learn", "matplotlib", "seaborn"],
-    "Methods": ["Bayesian inference", "MCMC", "Simulation", "Clustering", "Econometrics", "Regression", "Game theory"],
-    "Tools": ["Git", "GitHub", "Claude Code", "LaTeX", "Microsoft Office"]
+    "Methods": ["Bayesian inference", "MCMC", "Simulation", "Backtesting", "Clustering", "Econometrics", "Regression", "Game theory"],
+    "Frameworks & tools": ["SwiftUI", "Node.js", "SQLite", "Claude API", "Git", "GitHub", "Claude Code", "LaTeX", "Microsoft Office"]
   },
+  splits: [
+    { what: "Offensive efficiency (EPA per play)", lead: "Mostly the QB", coach: 10, qb: 59, rest: 31 },
+    { what: "Pass rate over expected (scheme)", lead: "Mostly the QB", coach: 14, qb: 59, rest: 27 },
+    { what: "Fourth-down aggressiveness", lead: "Mostly the coach", coach: 59, qb: 9, rest: 33 }
+  ],
   courses: ["Data Structures", "Algorithms", "Computer Architecture", "Discrete Math", "Linear Algebra", "Probability", "Game Theory", "Econometrics", "Intermediate Econ Analysis"]
 };
 
@@ -479,7 +567,7 @@ const css = (name) => getComputedStyle(document.documentElement).getPropertyValu
   const root = document.documentElement;
   try { const t = localStorage.getItem("sy-theme"); if (t) root.dataset.theme = t; } catch (e) {}
   const isDark = () => root.dataset.theme ? root.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
-  const label = () => { $("themeBtn").textContent = isDark() ? "☀ light" : "☾ dark"; };
+  const label = () => { $("themeBtn").textContent = isDark() ? "Light mode" : "Dark mode"; };
   label();
   $("themeBtn").addEventListener("click", () => {
     root.dataset.theme = isDark() ? "light" : "dark";
@@ -517,7 +605,7 @@ function renderProjects() {
       <ul>${p.points.map(t => `<li>${esc(t)}</li>`).join("")}</ul>
       <div class="foot">
         <div class="tags">${p.skills.map(s => `<span class="tag${s === activeSkill ? " on" : ""}">${esc(s)}</span>`).join("")}</div>
-        ${p.link ? `<a href="${esc(p.link)}" target="_blank" rel="noopener">${esc(p.linkText)}&nbsp;↗</a>` : `<span class="label">${esc(p.linkText)}</span>`}
+        <span class="plinks">${p.links.length ? p.links.map(([t, u]) => u.startsWith("#") ? `<a href="${esc(u)}">${esc(t)}</a>` : `<a href="${esc(u)}" target="_blank" rel="noopener">${esc(t)}&nbsp;↗</a>`).join("") : `<span class="label">${esc(p.status || "")}</span>`}</span>
       </div>
     </article>`;
   }).join("");
@@ -541,6 +629,17 @@ $("skillGroups").addEventListener("click", e => {
   activeCat = "All"; renderFilters(); renderSkills(); renderProjects(); applyReveals();
   if (activeSkill) document.getElementById("projects").scrollIntoView({ behavior: reduced ? "auto" : "smooth" });
 });
+
+/* ---------- research splits ---------- */
+function renderSplits() {
+  $("splits").innerHTML = PROFILE.splits.map(r => `
+    <div class="split" role="img" aria-label="${esc(r.what)}: head coach ${r.coach}%, starting QB ${r.qb}%, rest ${r.rest}%">
+      <div class="row"><b>${esc(r.what)}</b><span>${esc(r.lead)}</span></div>
+      <div class="stack">
+        <span class="seg coach" style="--w:${r.coach}%">${r.coach}%</span><span class="seg qb" style="--w:${r.qb}%">${r.qb}%</span><span class="seg rest" style="--w:${r.rest}%">${r.rest}%</span>
+      </div>
+    </div>`).join("");
+}
 
 /* ---------- experience ---------- */
 function renderExperience() {
@@ -669,7 +768,7 @@ matchMedia("(prefers-color-scheme: dark)").addEventListener("change", drawSample
 const REVEALS = [
   [".hero .who", "zoom"], [".hero h1", "up", 80], [".hero .lede", "up", 160], [".hero .rotator", "up", 220],
   [".hero .stats > div", "up", 260, 90], [".hero .cta", "up", 480], [".hero .sampler", "right", 200],
-  [".sechead", "up"], [".proj", "zoom", 0, 90], [".lab > div:first-child", "left"], [".lab > div:last-child", "right", 120],
+  [".sechead", "up"], [".steps li", "left", 0, 110, 5], [".finding", "right", 120], [".split", "up", 0, 140], [".proj", "zoom", 0, 90], [".lab > div:first-child", "left"], [".lab > div:last-child", "right", 120],
   [".role", "left", 0, 110], [".edu", "left"], ["#skills .two > div:last-child", "right", 120],
   [".beyond > div", "up", 0, 110], ["section.block:not([id]) h2", "up"], [".contact > div:first-child", "left"], [".citem", "right", 0, 90]
 ];
@@ -677,9 +776,9 @@ const revealObs = "IntersectionObserver" in window && document.documentElement.c
   ? new IntersectionObserver(es => es.forEach(e => e.target.classList.toggle("in", e.isIntersecting)), { threshold: 0.12, rootMargin: "0px 0px -6% 0px" })
   : null;
 function applyReveals() {
-  REVEALS.forEach(([sel, kind, base = 0, step = 0]) => {
+  REVEALS.forEach(([sel, kind, base = 0, step = 0, mod = 3]) => {
     document.querySelectorAll(sel).forEach((el, i) => {
-      if (!el.dataset.reveal) { el.dataset.reveal = kind; el.style.setProperty("--d", (base + (step ? (i % 3) * step : 0)) + "ms"); }
+      if (!el.dataset.reveal) { el.dataset.reveal = kind; el.style.setProperty("--d", (base + (step ? (i % mod) * step : 0)) + "ms"); }
       if (revealObs) revealObs.observe(el); else el.classList.add("in");
     });
   });
@@ -704,12 +803,12 @@ function applyReveals() {
 /* ---------- contact ---------- */
 $("copyBtn").addEventListener("click", () => {
   const t = $("emailV").textContent;
-  const done = () => { $("copyBtn").textContent = "copied"; setTimeout(() => $("copyBtn").textContent = "copy", 1600); };
-  const fallback = () => { const r = document.createRange(); r.selectNodeContents($("emailV")); const s = getSelection(); s.removeAllRanges(); s.addRange(r); $("copyBtn").textContent = "selected"; };
+  const done = () => { $("copyBtn").textContent = "Copied"; setTimeout(() => $("copyBtn").textContent = "Copy", 1600); };
+  const fallback = () => { const r = document.createRange(); r.selectNodeContents($("emailV")); const s = getSelection(); s.removeAllRanges(); s.addRange(r); $("copyBtn").textContent = "Selected"; };
   try { navigator.clipboard.writeText(t).then(done, fallback); } catch (e) { fallback(); }
 });
 
-renderFilters(); renderProjects(); renderSkills(); renderExperience(); updateLab(); restart(); applyReveals();
+renderFilters(); renderProjects(); renderSkills(); renderExperience(); renderSplits(); updateLab(); restart(); applyReveals();
 </script>
 </body>
 </html>
