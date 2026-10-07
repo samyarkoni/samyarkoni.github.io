@@ -185,6 +185,8 @@ nav.links a[aria-current="true"] { color: var(--hero-ink); box-shadow: inset 0 -
 .hacks figure:hover img { transform: scale(1.04); }
 .hacks figcaption { position: absolute; inset: auto 0 0 0; padding: 26px 12px 10px; background: linear-gradient(transparent, rgba(8, 14, 30, .82)); color: #fff; font-size: .82rem; line-height: 1.3; }
 .hacks figcaption b { display: block; font-weight: 600; font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; color: #e7c98a; }
+.hacks .tag { position: absolute; top: 8px; right: 8px; display: inline-flex; align-items: center; gap: 6px; padding: 4px 9px 4px 5px; border-radius: 999px; background: rgba(8, 14, 30, .72); color: #fff; font-size: .7rem; font-weight: 600; letter-spacing: .01em; backdrop-filter: blur(4px); }
+.hacks .tag svg { width: 18px; height: 18px; display: block; }
 @media (max-width: 760px) { .hacks { grid-template-columns: repeat(2, 1fr); gap: 10px; } }
 .tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
 .tile { background: var(--panel); border: 1px solid var(--rule); border-radius: 4px; padding: 18px; display: grid; gap: 4px; justify-items: start; min-width: 0; transition: border-color .2s, box-shadow .2s; }
@@ -304,7 +306,10 @@ section.block { padding-block: 64px; border-top: 1px solid var(--rule); }
 .steps .ball svg, .steps .qb svg { display: block; width: 100%; height: 100%; overflow: visible; }
 .steps .shade { position: absolute; left: 0; top: 0; width: 16px; height: 5px; margin: -2.5px 0 0 -8px; border-radius: 50%; background: var(--ink); opacity: 0; z-index: 2; pointer-events: none; }
 .steps .qb { position: absolute; left: 0; top: 0; width: 38px; height: 50px; color: var(--accent); z-index: 2; pointer-events: none; }
-.steps .wr { position: absolute; left: 0; top: 0; width: 46px; height: 23px; color: var(--accent); z-index: 2; pointer-events: none; opacity: 0; transform-origin: 50% 50%; }
+.steps .wr { position: absolute; left: 0; top: 0; width: 46px; height: 46px; color: var(--accent); z-index: 2; pointer-events: none; opacity: 0; }
+.steps .wr svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.steps .wr g { transform-box: view-box; }
+.steps .dust { position: absolute; left: 0; top: 0; width: 22px; height: 6px; margin: -3px 0 0 -11px; border-radius: 50%; background: var(--muted); opacity: 0; z-index: 1; pointer-events: none; filter: blur(1.5px); }
 .steps .qb .trim, .steps .wr .trim { color: var(--warm); }
 .steps strong { display: block; font-weight: 600; }
 .steps span { color: var(--muted); font-size: .9rem; }
@@ -510,7 +515,12 @@ footer { padding-block: 28px 40px; color: var(--muted); font-size: .85rem; borde
           <p class="label" style="margin-bottom:16px">How the model is built</p>
           <ol class="steps">
             <span class="qb" aria-hidden="true"><svg viewBox="0 0 40 52"><g fill="currentColor"><path d="M15 17c4-2 11-2 15 0l1 5-2 1-1 9h-11l-1-9-2-1z"/><path d="M17 31h10l1 3H16z" class="trim" fill="currentColor"/><circle cx="22.5" cy="9.5" r="6.3"/></g><path d="M27 8.5h4.5M27.5 11.5h4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" fill="none"/><path d="M19 7.5h6" class="trim" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 33l-5 7-3 8M25 33l3 7 5 6" stroke-width="4"/><path d="M10 49h4M32 46.5l3 1" stroke-width="2.6"/><path d="M29 20l5 4 4-1" stroke-width="3.4"/><g class="arm"><path d="M16 19l-6-5 1-7" stroke-width="3.4"/></g></g></svg></span>
-            <span class="wr" aria-hidden="true"><svg viewBox="0 0 48 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M14 12.5h16" stroke-width="7"/><path d="M14 13l-7 4-6 1M14 11l-6-5-5 0" stroke-width="3.6"/><path d="M30 9.5l8-3 7-2.5M30 12l8-2 7-3.5" stroke-width="2.6"/></g><circle cx="35" cy="11" r="5" fill="currentColor"/><path d="M38.5 13.5l2.2 2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><path d="M15 12.5h3" class="trim" stroke="currentColor" stroke-width="7"/></svg></span>
+            <span class="wr" aria-hidden="true"><svg viewBox="0 0 48 48">
+              <g class="run run1"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M25 14l-4 14" stroke-width="7"/><path d="M25 16l6-3 4-6M24 17l-6 4-4-3" stroke-width="2.6"/><path d="M21 28l7 7-3 9M21 28l-6 8-6 2" stroke-width="3.6"/></g><circle cx="27" cy="8.5" r="5" fill="currentColor"/><path d="M30.5 7.5h3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><path d="M24.6 17.5l-1 4" class="trim" stroke="currentColor" stroke-width="7"/></g>
+              <g class="run run2" style="display:none"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M25 14l-4 14" stroke-width="7"/><path d="M25 16l6-3 4-6M24 17l-5 5-4 0" stroke-width="2.6"/><path d="M21 28l5 8 5 7M21 28l-3 9-4 7" stroke-width="3.6"/></g><circle cx="27" cy="8.5" r="5" fill="currentColor"/><path d="M30.5 7.5h3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><path d="M24.6 17.5l-1 4" class="trim" stroke="currentColor" stroke-width="7"/></g>
+              <g class="lay" style="display:none"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M14 25l17-2" stroke-width="7"/><path d="M31 21l8-2.5 7-2M31 23.5l8-2 7-3" stroke-width="2.6"/><path d="M14 25l-8-3-5 4M14 26.5l-12 3.5" stroke-width="3.6"/></g><circle cx="36" cy="21.5" r="5" fill="currentColor"/><path d="M39 24.5l2 1.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><path d="M15 25l3-.4" class="trim" stroke="currentColor" stroke-width="7"/></g>
+            </svg></span>
+            <span class="dust" aria-hidden="true"></span>
             <span class="shade" aria-hidden="true"></span>
             <span class="ball" aria-hidden="true"><svg viewBox="0 0 26 16"><path d="M1 8C4 1.5 9 .5 13 .5S22 1.5 25 8C22 14.5 17 15.5 13 15.5S4 14.5 1 8Z" fill="currentColor"/><path d="M8 8h10M10 6v4M12.7 6v4M15.4 6v4" stroke="var(--panel)" stroke-width="1.3" stroke-linecap="round" fill="none"/></svg></span>
             <li><span class="n" aria-label="First down">1<sup>st</sup></span><div><strong>Play-by-play data</strong><span>Eight seasons (2018–2025) from nflverse, one file per game and a row per play.</span></div></li>
@@ -665,7 +675,7 @@ footer { padding-block: 28px 40px; color: var(--muted); font-size: .85rem; borde
       <div class="hacks">
         <figure><img src="images/hack-mhacks.jpg" width="1000" height="750" loading="lazy" style="object-position: 46% 50%" alt="Sam and three teammates behind the lit-up MHACKS letters"><figcaption><b>MHacks</b>With my team</figcaption></figure>
         <figure><img src="images/hack-hackmit-build.jpg" width="750" height="1000" loading="lazy" style="object-position: 50% 62%" alt="A team at laptops in front of a whiteboard architecture diagram during HackMIT"><figcaption><b>HackMIT</b>Mid-build</figcaption></figure>
-        <figure><img src="images/hack-hackmit.jpg" width="750" height="1000" loading="lazy" style="object-position: 50% 30%" alt="Sam with the creator of 3Blue1Brown in front of the HackMIT backdrop"><figcaption><b>HackMIT</b>With the creator of 3Blue1Brown</figcaption></figure>
+        <figure><img src="images/hack-hackmit.jpg" width="750" height="1000" loading="lazy" style="object-position: 50% 30%" alt="Sam with the creator of 3Blue1Brown in front of the HackMIT backdrop"><span class="tag" aria-hidden="true"><svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="9.5" fill="#bfe3f5"/><circle cx="10" cy="10" r="7.4" fill="#5fa8d9"/><circle cx="10" cy="10" r="5.4" fill="#2a6eb0"/><circle cx="10" cy="10" r="3.2" fill="#6b4524"/><circle cx="8.6" cy="8.6" r="1" fill="#fff"/></svg>3Blue1Brown</span><figcaption><b>HackMIT</b>With the creator of 3Blue1Brown</figcaption></figure>
         <figure><img src="images/hack-mit-dome.jpg" width="750" height="1000" loading="lazy" style="object-position: 50% 55%" alt="Sam standing on the lawn in front of MIT's Great Dome"><figcaption><b>MIT</b>At the Great Dome</figcaption></figure>
       </div>
       <div class="tiles">
@@ -1130,50 +1140,69 @@ $("copyBtn").addEventListener("click", () => {
 
 renderFilters(); renderProjects(); renderSkills(); renderExperience(); renderSplits(); updateLab(); restart(); applyReveals();
 
-/* a QB beside first down throws a spiral past every down; a receiver dives for it in the end zone */
+/* a QB beside first down throws a spiral past every down; a receiver sprints in and lays out for it in the end zone */
 (function () {
   const ol = document.querySelector(".steps"), ball = ol && ol.querySelector(".ball");
   if (!ball) return;
-  const qb = ol.querySelector(".qb"), arm = qb.querySelector(".arm"), wr = ol.querySelector(".wr"), shade = ol.querySelector(".shade");
-  const marks = [...ol.querySelectorAll(".n")], LANE = 66, QS = 38 / 40, WS = 46 / 48;
+  const qb = ol.querySelector(".qb"), arm = qb.querySelector(".arm"), wr = ol.querySelector(".wr"), shade = ol.querySelector(".shade"), dust = ol.querySelector(".dust");
+  const [run1, run2, lay] = ["run1", "run2", "lay"].map(c => wr.querySelector("." + c));
+  const marks = [...ol.querySelectorAll(".n")], QS = 38 / 40, WS = 46 / 48;
   let ys = [], raf = 0, t0 = 0, qTop = 0, wTop = 0;
-  const WIND = 650, FLY = 2500, HOLD = 1700, CYCLE = WIND + FLY + HOLD;
+  const WIND = 650, FLY = 2500, HOLD = 1900, CYCLE = WIND + FLY + HOLD;
+  const RUN0 = .3 * FLY, LEAP = .74 * FLY, LAND = FLY + .32 * HOLD;      /* receiver timeline, ms after release */
+  const CATCH = (FLY - LEAP) / (LAND - LEAP);                            /* where in the dive the ball arrives */
   const measure = () => {
     const top = ol.getBoundingClientRect().top;
     ys = marks.map(m => { const r = m.getBoundingClientRect(); return r.top - top + r.height / 2; });
-    qTop = ys[0] - 28; wTop = ys[ys.length - 1] - 9;
+    qTop = ys[0] - 28; wTop = ys[ys.length - 1] - 26;
     qb.style.top = qTop + "px"; wr.style.top = wTop + "px";
   };
-  /* throwing hand (11,7) rotated about the shoulder (16,19), in list coordinates */
   const hand = deg => { const r = deg * Math.PI / 180, dx = -5, dy = -12;
     return [QS * (16 + dx * Math.cos(r) - dy * Math.sin(r)), qTop + QS * (19 + dx * Math.sin(r) + dy * Math.cos(r))]; };
-  const catchAt = () => [WS * 45, wTop + WS * 5];
+  /* the dive as a function of d in [0,1]: forward, up then down (a ballistic hop), body tipping from nose-up to flat */
+  const dive = d => ({ x: -7 + 7 * d, y: 2 + 14 * d - 13 * Math.sin(Math.PI * d), rot: -28 + 36 * d - 8 * Math.max(0, d - .8) / .2 });
+  const handsAt = d => { const { x, y, rot } = dive(d), r = rot * Math.PI / 180, px = 46 - 24, py = 18 - 24;
+    return [WS * (24 + x + px * Math.cos(r) - py * Math.sin(r)), wTop + WS * (24 + y + px * Math.sin(r) + py * Math.cos(r))]; };
   const setArm = deg => arm.setAttribute("transform", `rotate(${deg} 16 19)`);
   const put = (x, y, rot, sc, sy) => { ball.style.transform = `translate(${x}px, ${y}px) rotate(${rot}deg) scale(${sc}, ${sc * sy})`; };
-  const pose = (op, dx, rot) => { wr.style.opacity = op; wr.style.transform = `translateX(${dx}px) rotate(${rot}deg)`; };
+  const show = g => [run1, run2, lay].forEach(e => e.style.display = e === g ? "" : "none");
   const light = k => marks.forEach((m, i) => m.classList.toggle("on", i <= k));
   const ease = x => x < .5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2;
   const clamp = x => Math.max(0, Math.min(1, x));
+  const receiver = (ms, fade) => {        /* ms since the throw left the QB's hand */
+    dust.style.opacity = 0;
+    if (ms < RUN0) { wr.style.opacity = 0; return; }
+    wr.style.opacity = fade * clamp((ms - RUN0) / 250);
+    if (ms < LEAP) {                      /* sprinting in, stride by stride */
+      const k = (ms - RUN0) / (LEAP - RUN0), bob = Math.abs(Math.sin(ms / 70)) * -1.5;
+      show(Math.floor(ms / 120) % 2 ? run2 : run1);
+      wr.style.transform = `translate(${-22 + 22 * k}px, ${bob}px)`; return;
+    }
+    show(lay);
+    const d = clamp((ms - LEAP) / (LAND - LEAP)), { x, y, rot } = dive(d), slide = ms > LAND ? 3 * ease(clamp((ms - LAND) / 450)) : 0;
+    lay.setAttribute("transform", `translate(${x + slide} ${y}) rotate(${rot} 24 24)`);
+    wr.style.transform = "none";
+    if (ms > LAND) { const p = clamp((ms - LAND) / 500); dust.style.opacity = .35 * (1 - p) * fade;
+      dust.style.transform = `translate(${WS * (14 + x + slide)}px, ${wTop + WS * 44}px) scale(${1 + p}, ${1 + .4 * p})`; }
+  };
   const frame = now => {
     const t = (now - t0) % CYCLE;
     if (t < WIND) {                       /* drop back and cock the arm */
       const u = t / WIND, deg = u < .65 ? -30 * ease(u / .65) : -30 + 95 * ease((u - .65) / .35);
       setArm(deg); const [x, y] = hand(deg); put(x, y, -60, .85, 1);
-      shade.style.opacity = 0; ball.style.opacity = 1; pose(0, -14, -40); light(0);
+      shade.style.opacity = 0; ball.style.opacity = 1; receiver(-1, 1); light(0);
     } else if (t < WIND + FLY) {          /* the spiral in flight */
-      const u = (t - WIND) / FLY, k = .7 * u + .3 * ease(u), [hx, hy] = hand(65), [cx, cy] = catchAt();
+      const ms = t - WIND, u = ms / FLY, k = .7 * u + .3 * ease(u), [hx, hy] = hand(65), [cx, cy] = handsAt(CATCH);
       const lift = Math.sin(Math.PI * k), bx = hx + (cx - hx) * k, x = bx + 26 * lift, y = hy + (cy - hy) * k;
       const dx = (cx - hx) + 26 * Math.PI * Math.cos(Math.PI * k), dy = cy - hy;
       put(x, y, Math.atan2(dy, dx) * 180 / Math.PI, .85 + .55 * lift, .72 + .28 * Math.abs(Math.cos(u * 46)));
-      shade.style.transform = `translate(${bx + 26 * lift}px, ${y + 10 + 9 * lift}px) scale(${1 - .45 * lift})`; shade.style.opacity = .2 - .1 * lift;
-      setArm(65 - 65 * clamp(u * 3));
-      /* receiver sprints in, then lays out for the ball */
-      const run = clamp((u - .45) / .33), dive = clamp((u - .8) / .2);
-      pose(clamp(run * 3), -14 + 10 * ease(run) + 4 * ease(dive), -40 + 40 * ease(dive));
+      shade.style.transform = `translate(${x}px, ${y + 10 + 9 * lift}px) scale(${1 - .45 * lift})`; shade.style.opacity = .2 - .1 * lift;
+      setArm(65 - 65 * clamp(u * 3)); receiver(ms, 1);
       let passed = 0; ys.forEach((v, i) => { if (y >= v - 4) passed = i; }); light(passed);
-    } else {                              /* caught in the end zone */
-      const u = (t - WIND - FLY) / HOLD, [cx, cy] = catchAt(), slide = 2 * ease(clamp(u * 2)), fade = u > .85 ? 1 - (u - .85) / .15 : 1;
-      pose(fade, slide, 0); put(cx + slide, cy, -15, .85, 1); ball.style.opacity = fade; shade.style.opacity = 0;
+    } else {                              /* secured, ridden to the ground, touchdown */
+      const ms = t - WIND, u = (t - WIND - FLY) / HOLD, fade = u > .86 ? 1 - (u - .86) / .14 : 1;
+      const d = clamp((ms - LEAP) / (LAND - LEAP)), slide = ms > LAND ? 3 * ease(clamp((ms - LAND) / 450)) : 0, [hx, hy] = handsAt(d);
+      receiver(ms, fade); put(hx + WS * slide, hy, dive(d).rot - 20, .85, 1); ball.style.opacity = fade; shade.style.opacity = 0;
       setArm(0); light(ys.length - 1);
     }
     raf = requestAnimationFrame(frame);
