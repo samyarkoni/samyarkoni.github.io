@@ -153,6 +153,37 @@ nav.links a[aria-current="true"] { color: var(--hero-ink); box-shadow: inset 0 -
 .epigraph figcaption { font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--gold); margin-top: 2px; }
 @media (max-width: 860px) { .epigraph { position: relative; right: auto; bottom: auto; text-align: left; padding: 0 20px 28px; max-width: 1080px; margin: -8px auto 0; } }
 
+/* about + personal */
+.about { display: grid; grid-template-columns: 1.15fr 1fr; gap: 48px; align-items: start; }
+.about > * { min-width: 0; }
+.about-text p:not(.label) { color: var(--muted); max-width: 60ch; }
+.about-text p + p { margin-top: 14px; }
+.about-text em { font-family: var(--display); font-size: 1.12em; color: var(--ink); }
+.ico { width: 26px; height: 26px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.threads { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--rule); }
+.threads li { border-bottom: 1px solid var(--rule); }
+.threads a { display: grid; grid-template-columns: 26px 1fr auto; gap: 16px; align-items: center; padding-block: 16px; text-decoration: none; color: var(--ink); }
+.threads a > div { min-width: 0; }
+.threads .ico { color: var(--warm); }
+.threads strong { display: block; font-weight: 600; }
+.threads span { color: var(--muted); font-size: .92rem; }
+.threads b { color: var(--accent); font-weight: 500; transition: transform .2s; }
+.threads a:hover b, .threads a:focus-visible b { transform: translateX(4px); }
+.threads a:hover strong { color: var(--accent); }
+.lead-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 26px; }
+.badge { border: 1px solid var(--rule); background: var(--panel); padding: 5px 12px; border-radius: 3px; font-size: .85rem; font-weight: 500; }
+.badge:first-child, .badge:nth-child(2) { border-color: var(--warm); background: var(--warm-soft); }
+.tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.tile { background: var(--panel); border: 1px solid var(--rule); border-radius: 4px; padding: 18px; display: grid; gap: 4px; justify-items: start; min-width: 0; transition: border-color .2s, box-shadow .2s; }
+.tile .ico { color: var(--accent); margin-bottom: 8px; transition: transform .35s cubic-bezier(.2, .7, .2, 1); }
+.tile:hover { border-color: var(--warm); box-shadow: 0 16px 30px -22px var(--shadow); }
+.tile:hover .ico { transform: rotate(-8deg) scale(1.12); color: var(--warm); }
+.tile strong { font-weight: 600; }
+.tile span { color: var(--muted); font-size: .85rem; }
+.langs { color: var(--muted); margin-top: 20px; font-size: .93rem; }
+.langs strong { color: var(--ink); font-weight: 600; }
+@media (max-width: 860px) { .about { grid-template-columns: 1fr; gap: 28px; } .tiles { grid-template-columns: repeat(2, 1fr); } }
+
 /* sections */
 section.block { padding-block: 64px; border-top: 1px solid var(--rule); }
 .sechead h2::before { content: ""; display: block; width: 36px; height: 3px; background: var(--warm); margin-bottom: 14px; }
@@ -284,6 +315,7 @@ footer { padding-block: 28px 40px; color: var(--muted); font-size: .85rem; borde
   <div class="wrap">
     <a class="mark" href="#top">Samuel Yarkoni</a>
     <nav class="links" aria-label="Sections">
+      <a href="#about">About</a>
       <a href="#projects">Projects</a>
       <a href="#research">Research</a>
       <a href="#lab">EV Lab</a>
@@ -309,7 +341,7 @@ footer { padding-block: 28px 40px; color: var(--muted); font-size: .85rem; borde
         </div>
       </div>
       <h1>I build models that turn <em>noisy data</em> into decisions.</h1>
-      <p class="lede">I work where statistics meets code: Bayesian sports models, genomic data pipelines, and econometric research.</p>
+      <p class="lede">I study computer science, data science and economics at Rutgers, and I build models for decisions made under uncertainty: on the football field, in the betting market and in the lab.</p>
       <p class="rotator" aria-live="polite">Current focus: <b id="rot">sampling NFL win probabilities with MCMC</b></p>
       <div class="stats">
         <div><strong class="mono">3.97</strong><span>GPA, Dean's List</span></div>
@@ -342,6 +374,24 @@ footer { padding-block: 28px 40px; color: var(--muted); font-size: .85rem; borde
   </div>
   <figure class="epigraph"><blockquote>“All models are wrong, but some are useful.”</blockquote><figcaption>George E. P. Box, statistician</figcaption></figure>
   </div>
+
+  <section class="block" id="about">
+    <div class="wrap about">
+      <div class="about-text">
+        <div class="sechead"><div><p class="label">About me</p><h2>One question, a lot of places to ask it</h2></div></div>
+        <p>I'm Sam. Most of what I build comes back to one question: <em>how do you make a good decision when you can't be sure?</em></p>
+        <p>I've followed that question through eight seasons of NFL play-by-play data, through evolution experiments on more than 130 yeast strains, and into game theory and behavioral economics. I founded Quantum Route to test my models against the toughest benchmark there is, the closing betting line.</p>
+        <p>I also care about the people around me: I've taught more than 100 students to code at The Coder School. Away from a screen, you'll find me on a soccer field or a track, at a poker table, practicing viola, cooking, or solving a Rubik's Cube.</p>
+      </div>
+      <ul class="threads" aria-label="Where my interests meet my work">
+        <li><a href="#research"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="12" rx="9" ry="5.5" transform="rotate(-35 12 12)"/><path d="M9.5 14.5l5-5M10.5 11.5l2 2M12.5 9.5l2 2"/></svg><div><strong>Football</strong><span>Quantum Route models NFL games and scores them against the market.</span></div><b aria-hidden="true">→</b></a></li>
+        <li><a href="#lab"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M12 8c-2 2.2-3.5 3.3-3.5 4.8a1.8 1.8 0 003.2 1.1h.6a1.8 1.8 0 003.2-1.1C15.5 11.3 14 10.2 12 8zM12 14v3"/></svg><div><strong>Poker</strong><span>Expected value and bet sizing, the same math behind the EV Lab.</span></div><b aria-hidden="true">→</b></a></li>
+        <li><a href="#experience"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3c0 6 10 6 10 12s-10 6-10 6M17 3c0 6-10 6-10 12M8.5 7h7M8.5 17h7M10 12h4"/></svg><div><strong>Evolution</strong><span>My CSI research asks how predictable evolution really is.</span></div><b aria-hidden="true">→</b></a></li>
+        <li><a href="#experience"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9l9-5 9 5-9 5-9-5z"/><path d="M7 11.5V16c3 2 7 2 10 0v-4.5M21 9v6"/></svg><div><strong>Teaching</strong><span>Explaining an idea clearly is the best test of knowing it.</span></div><b aria-hidden="true">→</b></a></li>
+        <li><a href="#skills"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/><path d="M4 7.5l8 4.5 8-4.5M12 12v9M8 5.2l8 4.6M16 5.2L8 9.8"/></svg><div><strong>The Rubik's Cube</strong><span>An algorithm you can hold in your hands.</span></div><b aria-hidden="true">→</b></a></li>
+      </ul>
+    </div>
+  </section>
 
   <section class="block" id="projects">
     <div class="wrap">
@@ -478,11 +528,21 @@ footer { padding-block: 28px 40px; color: var(--muted); font-size: .85rem; borde
     <div class="wrap">
       <p class="label">Beyond the code</p>
       <h2 style="margin-block:8px 22px">Leadership &amp; interests</h2>
-      <div class="beyond">
-        <div><h3>Involvement</h3><p>Quant Finance Club, HackMIT, MHacks, SEEDS2S, Chabad, intramural soccer, and the Cheese Club.</p></div>
-        <div><h3>Languages</h3><p>Conversational Spanish and beginner Hebrew, alongside Python, R, SQL, Java, C and RISC-V assembly.</p></div>
-        <div><h3>Interests</h3><p>Soccer, basketball, sprinting, the NFL, poker, viola, cooking, and speed-solving the Rubik's Cube.</p></div>
+      <div class="lead-row">
+        <span class="badge">RU Campus President</span><span class="badge">Founder, Quantum Route</span><span class="badge">Programming Instructor</span>
+        <span class="badge">Quant Finance Club</span><span class="badge">HackMIT &amp; MHacks</span><span class="badge">SEEDS2S</span><span class="badge">Chabad</span><span class="badge">Cheese Club</span>
       </div>
+      <div class="tiles">
+        <div class="tile"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8l3 2.2-1.1 3.5h-3.8L9 10.2 12 8zM12 8V3.5M15 10.2l4.2-1.4M13.9 13.7l2.6 3.6M10.1 13.7l-2.6 3.6M9 10.2L4.8 8.8"/></svg><strong>Soccer</strong><span>Intramurals</span></div>
+        <div class="tile"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3v18M5.6 5.6c3 2.6 3 10.2 0 12.8M18.4 5.6c-3 2.6-3 10.2 0 12.8"/></svg><strong>Basketball</strong><span>On the court</span></div>
+        <div class="tile"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M10 2h4M12 2v3"/></svg><strong>Track</strong><span>Sprinting</span></div>
+        <div class="tile"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="12" rx="9" ry="5.5" transform="rotate(-35 12 12)"/><path d="M9.5 14.5l5-5M10.5 11.5l2 2M12.5 9.5l2 2"/></svg><strong>NFL</strong><span>Fan and modeler</span></div>
+        <div class="tile"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M12 8c-2 2.2-3.5 3.3-3.5 4.8a1.8 1.8 0 003.2 1.1h.6a1.8 1.8 0 003.2-1.1C15.5 11.3 14 10.2 12 8zM12 14v3"/></svg><strong>Poker</strong><span>Expected value, live</span></div>
+        <div class="tile"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V5l11-2v13"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="17.5" cy="16" r="2.5"/></svg><strong>Viola</strong><span>Strings</span></div>
+        <div class="tile"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11h16v2a7 7 0 01-7 7h-2a7 7 0 01-7-7v-2zM20 12h2M9 7c0-1.5 1-1.5 1-3M13 7c0-1.5 1-1.5 1-3"/></svg><strong>Cooking</strong><span>In the kitchen</span></div>
+        <div class="tile"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/><path d="M4 7.5l8 4.5 8-4.5M12 12v9M8 5.2l8 4.6M16 5.2L8 9.8"/></svg><strong>Rubik's Cube</strong><span>Speed-solving</span></div>
+      </div>
+      <p class="langs"><strong>Languages:</strong> conversational Spanish, beginner Hebrew.</p>
     </div>
   </section>
 
@@ -490,8 +550,8 @@ footer { padding-block: 28px 40px; color: var(--muted); font-size: .85rem; borde
     <div class="wrap contact">
       <div>
         <p class="label">Contact</p>
-        <h2>Looking for internships in quant, data science and software.</h2>
-        <p>Based in Hillsborough and New Brunswick, NJ. Email is the fastest way to reach me.</p>
+        <h2>Let's talk data, research or football.</h2>
+        <p>I'm based in Hillsborough and New Brunswick, NJ, and always happy to compare notes on a model, a research question or Sunday's games. Email is the fastest way to reach me.</p>
       </div>
       <div class="clist">
         <div class="citem"><span class="v" id="emailV">samyarkoni@gmail.com</span><button class="iconbtn" id="copyBtn" type="button">Copy</button></div>
@@ -501,7 +561,7 @@ footer { padding-block: 28px 40px; color: var(--muted); font-size: .85rem; borde
     </div>
   </section>
 </main>
-<footer><div class="wrap">© 2026 Samuel Yarkoni · Every chart on this page is computed live in your browser.</div></footer>
+<footer><div class="wrap">© 2026 Samuel Yarkoni · Hillsborough, NJ · Every chart on this page runs live in your browser.</div></footer>
 
 <script>
 /* ---------- content ---------- */
@@ -854,7 +914,7 @@ const REVEALS = [
   [".hero .stats > div", "up", 260, 90], [".hero .cta", "up", 480], [".hero .sampler", "right", 200],
   [".sechead", "up"], [".steps li", "left", 0, 110, 5], [".finding", "right", 120], [".split", "up", 0, 140], [".proj", "zoom", 0, 90], [".lab > div:first-child", "left"], [".lab > div:last-child", "right", 120],
   [".role", "left", 0, 110], [".edu", "left"], ["#skills .two > div:last-child", "right", 120],
-  [".beyond > div", "up", 0, 110], ["section.block:not([id]) h2", "up"], [".contact > div:first-child", "left"], [".citem", "right", 0, 90]
+  [".about-text", "left"], [".threads li", "right", 0, 90, 5], [".lead-row", "up"], [".tile", "zoom", 0, 70, 4], [".langs", "up"], ["section.block:not([id]) h2", "up"], [".contact > div:first-child", "left"], [".citem", "right", 0, 90]
 ];
 const revealObs = "IntersectionObserver" in window && document.documentElement.classList.contains("js-anim")
   ? new IntersectionObserver(es => es.forEach(e => e.target.classList.toggle("in", e.isIntersecting)), { threshold: 0.12, rootMargin: "0px 0px -6% 0px" })
