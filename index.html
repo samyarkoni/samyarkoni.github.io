@@ -19,6 +19,7 @@ html, body { overflow-x: clip; }
 [hidden] { display: none !important; }
 img { max-width: 100%; }
 html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 /* Layout: single measured column on clean paper in navy and muted gold (the headshot's suit and tie); the hero pairs portrait and thesis with a live MCMC sampler; sections rise, slide or zoom into frame as they scroll by. */
 :root {
   --paper: #f6f7f9;
@@ -217,6 +218,13 @@ nav.links a[aria-current="true"] { color: var(--hero-ink); box-shadow: inset 0 -
 @keyframes twinkle { from { opacity: .35; } to { opacity: .7; } }
 .nyte-grid { position: relative; z-index: 1; display: grid; grid-template-columns: 1.25fr .85fr; gap: 56px; align-items: center; }
 .nyte-grid > * { min-width: 0; }
+.nyte-logo { display: block; width: 96px; height: 84px; margin-left: -10px; color: #efe6d6; margin-bottom: 14px; filter: drop-shadow(0 0 14px rgba(239, 230, 214, .18)); }
+.appicon { display: inline-grid; place-items: center; width: 38px; height: 38px; border-radius: 10px; background: linear-gradient(160deg, #121a33, #05070f); color: #efe6d6; flex: none; box-shadow: 0 6px 14px -8px var(--shadow); }
+.appicon svg { width: 36px; height: 32px; }
+.proj .titlerow { display: flex; align-items: center; gap: 12px; }
+html { scroll-padding-top: 76px; }
+.flash { animation: flash 1.6s ease-out; }
+@keyframes flash { 0%, 30% { box-shadow: 0 0 0 3px var(--warm); } 100% { box-shadow: 0 0 0 3px transparent; } }
 .nyte .label { color: #d9b26a; }
 .nyte h2 { color: #fff; font-size: clamp(1.8rem, 3.6vw, 2.5rem); margin-top: 8px; }
 .tagline { font-family: var(--display); font-style: italic; color: #d9b26a; margin-top: 6px; font-size: 1.05rem; }
@@ -400,6 +408,7 @@ footer { padding-block: 28px 40px; color: var(--muted); font-size: .85rem; borde
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="nyteLogo" viewBox="0 0 64 56"><path d="M32 1.5c.6 4.3 1.9 5.6 6.2 6.2-4.3.6-5.6 1.9-6.2 6.2-.6-4.3-1.9-5.6-6.2-6.2 4.3-.6 5.6-1.9 6.2-6.2z" fill="currentColor"/><path d="M14 25Q32 39 50 25" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"/><path d="M18.9 30.4L16.5 35.0M25.4 32.9L24.1 38.0M32.0 33.8L32.0 39.0M38.6 32.9L39.9 38.0M45.1 30.4L47.5 35.0" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M14.9 36.4v3.2M13.3 38.0h3.2M23.2 39.7v3.2M21.6 41.3h3.2M32.0 40.4v4.2M29.9 42.5h4.2M40.8 39.7v3.2M39.2 41.3h3.2M49.1 36.4v3.2M47.5 38.0h3.2" fill="none" stroke="#d9876a" stroke-width=".9" stroke-linecap="round"/></symbol></svg>
 <script>try { if (!matchMedia("(prefers-reduced-motion: reduce)").matches && "IntersectionObserver" in window) document.documentElement.classList.add("js-anim"); } catch (e) {}</script>
 <canvas class="topo page" id="topoPage" aria-hidden="true"></canvas>
 <div class="progress" id="prog" aria-hidden="true"></div>
@@ -480,9 +489,9 @@ footer { padding-block: 28px 40px; color: var(--muted); font-size: .85rem; borde
       <ul class="threads" aria-label="Where my interests meet my work">
         <li><a href="#research"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="12" rx="9" ry="5.5" transform="rotate(-35 12 12)"/><path d="M9.5 14.5l5-5M10.5 11.5l2 2M12.5 9.5l2 2"/></svg><div><strong>Football</strong><span>Quantum Route models NFL games and scores them against the market.</span></div><b aria-hidden="true">→</b></a></li>
         <li><a href="#lab"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M12 8c-2 2.2-3.5 3.3-3.5 4.8a1.8 1.8 0 003.2 1.1h.6a1.8 1.8 0 003.2-1.1C15.5 11.3 14 10.2 12 8zM12 14v3"/></svg><div><strong>Poker</strong><span>Expected value and bet sizing, the same math behind the EV Lab.</span></div><b aria-hidden="true">→</b></a></li>
-        <li><a href="#experience"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3c0 6 10 6 10 12s-10 6-10 6M17 3c0 6-10 6-10 12M8.5 7h7M8.5 17h7M10 12h4"/></svg><div><strong>Evolution</strong><span>My CSI research asks how predictable evolution really is.</span></div><b aria-hidden="true">→</b></a></li>
-        <li><a href="#experience"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9l9-5 9 5-9 5-9-5z"/><path d="M7 11.5V16c3 2 7 2 10 0v-4.5M21 9v6"/></svg><div><strong>Teaching</strong><span>Explaining an idea clearly is the best test of knowing it.</span></div><b aria-hidden="true">→</b></a></li>
-        <li><a href="#skills"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/><path d="M4 7.5l8 4.5 8-4.5M12 12v9M8 5.2l8 4.6M16 5.2L8 9.8"/></svg><div><strong>The Rubik's Cube</strong><span>An algorithm you can hold in your hands.</span></div><b aria-hidden="true">→</b></a></li>
+        <li><a href="#proj-evolutionary-predictability"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3c0 6 10 6 10 12s-10 6-10 6M17 3c0 6-10 6-10 12M8.5 7h7M8.5 17h7M10 12h4"/></svg><div><strong>Evolution</strong><span>My CSI research asks how predictable evolution really is.</span></div><b aria-hidden="true">→</b></a></li>
+        <li><a href="#exp-csi"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9l9-5 9 5-9 5-9-5z"/><path d="M7 11.5V16c3 2 7 2 10 0v-4.5M21 9v6"/></svg><div><strong>Teaching</strong><span>Explaining an idea clearly is the best test of knowing it.</span></div><b aria-hidden="true">→</b></a></li>
+        <li><a href="#education"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/><path d="M4 7.5l8 4.5 8-4.5M12 12v9M8 5.2l8 4.6M16 5.2L8 9.8"/></svg><div><strong>The Rubik's Cube</strong><span>An algorithm you can hold in your hands.</span></div><b aria-hidden="true">→</b></a></li>
       </ul>
     </div>
   </section>
@@ -594,6 +603,7 @@ footer { padding-block: 28px 40px; color: var(--muted); font-size: .85rem; borde
     <div class="sky" aria-hidden="true"></div>
     <div class="wrap nyte-grid">
       <div class="nyte-text">
+        <svg class="nyte-logo" role="img" aria-label="Nyte Nyte logo"><use href="#nyteLogo"/></svg>
         <p class="label">My app · Nyte Nyte</p>
         <h2>Nyte Nyte listens before you sleep.</h2>
         <p class="tagline">“what’s still awake in you?”</p>
@@ -641,7 +651,7 @@ footer { padding-block: 28px 40px; color: var(--muted); font-size: .85rem; borde
 
   <section class="block" id="skills">
     <div class="wrap two">
-      <div class="edu">
+      <div class="edu" id="education">
         <p class="label">Education</p>
         <h3 style="margin-top:8px">Rutgers University — Honors College</h3>
         <p style="color:var(--muted);margin-top:4px">B.S. Computer Science, Data Science &amp; Economics · expected May 2028</p>
@@ -741,7 +751,7 @@ const PROFILE = {
                "Statistical analysis and visualization in R."],
       skills: ["R", "Regression", "Data visualization"],
       links: [["Read the article", "https://github.com/samyarkoni/-Must-See-NFL-Trend-/blob/main/Article.pdf"], ["Source", "https://github.com/samyarkoni/-Must-See-NFL-Trend-"]] },
-    { title: "Nyte Nyte", role: "iOS app with an AI backend", cat: ["Apps", "AI"], year: "2026",
+    { title: "Nyte Nyte", logo: true, role: "iOS app with an AI backend", cat: ["Apps", "AI"], year: "2026",
       points: ["A bedtime companion: talk through ideas or worries, and Nyte spots rumination spirals and offers a reframe and grounding steps.",
                "Turns the night's conversation into tomorrow's plan and hands research and drafting tasks to a Claude agent with web search, ready by morning.",
                "Maps dreams into a knowledge graph of people, places and themes that connects across nights, and tracks habit streaks."],
@@ -749,7 +759,7 @@ const PROFILE = {
       links: [["Source", "https://github.com/samyarkoni/Nyte"], ["See it in action", "#nyte"]] }
   ],
   experience: [
-    { title: "Research Fellow, Evolutionary Predictability", org: "Rutgers Chancellor Signature Initiatives (CSI) · Piscataway, NJ",
+    { title: "Research Fellow, Evolutionary Predictability", id: "csi", org: "Rutgers Chancellor Signature Initiatives (CSI) · Piscataway, NJ",
       when: "May 2026 – Present", live: true, flag: "6% acceptance rate: 1 of 36 selected from 550+ applicants",
       points: ["Engineered Python data pipelines that automate parsing, filtering and grouping of large-scale genomic datasets from multi-cohort evolution experiments.",
                "Built regex-driven cleaning that maps 130+ ancestral and environmental yeast strains and filters out synonymous mutations and experimental anomalies.",
@@ -810,6 +820,7 @@ const css = (name) => getComputedStyle(document.documentElement).getPropertyValu
 
 /* ---------- projects + skill cross-linking ---------- */
 let activeCat = "All", activeSkill = null;
+const slug = t => t.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 function renderFilters() {
   const cats = ["All", ...new Set(PROFILE.projects.flatMap(p => p.cat))];
   $("filters").innerHTML = cats.map(c => `<button class="chip" type="button" data-cat="${esc(c)}" aria-pressed="${c === activeCat}">${esc(c)}</button>`).join("");
@@ -821,9 +832,9 @@ function renderProjects() {
     if (!catOk) return "";
     shown++;
     const dim = activeSkill && !p.skills.includes(activeSkill);
-    return `<article class="proj${dim ? " dim" : ""}">
+    return `<article class="proj${dim ? " dim" : ""}" id="proj-${slug(p.title)}">
       <div class="meta"><span class="label">${esc(p.cat.join(" · "))}</span><span class="label">${esc(p.year)}</span></div>
-      <div><h3>${esc(p.title)}</h3><p style="color:var(--muted);font-size:.9rem">${esc(p.role)}</p></div>
+      <div class="titlerow">${p.logo ? `<span class="appicon"><svg role="img" aria-label="Nyte Nyte logo"><use href="#nyteLogo"/></svg></span>` : ""}<div><h3>${esc(p.title)}</h3><p style="color:var(--muted);font-size:.9rem">${esc(p.role)}</p></div></div>
       <ul>${p.points.map(t => `<li>${esc(t)}</li>`).join("")}</ul>
       <div class="foot">
         <div class="tags">${p.skills.map(s => `<span class="tag${s === activeSkill ? " on" : ""}">${esc(s)}</span>`).join("")}</div>
@@ -866,7 +877,7 @@ function renderSplits() {
 /* ---------- experience ---------- */
 function renderExperience() {
   $("timeline").innerHTML = PROFILE.experience.map((r, i) => `
-    <div class="role">
+    <div class="role" id="exp-${r.id || slug(r.title)}">
       <div class="when">${esc(r.when)}${r.live ? `<br><span class="live">current</span>` : ""}</div>
       <div>
         <h3>${esc(r.title)}</h3>
@@ -1216,6 +1227,18 @@ renderFilters(); renderProjects(); renderSkills(); renderExperience(); renderSpl
   })).observe(ol);
   addEventListener("resize", measure);
 })();
+
+/* in-page links: make sure the target is rendered (project filters), land below the header, and flash it */
+document.addEventListener("click", e => {
+  const a = e.target.closest('a[href^="#"]'); if (!a) return;
+  const id = a.getAttribute("href").slice(1); if (!id || id === "top") return;
+  let el = document.getElementById(id);
+  if (!el && id.startsWith("proj-")) { activeCat = "All"; activeSkill = null; renderFilters(); renderSkills(); renderProjects(); applyReveals(); el = document.getElementById(id); }
+  if (!el) return;
+  e.preventDefault(); history.pushState(null, "", "#" + id);
+  el.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "start" });
+  if (/^(proj|exp)-|^education$/.test(id)) { el.classList.remove("flash"); void el.offsetWidth; el.classList.add("flash"); }
+});
 </script>
 </body>
 </html>
