@@ -237,6 +237,8 @@ nav.links a[aria-current="true"] { color: var(--hero-ink); box-shadow: inset 0 -
 .plan span { display: inline-block; min-width: 40px; color: #9aa4c4; font-variant-numeric: tabular-nums; }
 .mic { margin-top: auto; align-self: center; width: 46px; height: 46px; border-radius: 50%; background: #d9b26a; box-shadow: 0 0 0 8px rgba(217, 178, 106, .15), 0 0 30px rgba(217, 178, 106, .5); animation: breathe 3.2s ease-in-out infinite; }
 @keyframes breathe { 50% { box-shadow: 0 0 0 14px rgba(217, 178, 106, .08), 0 0 40px rgba(217, 178, 106, .6); } }
+.screen.shot { padding: 0; aspect-ratio: 600 / 1304; background: #08090d; }
+.screen.shot img { width: 100%; height: 100%; object-fit: cover; display: block; }
 @media (max-width: 860px) { .nyte-grid { grid-template-columns: 1fr; gap: 36px; } .roadmap { grid-template-columns: 1fr; } .nyte .sky::after { display: none; } .phone { width: min(250px, 100%); } }
 @media (prefers-reduced-motion: reduce) { .nyte .sky, .mic { animation: none; } }
 
@@ -568,21 +570,9 @@ footer { padding-block: 28px 40px; color: var(--muted); font-size: .85rem; borde
         </ol>
         <div class="links-row"><a href="https://github.com/samyarkoni/Nyte" target="_blank" rel="noopener">See the code ↗</a></div>
       </div>
-      <figure class="phone" aria-label="Illustration of the Nyte app's Tonight screen">
-        <div class="screen">
-          <div class="notch"></div>
-          <p class="app-top"><span>Tonight</span><span class="moon"></span></p>
-          <div class="bubble me">Can't stop replaying tomorrow's exam in my head.</div>
-          <div class="bubble nyte-says"><b>That sounds like a worry loop.</b> Let's park it: one small step tonight, the rest in the morning.</div>
-          <div class="plan">
-            <p class="plan-h">Tomorrow</p>
-            <p><span>9:00</span>Review chapter 4</p>
-            <p><span>11:00</span>Office hours</p>
-            <p><span>✓</span>Study guide drafted overnight</p>
-          </div>
-          <div class="mic"></div>
-        </div>
-        <figcaption>Illustrative screen</figcaption>
+      <figure class="phone">
+        <div class="screen shot"><img src="images/nyte-dream-map.jpg" width="600" height="1304" alt="Nyte's dream map: a constellation of dream elements such as a hackathon submission, a pitch deck and debugging code, linked by recurring and possible echoes" loading="lazy"></div>
+        <figcaption>The dream map, from the app</figcaption>
       </figure>
     </div>
   </section>
