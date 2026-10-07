@@ -759,7 +759,7 @@ const PROFILE = {
       links: [["Source", "https://github.com/samyarkoni/Nyte"], ["See it in action", "#nyte"]] }
   ],
   experience: [
-    { title: "Research Fellow, Evolutionary Predictability", id: "csi", org: "Rutgers Chancellor Signature Initiatives (CSI) · Piscataway, NJ",
+    { title: "Research Fellow, Evolutionary Predictability", id: "csi", links: [["Rutgers CSI SURF program", "https://newbrunswick.rutgers.edu/research/office/summer-undergraduate-research-fellowship"]], org: "Rutgers Chancellor Signature Initiatives (CSI) · Piscataway, NJ",
       when: "May 2026 – Present", live: true, flag: "6% acceptance rate: 1 of 36 selected from 550+ applicants",
       points: ["Engineered Python data pipelines that automate parsing, filtering and grouping of large-scale genomic datasets from multi-cohort evolution experiments.",
                "Built regex-driven cleaning that maps 130+ ancestral and environmental yeast strains and filters out synonymous mutations and experimental anomalies.",
@@ -885,6 +885,7 @@ function renderExperience() {
         ${r.flag ? `<p class="flag">${esc(r.flag)}</p>` : ""}
         <ul>${r.points.map((t, j) => `<li${j >= 2 ? ' data-extra hidden' : ""}>${esc(t)}</li>`).join("")}</ul>
         ${r.points.length > 2 ? `<button class="more" type="button" data-i="${i}" aria-expanded="false">Show ${r.points.length - 2} more</button>` : ""}
+        ${r.links ? `<div class="links-row">${r.links.map(([t, u]) => `<a href="${esc(u)}" target="_blank" rel="noopener">${esc(t)}&nbsp;↗</a>`).join("")}</div>` : ""}
       </div>
     </div>`).join("");
 }
