@@ -89,10 +89,11 @@ header.top .iconbtn { background: transparent; color: var(--hero-ink); border-co
 .hero .lede { font-size: var(--step-1); color: var(--muted); max-width: 34ch; margin-top: 16px; }
 .rotator { color: var(--hero-muted); margin-top: 20px; font-size: .95rem; min-height: 1.6em; }
 .rotator b { color: var(--gold); font-weight: 500; }
-.stats { display: flex; gap: 28px; flex-wrap: wrap; margin-top: 28px; }
+.stats { display: grid; grid-template-columns: repeat(3, auto); justify-content: start; gap: 12px 32px; margin-top: 28px; }
 .stats div { display: grid; }
 .stats strong { font-family: var(--display); font-size: 1.7rem; font-weight: 700; font-variant-numeric: tabular-nums; }
 .stats span { font-size: .85rem; color: var(--muted); }
+@media (max-width: 480px) { .stats { gap: 10px 18px; } .stats strong { font-size: 1.4rem; } .stats span { font-size: .78rem; line-height: 1.35; } }
 .cta { display: flex; gap: 12px; margin-top: 28px; flex-wrap: wrap; }
 .btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 20px; border-radius: 3px; font-weight: 600; text-decoration: none; border: 1px solid var(--accent); cursor: pointer; font-family: var(--body); font-size: .95rem; }
 .btn.primary { background: var(--accent); color: var(--paper); }
@@ -133,7 +134,8 @@ header.top .iconbtn { background: transparent; color: var(--hero-ink); border-co
 /* scroll progress + active nav */
 .progress { position: fixed; top: 0; left: 0; height: 3px; width: 100%; transform-origin: 0 50%; transform: scaleX(0); background: var(--warm); z-index: 20; pointer-events: none; }
 nav.links a[aria-current="true"] { color: var(--hero-ink); box-shadow: inset 0 -2px 0 var(--gold); }
-.totop { position: fixed; right: 18px; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); z-index: 15; opacity: 0; transform: translateY(12px); transition: opacity .3s, transform .3s; pointer-events: none; }
+.btn.totop { width: 44px; height: 44px; padding: 0; justify-content: center; border-radius: 50%; font-size: 1.1rem; box-shadow: 0 10px 24px -10px var(--shadow); }
+.totop { position: fixed; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); z-index: 15; opacity: 0; transform: translateY(12px); transition: opacity .3s, transform .3s; pointer-events: none; }
 .totop.show { opacity: 1; transform: none; pointer-events: auto; }
 
 /* reveal on scroll: rise, slide from either side, or zoom into frame; reverses when it leaves */
@@ -265,7 +267,9 @@ section.block { padding-block: 64px; border-top: 1px solid var(--rule); }
 .chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--paper); }
 .chip.hit { background: var(--warm-soft); border-color: var(--warm); }
 
-.projects { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; }
+.projects { display: grid; grid-template-columns: 1fr; gap: 18px; }
+@media (min-width: 640px) { .projects { grid-template-columns: repeat(2, 1fr); } .projects > .proj:last-child:nth-child(odd) { grid-column: span 2; } }
+@media (min-width: 980px) { .projects { grid-template-columns: repeat(3, 1fr); } .projects > .proj:last-child:nth-child(odd) { grid-column: auto; } .projects > .proj:last-child:nth-child(3n+2) { grid-column: span 2; } }
 .proj { background: var(--panel); border: 1px solid var(--rule); border-top: 3px solid var(--accent); border-radius: 4px; padding: 20px; display: grid; grid-template-rows: auto auto 1fr auto; gap: 10px; transition: opacity .25s, transform .25s, border-color .2s; min-width: 0; }
 .proj:hover { border-color: var(--accent); }
 .proj.dim { opacity: .28; transform: scale(.985); }
@@ -294,7 +298,8 @@ section.block { padding-block: 64px; border-top: 1px solid var(--rule); }
 .finding { background: var(--panel); border: 1px solid var(--rule); border-radius: 4px; padding: 22px; }
 .finding h3 { font-size: 1.15rem; margin-top: 6px; }
 .split { margin-top: 18px; }
-.split .row { display: flex; justify-content: space-between; gap: 10px; font-size: .9rem; margin-bottom: 6px; }
+.split .row { display: flex; justify-content: space-between; align-items: baseline; gap: 4px 12px; flex-wrap: wrap; font-size: .9rem; margin-bottom: 6px; }
+.split .row span { color: var(--muted); font-size: .84rem; white-space: nowrap; }
 .split .row b { font-weight: 600; }
 .stack { display: flex; height: 30px; border-radius: 3px; overflow: hidden; background: var(--accent-soft); }
 .seg { width: var(--w); display: grid; place-items: center; color: var(--panel); font: 600 .75rem var(--body); transition: width 1.1s cubic-bezier(.2, .7, .2, 1); transition-delay: calc(var(--d, 0ms) + 250ms); white-space: nowrap; overflow: hidden; }
@@ -380,7 +385,7 @@ footer { padding-block: 28px 40px; color: var(--muted); font-size: .85rem; borde
 <script>try { if (!matchMedia("(prefers-reduced-motion: reduce)").matches && "IntersectionObserver" in window) document.documentElement.classList.add("js-anim"); } catch (e) {}</script>
 <canvas class="topo page" id="topoPage" aria-hidden="true"></canvas>
 <div class="progress" id="prog" aria-hidden="true"></div>
-<a class="btn primary totop" id="totop" href="#top" aria-label="Back to top">↑ Top</a>
+<a class="btn primary totop" id="totop" href="#top" aria-label="Back to top" title="Back to top">↑</a>
 <header class="top">
   <div class="wrap">
     <a class="mark" href="#top">Samuel Yarkoni</a>
@@ -584,11 +589,11 @@ footer { padding-block: 28px 40px; color: var(--muted); font-size: .85rem; borde
         <div class="links-row"><a href="https://github.com/samyarkoni/Nyte" target="_blank" rel="noopener">See the code ↗</a></div>
       </div>
       <figure class="phone" aria-roledescription="carousel" aria-label="Screens from Nyte Nyte">
-        <div class="screen shot"><div class="track" id="nyteTrack" tabindex="0"><img src="images/nyte-dump.jpg" width="600" height="1302" alt="The Dump screen, where you type or speak whatever is on your mind before bed" loading="eager" data-title="Dump" data-sub="Talk it out before sleep"><img src="images/nyte-dream-map.jpg" width="600" height="1304" alt="Dream map connecting elements of a dream such as a hackathon submission, a pitch deck and debugging code" loading="lazy" data-title="Dream map" data-sub="A night as a constellation"><img src="images/nyte-worry.jpg" width="600" height="1302" alt="A worry card: Manager yelling because forgot to submit, echoed in a dream about a failed presentation" loading="lazy" data-title="Worry echo" data-sub="A worry that shows up in a dream"><img src="images/nyte-patterns-thoughts.jpg" width="600" height="1302" alt="Patterns view showing how worries connect and which ones eased after tasks were finished" loading="lazy" data-title="Patterns" data-sub="What Nyte notices"><img src="images/nyte-patterns-dreams.jpg" width="600" height="1302" alt="Dream patterns: symbols such as hackathon, meteor and train station sized by how often they return" loading="lazy" data-title="Dream symbols" data-sub="What keeps coming back"></div></div>
+        <div class="screen shot"><div class="track" id="nyteTrack" tabindex="0"><img src="images/nyte-dump.jpg" width="600" height="1302" alt="The Dump screen, where you type or speak whatever is on your mind before bed" loading="eager" data-title="Dump" data-sub="Talk it out before sleep"><img src="images/nyte-dream-map.jpg" width="600" height="1304" alt="Dream map connecting elements of a dream such as a hackathon submission, a pitch deck and debugging code" loading="lazy" data-title="Dream map" data-sub="A night as a constellation"><img src="images/nyte-worry.jpg" width="600" height="1302" alt="A worry card: Manager yelling because forgot to submit, echoed in a dream about a failed presentation" loading="lazy" data-title="Worry echo" data-sub="A worry that shows up in a dream"><img src="images/nyte-worry-recurring.jpg" width="600" height="1301" alt="A recurring worry card: Stressing about work, on your mind two nights, linked to two projects, a submission, a pitch deck and debugging" loading="lazy" data-title="Recurring worry" data-sub="On your mind two nights running"><img src="images/nyte-connections.jpg" width="600" height="1301" alt="Dream map highlighting how one worry links to failed presentation, two projects and other elements" loading="lazy" data-title="Connections" data-sub="How one worry links to everything else"><img src="images/nyte-patterns-thoughts.jpg" width="600" height="1302" alt="Patterns view showing how worries connect and which ones eased after tasks were finished" loading="lazy" data-title="Patterns" data-sub="What Nyte notices"><img src="images/nyte-patterns-dreams.jpg" width="600" height="1302" alt="Dream patterns: symbols such as hackathon, meteor and train station sized by how often they return" loading="lazy" data-title="Dream symbols" data-sub="What keeps coming back"></div></div>
         <figcaption class="shot-cap" aria-live="polite"><strong id="nyteTitle">Dump</strong><span id="nyteSub">Talk it out before sleep</span></figcaption>
         <div class="shot-nav">
           <button type="button" class="arrow" id="nytePrev" aria-label="Previous screen">←</button>
-          <div class="dots" id="nyteDots"><button type="button" class="dot" aria-label="Show Dump" data-i="0"></button><button type="button" class="dot" aria-label="Show Dream map" data-i="1"></button><button type="button" class="dot" aria-label="Show Worry echo" data-i="2"></button><button type="button" class="dot" aria-label="Show Patterns" data-i="3"></button><button type="button" class="dot" aria-label="Show Dream symbols" data-i="4"></button></div>
+          <div class="dots" id="nyteDots"><button type="button" class="dot" aria-label="Show Dump" data-i="0"></button><button type="button" class="dot" aria-label="Show Dream map" data-i="1"></button><button type="button" class="dot" aria-label="Show Worry echo" data-i="2"></button><button type="button" class="dot" aria-label="Show Recurring worry" data-i="3"></button><button type="button" class="dot" aria-label="Show Connections" data-i="4"></button><button type="button" class="dot" aria-label="Show Patterns" data-i="5"></button><button type="button" class="dot" aria-label="Show Dream symbols" data-i="6"></button></div>
           <button type="button" class="arrow" id="nyteNext" aria-label="Next screen">→</button>
         </div>
       </figure>
