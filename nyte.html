@@ -198,11 +198,32 @@ figure { margin: 0; }
   .demo { padding: 16px 12px 14px; }
   .demo-head .night { margin-left: 0; width: 100%; }
 }
+
+/* arriving from the main site's night-falls transition: the logo glides into place and the page rises */
+#arrive { display: none; }
+html.arrive #arrive { display: block; position: fixed; inset: 0; z-index: 100; background-color: #0b1326; color: var(--cream); pointer-events: none; transition: background-color .8s ease .15s, opacity .5s ease .75s; }
+html.arrive #arrive::before { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 50% 46%, rgba(40, 52, 104, .55), transparent 62vmin); transition: opacity .8s ease; }
+#arrive .sky { position: absolute; inset: 0; width: 100%; height: 100%; }
+#arrive .mark { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); text-align: center; width: 90%; }
+#arrive .alogo { width: 132px; height: 116px; display: block; margin: 0 auto; color: var(--cream); filter: drop-shadow(0 0 22px rgba(239, 230, 214, .22)); transition: transform .85s cubic-bezier(.65, 0, .25, 1); }
+#arrive .word { font-family: var(--display); font-size: 1.35rem; letter-spacing: .32em; margin-top: 10px; transition: opacity .4s ease; }
+#arrive .tag { font-family: var(--display); font-style: italic; color: #b9b2a6; margin-top: 6px; transition: opacity .4s ease; }
+html.arrive.go #arrive { background-color: rgba(11, 19, 38, 0); opacity: 0; }
+html.arrive.go #arrive::before, html.arrive.go #arrive .word, html.arrive.go #arrive .tag { opacity: 0; }
+html.arrive:not(.landed) .hero .logo { opacity: 0; }
+html.arrive .hero > :not(.logo) { opacity: 0; transform: translateY(18px); transition: opacity .8s ease, transform .8s ease; }
+html.arrive.go .hero > :not(.logo) { opacity: 1; transform: none; }
+html.arrive.go .hero > .tag { transition-delay: .35s; } html.arrive.go .hero > h1 { transition-delay: .25s; }
+html.arrive.go .hero > .lede { transition-delay: .45s; } html.arrive.go .hero > .chips { transition-delay: .55s; } html.arrive.go .hero > .loop { transition-delay: .65s; }
+html.arrive.go .hero > .loop.rv { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) { html.arrive #arrive { display: none; } html.arrive .hero > :not(.logo), html.arrive:not(.landed) .hero .logo { opacity: 1; transform: none; } }
 </style>
+<script>try { const t = +sessionStorage.getItem("nyteGo"); sessionStorage.removeItem("nyteGo"); if (t && Date.now() - t < 8000) document.documentElement.classList.add("arrive"); } catch (e) {}</script>
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="nyteLogo" viewBox="0 0 64 56"><path d="M32 1.5c.6 4.3 1.9 5.6 6.2 6.2-4.3.6-5.6 1.9-6.2 6.2-.6-4.3-1.9-5.6-6.2-6.2 4.3-.6 5.6-1.9 6.2-6.2z" fill="currentColor"/><path d="M14 25Q32 39 50 25" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"/><path d="M18.9 30.4L16.5 35.0M25.4 32.9L24.1 38.0M32.0 33.8L32.0 39.0M38.6 32.9L39.9 38.0M45.1 30.4L47.5 35.0" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M14.9 36.4v3.2M13.3 38.0h3.2M23.2 39.7v3.2M21.6 41.3h3.2M32.0 40.4v4.2M29.9 42.5h4.2M40.8 39.7v3.2M39.2 41.3h3.2M49.1 36.4v3.2M47.5 38.0h3.2" fill="none" stroke="#d9876a" stroke-width=".9" stroke-linecap="round"/></symbol></svg>
 <div id="sky" aria-hidden="true"></div>
+<div id="arrive" aria-hidden="true"><div class="mark"><svg class="alogo"><use href="#nyteLogo"/></svg><div class="word">NYTE NYTE</div><div class="tag">what’s still awake in you?</div></div></div>
 
 <header>
   <div class="wrap">
@@ -430,6 +451,18 @@ const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
     out += `<circle cx="${x}" cy="${y}" r="${rad}" fill="#fff" opacity="${o}"${i % 9 === 0 ? ` class="tw" style="animation-delay:-${(r() * 5).toFixed(1)}s"` : ""}/>`;
   }
   document.getElementById("sky").innerHTML = `<svg viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice">${out}</svg>`;
+  const html = document.documentElement;
+  if (!html.classList.contains("arrive") || reduced) return;
+  const ar = document.getElementById("arrive");
+  ar.insertAdjacentHTML("afterbegin", `<svg class="sky" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice">${out.replace(/ class="tw"[^/]*/g, "")}</svg>`);
+  const from = ar.querySelector(".alogo"), to = document.querySelector(".hero .logo");
+  requestAnimationFrame(() => {
+    const a = from.getBoundingClientRect(), b = to.getBoundingClientRect();
+    from.style.transform = `translate(${b.left - a.left}px, ${b.top - a.top}px)`;
+    html.classList.add("go");
+    setTimeout(() => html.classList.add("landed"), 880);
+    setTimeout(() => { ar.remove(); html.classList.remove("arrive", "go", "landed"); }, 1500);
+  });
 })();
 
 /* reveal on scroll */
