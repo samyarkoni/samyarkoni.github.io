@@ -223,8 +223,8 @@ nav.links a[aria-current="true"] { color: var(--hero-ink); box-shadow: inset 0 -
 .appicon svg { width: 36px; height: 32px; }
 .proj .titlerow { display: flex; align-items: center; gap: 12px; }
 html { scroll-padding-top: 76px; }
-.flash { animation: flash 1.6s ease-out; }
-@keyframes flash { 0%, 30% { box-shadow: 0 0 0 3px var(--warm); } 100% { box-shadow: 0 0 0 3px transparent; } }
+.flash { animation: flash 2.6s cubic-bezier(.2, .7, .2, 1); border-radius: 4px; }
+@keyframes flash { 0% { background-color: transparent; box-shadow: 0 0 0 0 transparent; } 12%, 45% { background-color: var(--warm-soft); box-shadow: 0 0 0 12px var(--warm-soft); } 100% { background-color: transparent; box-shadow: 0 0 0 12px transparent; } }
 .nyte .label { color: #d9b26a; }
 .nyte h2 { color: #fff; font-size: clamp(1.8rem, 3.6vw, 2.5rem); margin-top: 8px; }
 .tagline { font-family: var(--display); font-style: italic; color: #d9b26a; margin-top: 6px; font-size: 1.05rem; }
@@ -623,7 +623,7 @@ footer { padding-block: 28px 40px; color: var(--muted); font-size: .85rem; borde
           <li class="next"><span></span><div><strong>Next</strong>Keep expanding it and bring it into the seminar classroom</div></li>
           <li><span></span><div><strong>Then</strong>Publish on the App Store</div></li>
         </ol>
-        <div class="links-row"><a href="https://github.com/samyarkoni/Nyte" target="_blank" rel="noopener">See the code ↗</a></div>
+        <div class="links-row"><a href="#contact">Code available on request</a></div>
       </div>
       <figure class="phone" aria-roledescription="carousel" aria-label="Screens from Nyte Nyte">
         <div class="screen shot"><div class="track" id="nyteTrack" tabindex="0"><img src="images/nyte-dream-map.jpg" width="600" height="1304" alt="Dream map connecting elements of a dream such as a hackathon submission, a pitch deck and debugging code" loading="eager" data-title="Dream map" data-sub="A night as a constellation"><img src="images/nyte-worry.jpg" width="600" height="1302" alt="A worry card: Manager yelling because forgot to submit, echoed in a dream about a failed presentation" loading="lazy" data-title="Worry echo" data-sub="A worry that shows up in a dream"><img src="images/nyte-worry-recurring.jpg" width="600" height="1301" alt="A recurring worry card: Stressing about work, on your mind two nights, linked to two projects, a submission, a pitch deck and debugging" loading="lazy" data-title="Recurring worry" data-sub="On your mind two nights running"><img src="images/nyte-connections.jpg" width="600" height="1301" alt="Dream map highlighting how one worry links to failed presentation, two projects and other elements" loading="lazy" data-title="Connections" data-sub="How one worry links to everything else"><img src="images/nyte-patterns-thoughts.jpg" width="600" height="1302" alt="Patterns view showing how worries connect and which ones eased after tasks were finished" loading="lazy" data-title="Patterns" data-sub="What Nyte notices"><img src="images/nyte-patterns-dreams.jpg" width="600" height="1302" alt="Dream patterns: symbols such as hackathon, meteor and train station sized by how often they return" loading="lazy" data-title="Dream symbols" data-sub="What keeps coming back"></div></div>
@@ -756,7 +756,7 @@ const PROFILE = {
                "Turns the night's conversation into tomorrow's plan and hands research and drafting tasks to a Claude agent with web search, ready by morning.",
                "Maps dreams into a knowledge graph of people, places and themes that connects across nights, and tracks habit streaks."],
       skills: ["Swift", "SwiftUI", "TypeScript", "Node.js", "SQLite", "Claude API"],
-      links: [["Source", "https://github.com/samyarkoni/Nyte"], ["See it in action", "#nyte"]] }
+      links: [["See it in action", "#nyte"], ["Code available on request", "#contact"]] }
   ],
   experience: [
     { title: "Research Fellow, Evolutionary Predictability", id: "csi", links: [["Rutgers CSI SURF program", "https://newbrunswick.rutgers.edu/research/office/summer-undergraduate-research-fellowship"]], org: "Rutgers Chancellor Signature Initiatives (CSI) · Piscataway, NJ",
