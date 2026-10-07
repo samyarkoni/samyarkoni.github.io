@@ -207,6 +207,7 @@ nav.links a[aria-current="true"] { color: var(--hero-ink); box-shadow: inset 0 -
 .nyte-grid > * { min-width: 0; }
 .nyte .label { color: #d9b26a; }
 .nyte h2 { color: #fff; font-size: clamp(1.8rem, 3.6vw, 2.5rem); margin-top: 8px; }
+.tagline { font-family: var(--display); font-style: italic; color: #d9b26a; margin-top: 6px; font-size: 1.05rem; }
 .nyte-lede { color: #c3cbe0; font-size: 1.08rem; margin-top: 14px; max-width: 54ch; }
 .nyte-features { list-style: none; padding: 0; margin: 22px 0 0; display: grid; gap: 12px; }
 .nyte-features li { color: #c3cbe0; padding-left: 22px; position: relative; max-width: 60ch; }
@@ -238,7 +239,18 @@ nav.links a[aria-current="true"] { color: var(--hero-ink); box-shadow: inset 0 -
 .mic { margin-top: auto; align-self: center; width: 46px; height: 46px; border-radius: 50%; background: #d9b26a; box-shadow: 0 0 0 8px rgba(217, 178, 106, .15), 0 0 30px rgba(217, 178, 106, .5); animation: breathe 3.2s ease-in-out infinite; }
 @keyframes breathe { 50% { box-shadow: 0 0 0 14px rgba(217, 178, 106, .08), 0 0 40px rgba(217, 178, 106, .6); } }
 .screen.shot { padding: 0; aspect-ratio: 600 / 1304; background: #08090d; }
-.screen.shot img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.track { display: flex; width: 100%; height: 100%; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; scroll-behavior: smooth; }
+.track::-webkit-scrollbar { display: none; }
+.track img { flex: 0 0 100%; width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; scroll-snap-align: start; }
+.phone .shot-cap { display: grid; gap: 2px; text-align: center; text-transform: none; letter-spacing: 0; }
+.shot-cap strong { color: #fff; font-family: var(--display); font-size: 1rem; font-weight: 600; }
+.shot-cap span { color: #aab3cb; font-size: .85rem; }
+.shot-nav { display: flex; align-items: center; gap: 12px; }
+.arrow { background: transparent; border: 1px solid rgba(255, 255, 255, .25); color: #eef1f8; width: 34px; height: 34px; border-radius: 50%; cursor: pointer; font: 500 .95rem var(--body); }
+.arrow:hover { border-color: #d9b26a; color: #d9b26a; }
+.dots { display: flex; gap: 8px; }
+.dot { width: 8px; height: 8px; padding: 0; border-radius: 50%; border: 0; background: rgba(255, 255, 255, .25); cursor: pointer; transition: width .25s, background .25s; }
+.dot[aria-current="true"] { width: 22px; border-radius: 4px; background: #d9b26a; }
 @media (max-width: 860px) { .nyte-grid { grid-template-columns: 1fr; gap: 36px; } .roadmap { grid-template-columns: 1fr; } .nyte .sky::after { display: none; } .phone { width: min(250px, 100%); } }
 @media (prefers-reduced-motion: reduce) { .nyte .sky, .mic { animation: none; } }
 
@@ -550,9 +562,10 @@ footer { padding-block: 28px 40px; color: var(--muted); font-size: .85rem; borde
     <div class="sky" aria-hidden="true"></div>
     <div class="wrap nyte-grid">
       <div class="nyte-text">
-        <p class="label">My app · Nyte</p>
-        <h2>Nyte listens before you sleep.</h2>
-        <p class="nyte-lede">I'm building Nyte for the hour before bed. You talk through whatever is on your mind, and Nyte helps you set it down so tomorrow starts clearer.</p>
+        <p class="label">My app · Nyte Nyte</p>
+        <h2>Nyte Nyte listens before you sleep.</h2>
+        <p class="tagline">“what’s still awake in you?”</p>
+        <p class="nyte-lede">I'm building Nyte Nyte for the hour before bed. You talk through whatever is on your mind, and it helps you set it down so tomorrow starts clearer.</p>
         <ul class="nyte-features">
           <li><strong>Catches spirals.</strong> Notices rumination and catastrophizing, names the pattern gently, and offers a reframe and grounding steps.</li>
           <li><strong>Plans tomorrow.</strong> Turns what you said into an intention, a timeline and concrete tasks.</li>
@@ -561,7 +574,7 @@ footer { padding-block: 28px 40px; color: var(--muted); font-size: .85rem; borde
         </ul>
         <div class="callout">
           <p class="label">Early interest</p>
-          <p>After I pitched Nyte, the professor of my Honors seminar, <em>From Distractions to Mind Wandering</em>, wanted to bring it into her class.</p>
+          <p>After I pitched Nyte Nyte, the professor of my Honors seminar, <em>From Distractions to Mind Wandering</em>, wanted to bring it into her class.</p>
         </div>
         <ol class="roadmap" aria-label="Nyte roadmap">
           <li class="done"><span></span><div><strong>Built</strong>SwiftUI iOS app with a Node, SQLite and Claude backend</div></li>
@@ -570,9 +583,14 @@ footer { padding-block: 28px 40px; color: var(--muted); font-size: .85rem; borde
         </ol>
         <div class="links-row"><a href="https://github.com/samyarkoni/Nyte" target="_blank" rel="noopener">See the code ↗</a></div>
       </div>
-      <figure class="phone">
-        <div class="screen shot"><img src="images/nyte-dream-map.jpg" width="600" height="1304" alt="Nyte's dream map: a constellation of dream elements such as a hackathon submission, a pitch deck and debugging code, linked by recurring and possible echoes" loading="lazy"></div>
-        <figcaption>The dream map, from the app</figcaption>
+      <figure class="phone" aria-roledescription="carousel" aria-label="Screens from Nyte Nyte">
+        <div class="screen shot"><div class="track" id="nyteTrack" tabindex="0"><img src="images/nyte-dump.jpg" width="600" height="1302" alt="The Dump screen, where you type or speak whatever is on your mind before bed" loading="eager" data-title="Dump" data-sub="Talk it out before sleep"><img src="images/nyte-dream-map.jpg" width="600" height="1304" alt="Dream map connecting elements of a dream such as a hackathon submission, a pitch deck and debugging code" loading="lazy" data-title="Dream map" data-sub="A night as a constellation"><img src="images/nyte-worry.jpg" width="600" height="1302" alt="A worry card: Manager yelling because forgot to submit, echoed in a dream about a failed presentation" loading="lazy" data-title="Worry echo" data-sub="A worry that shows up in a dream"><img src="images/nyte-patterns-thoughts.jpg" width="600" height="1302" alt="Patterns view showing how worries connect and which ones eased after tasks were finished" loading="lazy" data-title="Patterns" data-sub="What Nyte notices"><img src="images/nyte-patterns-dreams.jpg" width="600" height="1302" alt="Dream patterns: symbols such as hackathon, meteor and train station sized by how often they return" loading="lazy" data-title="Dream symbols" data-sub="What keeps coming back"></div></div>
+        <figcaption class="shot-cap" aria-live="polite"><strong id="nyteTitle">Dump</strong><span id="nyteSub">Talk it out before sleep</span></figcaption>
+        <div class="shot-nav">
+          <button type="button" class="arrow" id="nytePrev" aria-label="Previous screen">←</button>
+          <div class="dots" id="nyteDots"><button type="button" class="dot" aria-label="Show Dump" data-i="0"></button><button type="button" class="dot" aria-label="Show Dream map" data-i="1"></button><button type="button" class="dot" aria-label="Show Worry echo" data-i="2"></button><button type="button" class="dot" aria-label="Show Patterns" data-i="3"></button><button type="button" class="dot" aria-label="Show Dream symbols" data-i="4"></button></div>
+          <button type="button" class="arrow" id="nyteNext" aria-label="Next screen">→</button>
+        </div>
       </figure>
     </div>
   </section>
@@ -685,12 +703,12 @@ const PROFILE = {
                "Statistical analysis and visualization in R."],
       skills: ["R", "Regression", "Data visualization"],
       links: [["Read the article", "https://github.com/samyarkoni/-Must-See-NFL-Trend-/blob/main/Article.pdf"], ["Source", "https://github.com/samyarkoni/-Must-See-NFL-Trend-"]] },
-    { title: "Nyte", role: "iOS app with an AI backend", cat: ["Apps", "AI"], year: "2026",
+    { title: "Nyte Nyte", role: "iOS app with an AI backend", cat: ["Apps", "AI"], year: "2026",
       points: ["A bedtime companion: talk through ideas or worries, and Nyte spots rumination spirals and offers a reframe and grounding steps.",
                "Turns the night's conversation into tomorrow's plan and hands research and drafting tasks to a Claude agent with web search, ready by morning.",
                "Maps dreams into a knowledge graph of people, places and themes that connects across nights, and tracks habit streaks."],
       skills: ["Swift", "SwiftUI", "TypeScript", "Node.js", "SQLite", "Claude API"],
-      links: [["Source", "https://github.com/samyarkoni/Nyte"], ["More on Nyte", "#nyte"]] }
+      links: [["Source", "https://github.com/samyarkoni/Nyte"], ["See it in action", "#nyte"]] }
   ],
   experience: [
     { title: "Research Fellow, Evolutionary Predictability", org: "Rutgers Chancellor Signature Initiatives (CSI) · Piscataway, NJ",
@@ -1012,6 +1030,31 @@ matchMedia("(prefers-color-scheme: dark)").addEventListener("change", drawSample
     out += `<text x="${x}" y="470" text-anchor="middle">${n}</text><text x="${x}" y="63" text-anchor="middle" transform="rotate(180 ${x} 52)">${n}</text>`;
   }
   svg.innerHTML = out;
+})();
+
+/* ---------- Nyte screen gallery ---------- */
+(function nyteGallery() {
+  const track = $("nyteTrack"); if (!track) return;
+  const imgs = [...track.querySelectorAll("img")], dots = [...document.querySelectorAll("#nyteDots .dot")];
+  let cur = 0, timer = null, userTouched = false;
+  const show = i => { cur = (i + imgs.length) % imgs.length; track.scrollTo({ left: cur * track.clientWidth, behavior: reduced ? "auto" : "smooth" }); };
+  const sync = () => {
+    const i = Math.round(track.scrollLeft / Math.max(1, track.clientWidth)); cur = Math.max(0, Math.min(imgs.length - 1, i));
+    dots.forEach((d, k) => d.setAttribute("aria-current", k === cur ? "true" : "false"));
+    $("nyteTitle").textContent = imgs[cur].dataset.title; $("nyteSub").textContent = imgs[cur].dataset.sub;
+  };
+  const stop = () => { userTouched = true; clearInterval(timer); };
+  let st; track.addEventListener("scroll", () => { clearTimeout(st); st = setTimeout(sync, 60); }, { passive: true });
+  ["pointerdown", "wheel", "touchstart"].forEach(ev => track.addEventListener(ev, stop, { passive: true }));
+  $("nytePrev").addEventListener("click", () => { stop(); show(cur - 1); });
+  $("nyteNext").addEventListener("click", () => { stop(); show(cur + 1); });
+  dots.forEach(d => d.addEventListener("click", () => { stop(); show(+d.dataset.i); }));
+  track.addEventListener("keydown", e => { if (e.key === "ArrowRight") { stop(); show(cur + 1); } if (e.key === "ArrowLeft") { stop(); show(cur - 1); } });
+  sync();
+  if (!reduced && "IntersectionObserver" in window) new IntersectionObserver(es => {
+    clearInterval(timer);
+    if (es[0].isIntersecting && !userTouched) timer = setInterval(() => show(cur + 1), 4500);
+  }, { threshold: 0.5 }).observe(track);
 })();
 
 /* ---------- scroll motion ---------- */
