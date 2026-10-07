@@ -287,12 +287,14 @@ section.block { padding-block: 64px; border-top: 1px solid var(--rule); }
 .research { display: grid; grid-template-columns: 1fr 1.15fr; gap: 36px; }
 .research > * { min-width: 0; }
 .steps { list-style: none; margin: 0; padding: 0; position: relative; display: grid; gap: 18px; }
-.steps::before { content: ""; position: absolute; left: 15px; top: 16px; bottom: 16px; width: 2px; background: var(--rule); }
-.steps::after { content: ""; position: absolute; left: 11px; top: 12px; width: 10px; height: 10px; border-radius: 50%; background: var(--warm); box-shadow: 0 0 0 4px var(--warm-soft); animation: flow 5s cubic-bezier(.5, 0, .5, 1) infinite; }
-@keyframes flow { 0% { top: 12px; opacity: 0; } 8% { opacity: 1; } 92% { opacity: 1; } 100% { top: calc(100% - 22px); opacity: 0; } }
-.steps li { display: grid; grid-template-columns: 32px 1fr; gap: 14px; position: relative; }
+.steps::before { content: ""; position: absolute; left: 53px; top: 18px; bottom: 18px; border-left: 2px dashed var(--rule); }
+.steps li { display: grid; grid-template-columns: 36px 1fr; gap: 40px; position: relative; }
 .steps li > div { min-width: 0; }
-.steps .n { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; background: var(--panel); border: 2px solid var(--accent); color: var(--accent); font: 600 .85rem var(--body); position: relative; z-index: 1; }
+.steps .n { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: var(--panel); border: 2px solid var(--accent); color: var(--accent); font: 600 .78rem var(--body); letter-spacing: -.01em; position: relative; z-index: 1; transition: background .3s, color .3s, border-color .3s, box-shadow .3s; }
+.steps .n sup { font-size: .66em; line-height: 1; margin-left: 1px; position: relative; top: -.1em; vertical-align: top; }
+.steps .n.on { background: var(--warm); border-color: var(--warm); color: var(--panel); box-shadow: 0 0 0 5px var(--warm-soft); }
+.steps .ball { position: absolute; left: 54px; top: 0; width: 30px; height: 19px; margin: -9.5px 0 0 -15px; color: var(--warm); z-index: 2; pointer-events: none; transform: translateY(var(--y, 18px)) rotate(90deg); filter: drop-shadow(0 3px 4px var(--shadow)); }
+.steps .ball svg { display: block; width: 100%; height: 100%; }
 .steps strong { display: block; font-weight: 600; }
 .steps span { color: var(--muted); font-size: .9rem; }
 .finding { background: var(--panel); border: 1px solid var(--rule); border-radius: 4px; padding: 22px; }
@@ -309,7 +311,6 @@ section.block { padding-block: 64px; border-top: 1px solid var(--rule); }
 .keyfacts li + li { margin-top: 6px; }
 .links-row { display: flex; gap: 18px; flex-wrap: wrap; margin-top: 16px; font-size: .92rem; font-weight: 500; }
 @media (max-width: 860px) { .research { grid-template-columns: 1fr; } }
-@media (prefers-reduced-motion: reduce) { .steps::after { display: none; } }
 
 /* EV lab */
 .lab { display: grid; grid-template-columns: 1fr 1.1fr; gap: 28px; background: var(--panel); border: 1px solid var(--rule); border-radius: 6px; padding: 24px; }
@@ -497,11 +498,12 @@ footer { padding-block: 28px 40px; color: var(--muted); font-size: .85rem; borde
         <div>
           <p class="label" style="margin-bottom:16px">How the model is built</p>
           <ol class="steps">
-            <li><span class="n">1</span><div><strong>Play-by-play data</strong><span>Eight seasons (2018–2025) from nflverse, one file per game and a row per play.</span></div></li>
-            <li><span class="n">2</span><div><strong>Expected points</strong><span>An EP/EPA model values every play by how it changes the scoring outlook.</span></div></li>
-            <li><span class="n">3</span><div><strong>Team strength and coaching tendencies</strong><span>Bayesian models fit with a hand-written Metropolis-within-Gibbs sampler, checked with split R-hat and effective sample size.</span></div></li>
-            <li><span class="n">4</span><div><strong>Drive and game simulator</strong><span>Simulates play calls, yardage and field goals to produce full-game outcomes.</span></div></li>
-            <li><span class="n">5</span><div><strong>Walk-forward backtest</strong><span>Each week is predicted only from earlier games, then scored against closing spreads, totals and moneylines.</span></div></li>
+            <span class="ball" aria-hidden="true"><svg viewBox="0 0 26 16"><path d="M1 8C4 1.5 9 .5 13 .5S22 1.5 25 8C22 14.5 17 15.5 13 15.5S4 14.5 1 8Z" fill="currentColor"/><path d="M8 8h10M10 6v4M12.7 6v4M15.4 6v4" stroke="var(--panel)" stroke-width="1.3" stroke-linecap="round" fill="none"/></svg></span>
+            <li><span class="n" aria-label="First down">1<sup>st</sup></span><div><strong>Play-by-play data</strong><span>Eight seasons (2018–2025) from nflverse, one file per game and a row per play.</span></div></li>
+            <li><span class="n" aria-label="Second down">2<sup>nd</sup></span><div><strong>Expected points</strong><span>An EP/EPA model values every play by how it changes the scoring outlook.</span></div></li>
+            <li><span class="n" aria-label="Third down">3<sup>rd</sup></span><div><strong>Team strength and coaching tendencies</strong><span>Bayesian models fit with a hand-written Metropolis-within-Gibbs sampler, checked with split R-hat and effective sample size.</span></div></li>
+            <li><span class="n" aria-label="Fourth down">4<sup>th</sup></span><div><strong>Drive and game simulator</strong><span>Simulates play calls, yardage and field goals to produce full-game outcomes.</span></div></li>
+            <li><span class="n" aria-label="Touchdown">TD</span><div><strong>Walk-forward backtest</strong><span>Each week is predicted only from earlier games, then scored against closing spreads, totals and moneylines.</span></div></li>
           </ol>
         </div>
         <div class="finding">
@@ -1107,6 +1109,34 @@ $("copyBtn").addEventListener("click", () => {
 });
 
 renderFilters(); renderProjects(); renderSkills(); renderExperience(); renderSplits(); updateLab(); restart(); applyReveals();
+
+/* football marching down the model-building steps, stopping at each down */
+(function () {
+  const ol = document.querySelector(".steps"), ball = ol && ol.querySelector(".ball");
+  if (!ball) return;
+  const marks = [...ol.querySelectorAll(".n")];
+  let ys = [], raf = 0, t0 = 0, cur = -1;
+  const MOVE = 650, HOLD = 1100, SEG = MOVE + HOLD;
+  const measure = () => { const top = ol.getBoundingClientRect().top; ys = marks.map(m => { const r = m.getBoundingClientRect(); return r.top - top + r.height / 2; }); };
+  const light = i => { if (i === cur) return; cur = i; marks.forEach((m, k) => m.classList.toggle("on", k === i)); };
+  const ease = x => x < .5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2;
+  const place = (y, spin) => { ball.style.transform = `translateY(${y}px) rotate(${90 + spin}deg)`; };
+  measure(); place(ys[0], 0); light(0);
+  if (reduced) return;
+  const frame = now => {
+    const n = ys.length, t = (now - t0) % (SEG * n), i = Math.floor(t / SEG), u = t - i * SEG;
+    if (u < HOLD) { place(ys[i], 0); light(i); }
+    else { const k = ease((u - HOLD) / MOVE), j = (i + 1) % n;
+      if (j === 0) { ball.style.opacity = 1 - k; place(ys[i] + 14 * k, 0); if (k > .98) { ball.style.opacity = 1; } }
+      else { place(ys[i] + (ys[j] - ys[i]) * k, Math.sin(k * Math.PI) * 18); } }
+    raf = requestAnimationFrame(frame);
+  };
+  new IntersectionObserver(es => es.forEach(e => {
+    if (e.isIntersecting && !raf) { measure(); t0 = performance.now(); raf = requestAnimationFrame(frame); }
+    else if (!e.isIntersecting && raf) { cancelAnimationFrame(raf); raf = 0; }
+  })).observe(ol);
+  addEventListener("resize", measure);
+})();
 </script>
 </body>
 </html>
