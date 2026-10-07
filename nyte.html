@@ -201,20 +201,20 @@ figure { margin: 0; }
 
 /* arriving from the main site's night-falls transition: the logo glides into place and the page rises */
 #arrive { display: none; }
-html.arrive #arrive { display: block; position: fixed; inset: 0; z-index: 100; background-color: #0b1326; color: var(--cream); pointer-events: none; transition: background-color .8s ease .15s, opacity .5s ease .75s; }
-html.arrive #arrive::before { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 50% 46%, rgba(40, 52, 104, .55), transparent 62vmin); transition: opacity .8s ease; }
+html.arrive #arrive { display: block; position: fixed; inset: 0; z-index: 100; background-color: #0b1326; color: var(--cream); pointer-events: none; transition: background-color 1.4s ease .3s, opacity .9s ease 1.3s; }
+html.arrive #arrive::before { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 50% 46%, rgba(40, 52, 104, .55), transparent 62vmin); transition: opacity 1.4s ease .2s; }
 #arrive .sky { position: absolute; inset: 0; width: 100%; height: 100%; }
 #arrive .mark { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); text-align: center; width: 90%; }
-#arrive .alogo { width: 132px; height: 116px; display: block; margin: 0 auto; color: var(--cream); filter: drop-shadow(0 0 22px rgba(239, 230, 214, .22)); transition: transform .85s cubic-bezier(.65, 0, .25, 1); }
-#arrive .word { font-family: var(--display); font-size: 1.35rem; letter-spacing: .32em; margin-top: 10px; transition: opacity .4s ease; }
-#arrive .tag { font-family: var(--display); font-style: italic; color: #b9b2a6; margin-top: 6px; transition: opacity .4s ease; }
+#arrive .alogo { width: 132px; height: 116px; display: block; margin: 0 auto; color: var(--cream); filter: drop-shadow(0 0 22px rgba(239, 230, 214, .22)); transition: transform 1.4s cubic-bezier(.45, 0, .2, 1); }
+#arrive .word { font-family: var(--display); font-size: 1.35rem; letter-spacing: .32em; margin-top: 10px; transition: opacity .7s ease; }
+#arrive .tag { font-family: var(--display); font-style: italic; color: #b9b2a6; margin-top: 6px; transition: opacity .7s ease; }
 html.arrive.go #arrive { background-color: rgba(11, 19, 38, 0); opacity: 0; }
 html.arrive.go #arrive::before, html.arrive.go #arrive .word, html.arrive.go #arrive .tag { opacity: 0; }
 html.arrive:not(.landed) .hero .logo { opacity: 0; }
-html.arrive .hero > :not(.logo) { opacity: 0; transform: translateY(18px); transition: opacity .8s ease, transform .8s ease; }
+html.arrive .hero > :not(.logo) { opacity: 0; transform: translateY(22px); transition: opacity 1.1s ease, transform 1.3s cubic-bezier(.3, 0, .2, 1); }
 html.arrive.go .hero > :not(.logo) { opacity: 1; transform: none; }
-html.arrive.go .hero > .tag { transition-delay: .35s; } html.arrive.go .hero > h1 { transition-delay: .25s; }
-html.arrive.go .hero > .lede { transition-delay: .45s; } html.arrive.go .hero > .chips { transition-delay: .55s; } html.arrive.go .hero > .loop { transition-delay: .65s; }
+html.arrive.go .hero > .tag { transition-delay: 1s; } html.arrive.go .hero > h1 { transition-delay: .75s; }
+html.arrive.go .hero > .lede { transition-delay: 1.25s; } html.arrive.go .hero > .chips { transition-delay: 1.5s; } html.arrive.go .hero > .loop { transition-delay: 1.75s; }
 html.arrive.go .hero > .loop.rv { opacity: 1; transform: none; }
 @media (prefers-reduced-motion: reduce) { html.arrive #arrive { display: none; } html.arrive .hero > :not(.logo), html.arrive:not(.landed) .hero .logo { opacity: 1; transform: none; } }
 </style>
@@ -460,8 +460,8 @@ const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
     const a = from.getBoundingClientRect(), b = to.getBoundingClientRect();
     from.style.transform = `translate(${b.left - a.left}px, ${b.top - a.top}px)`;
     html.classList.add("go");
-    setTimeout(() => html.classList.add("landed"), 880);
-    setTimeout(() => { ar.remove(); html.classList.remove("arrive", "go", "landed"); }, 1500);
+    setTimeout(() => html.classList.add("landed"), 1420);
+    setTimeout(() => { ar.remove(); html.classList.remove("arrive", "go", "landed"); }, 3200);
   });
 })();
 
