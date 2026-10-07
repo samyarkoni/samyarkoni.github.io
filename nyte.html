@@ -201,12 +201,13 @@ figure { margin: 0; }
 
 /* arriving from the main site's night-falls transition: the logo glides into place and the page rises */
 #arrive { display: none; }
+html.night #arrive .mark { opacity: 0; }
 html.arrive #arrive { display: block; position: fixed; inset: 0; z-index: 100; background-color: #0b1326; color: var(--cream); pointer-events: none; transition: background-color 1.4s ease .3s, opacity .9s ease 1.3s; }
 html.arrive #arrive::before { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 50% 46%, rgba(40, 52, 104, .55), transparent 62vmin); transition: opacity 1.4s ease .2s; }
 #arrive .sky { position: absolute; inset: 0; width: 100%; height: 100%; }
 #arrive .mark { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); text-align: center; width: 90%; }
 #arrive .alogo { width: 132px; height: 116px; display: block; margin: 0 auto; color: var(--cream); filter: drop-shadow(0 0 22px rgba(239, 230, 214, .22)); transition: transform 1.4s cubic-bezier(.45, 0, .2, 1); }
-#arrive .word { font-family: var(--display); font-size: 1.35rem; letter-spacing: .32em; margin-top: 10px; transition: opacity .7s ease; }
+#arrive .word { font-family: var(--display); font-weight: 600; font-size: 1.35rem; letter-spacing: .32em; margin-top: 10px; transition: opacity .7s ease; }
 #arrive .tag { font-family: var(--display); font-style: italic; color: #b9b2a6; margin-top: 6px; transition: opacity .7s ease; }
 html.arrive.go #arrive { background-color: rgba(11, 19, 38, 0); opacity: 0; }
 html.arrive.go #arrive::before, html.arrive.go #arrive .word, html.arrive.go #arrive .tag { opacity: 0; }
@@ -218,7 +219,14 @@ html.arrive.go .hero > .lede { transition-delay: 1.25s; } html.arrive.go .hero >
 html.arrive.go .hero > .loop.rv { opacity: 1; transform: none; }
 @media (prefers-reduced-motion: reduce) { html.arrive #arrive { display: none; } html.arrive .hero > :not(.logo), html.arrive:not(.landed) .hero .logo { opacity: 1; transform: none; } }
 </style>
-<script>try { const t = +sessionStorage.getItem("nyteGo"); sessionStorage.removeItem("nyteGo"); if (t && Date.now() - t < 8000) document.documentElement.classList.add("arrive"); } catch (e) {}</script>
+<script>/* arrive: came through the main site's night transition. night: reached with back/forward, so replay the whole night here */
+try {
+  const h = document.documentElement, t = +sessionStorage.getItem("nyteGo"), nav = performance.getEntriesByType("navigation")[0];
+  sessionStorage.removeItem("nyteGo");
+  if (t && Date.now() - t < 8000) h.classList.add("arrive");
+  else if (nav && nav.type === "back_forward") h.classList.add("arrive", "night");
+} catch (e) {}
+</script>
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="nyteLogo" viewBox="0 0 64 56"><path d="M32 1.5c.6 4.3 1.9 5.6 6.2 6.2-4.3.6-5.6 1.9-6.2 6.2-.6-4.3-1.9-5.6-6.2-6.2 4.3-.6 5.6-1.9 6.2-6.2z" fill="currentColor"/><path d="M14 25Q32 39 50 25" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"/><path d="M18.9 30.4L16.5 35.0M25.4 32.9L24.1 38.0M32.0 33.8L32.0 39.0M38.6 32.9L39.9 38.0M45.1 30.4L47.5 35.0" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M14.9 36.4v3.2M13.3 38.0h3.2M23.2 39.7v3.2M21.6 41.3h3.2M32.0 40.4v4.2M29.9 42.5h4.2M40.8 39.7v3.2M39.2 41.3h3.2M49.1 36.4v3.2M47.5 38.0h3.2" fill="none" stroke="#d9876a" stroke-width=".9" stroke-linecap="round"/></symbol></svg>
@@ -438,6 +446,7 @@ html.arrive.go .hero > .loop.rv { opacity: 1; transform: none; }
   </div>
 </main>
 
+<script src="nyte-night.js"></script>
 <script>
 const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -452,17 +461,24 @@ const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
   }
   document.getElementById("sky").innerHTML = `<svg viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice">${out}</svg>`;
   const html = document.documentElement;
-  if (!html.classList.contains("arrive") || reduced) return;
+  /* forward from bfcache: the page comes back as it was left, so play the night over it and fade it away */
+  addEventListener("pageshow", e => {
+    if (!e.persisted || reduced || !window.NyteNight) return;
+    NyteNight.run({ wipe: false, onDone: ov => { ov.style.transition = "opacity .9s ease"; ov.style.opacity = 0; setTimeout(() => ov.remove(), 950); } });
+  });
+  if (!html.classList.contains("arrive") || reduced) { html.classList.remove("night"); return; }
   const ar = document.getElementById("arrive");
   ar.insertAdjacentHTML("afterbegin", `<svg class="sky" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice">${out.replace(/ class="tw"[^/]*/g, "")}</svg>`);
   const from = ar.querySelector(".alogo"), to = document.querySelector(".hero .logo");
-  requestAnimationFrame(() => {
+  const land = () => requestAnimationFrame(() => {
     const a = from.getBoundingClientRect(), b = to.getBoundingClientRect();
     from.style.transform = `translate(${b.left - a.left}px, ${b.top - a.top}px)`;
     html.classList.add("go");
     setTimeout(() => html.classList.add("landed"), 1420);
     setTimeout(() => { ar.remove(); html.classList.remove("arrive", "go", "landed"); }, 3200);
   });
+  if (html.classList.contains("night") && window.NyteNight) NyteNight.run({ wipe: false, onDone: ov => { html.classList.remove("night"); ov.remove(); land(); } });
+  else { html.classList.remove("night"); land(); }
 })();
 
 /* reveal on scroll */
