@@ -40,7 +40,7 @@
 #nyteGo.rest .st { opacity: 1; transform: none; }
 #nyteGo .word { font-family: var(--display); font-weight: 600; color: #efe6d6; font-size: 1.35rem; letter-spacing: .12em; margin-top: 10px; opacity: 0; transition: opacity 1.2s ease 1.1s, letter-spacing 2s cubic-bezier(.3, 0, .2, 1) 1.1s; }
 #nyteGo.rest .word { opacity: 1; letter-spacing: .32em; }
-#nyteGo .ngtag { height: 2.1em; margin-top: 2px; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity .6s ease; }
+#nyteGo .ngtag { font-size: 1.15rem; height: 2.1em; margin-top: 2px; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity .6s ease; }
 #nyteGo.tagon .ngtag { opacity: 1; }
 #nyteGo .ngtag span { display: inline-block; font-family: var(--display); font-style: italic; color: #b9b2a6; white-space: nowrap; transition: opacity .16s ease, filter .16s ease, text-shadow 1.2s ease; }
 #nyteGo .ngtag span.blur { opacity: .1; filter: blur(5px); }
@@ -114,7 +114,7 @@
           Object.assign(el.style, { fontFamily: T.f, fontStyle: T.s, fontWeight: T.w, fontSize: T.z, color: T.c, textTransform: T.t, letterSpacing: T.l,
             transform: a > 0 ? `translate(${j(4)}px, ${j(2.5)}px) rotate(${j(2.5)}deg)` : "none" });
           el.classList.remove("blur");
-          if (k === TYPES.length - 1) el.classList.add("settled");
+          if (k === TYPES.length - 1) { el.textContent = "“what’s still awake in you?”"; el.classList.add("settled"); }
         }, swap);
       }, t);
       t += gap;
