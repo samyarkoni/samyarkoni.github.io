@@ -42,7 +42,7 @@
 #nyteGo.rest .word { opacity: 1; letter-spacing: .32em; }
 #nyteGo .ngtag { height: 2.1em; margin-top: 2px; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity .6s ease; }
 #nyteGo.tagon .ngtag { opacity: 1; }
-#nyteGo .ngtag span { font-family: var(--display); font-style: italic; color: #b9b2a6; white-space: nowrap; transition: opacity .16s ease, filter .16s ease, text-shadow 1.2s ease; }
+#nyteGo .ngtag span { display: inline-block; font-family: var(--display); font-style: italic; color: #b9b2a6; white-space: nowrap; transition: opacity .16s ease, filter .16s ease, text-shadow 1.2s ease; }
 #nyteGo .ngtag span.blur { opacity: .1; filter: blur(5px); }
 #nyteGo .ngtag span.settled { text-shadow: 0 0 18px rgba(239, 230, 214, .35); }
 #nyteGo .skip { position: absolute; bottom: 22px; left: 0; right: 0; text-align: center; font-size: .75rem; letter-spacing: .14em; text-transform: uppercase; color: #8e98b3; opacity: 0; transition: opacity .8s ease 1.8s; }
@@ -99,14 +99,27 @@
     l.onload = () => TYPES.slice(0, -1).forEach(T => { try { document.fonts.load(`${T.s} ${T.w} 24px ${T.f.split(",")[0]}`, "what’s still awake in you?WHAT’S"); } catch (e) {} });
     document.head.appendChild(l);
   };
-  const dreamType = el => TYPES.forEach((T, i) => setTimeout(() => {
-    el.classList.add("blur");
-    setTimeout(() => {
-      Object.assign(el.style, { fontFamily: T.f, fontStyle: T.s, fontWeight: T.w, fontSize: T.z, color: T.c, textTransform: T.t, letterSpacing: T.l });
-      el.classList.remove("blur");
-      if (i === TYPES.length - 1) el.classList.add("settled");
-    }, 160);
-  }, i * 360));
+  /* racing thoughts settling: quick, twitchy swaps that slow step by step until the line rests in the calm cream serif */
+  const ORDER = [0, 1, 2, 3, 4, 5, 6, 2, 0, 4, 1, 5, 3, 6, 7];
+  const PACE = [70, 70, 75, 80, 90, 100, 115, 135, 160, 195, 240, 300, 380, 480];
+  const dreamType = el => {
+    let t = 0;
+    ORDER.forEach((k, i) => {
+      const gap = PACE[i] || 0, swap = i < PACE.length ? Math.round(Math.min(160, Math.max(30, gap * .45))) : 260;
+      setTimeout(() => {
+        el.style.transitionDuration = `${swap}ms, ${swap}ms, 1.2s`;
+        el.classList.add("blur");
+        setTimeout(() => {
+          const T = TYPES[k], a = Math.pow(1 - i / (ORDER.length - 1), 1.6), j = m => ((Math.random() * 2 - 1) * m * a).toFixed(2);
+          Object.assign(el.style, { fontFamily: T.f, fontStyle: T.s, fontWeight: T.w, fontSize: T.z, color: T.c, textTransform: T.t, letterSpacing: T.l,
+            transform: a > 0 ? `translate(${j(4)}px, ${j(2.5)}px) rotate(${j(2.5)}deg)` : "none" });
+          el.classList.remove("blur");
+          if (k === TYPES.length - 1) el.classList.add("settled");
+        }, swap);
+      }, t);
+      t += gap;
+    });
+  };
   /* x, y: where the night spreads from; wipe: false starts fully dark (already on the explainer); onDone(overlay) runs at the end or on skip */
   function run({ x = innerWidth / 2, y = innerHeight / 2, wipe = true, onDone }) {
     if (document.getElementById("nyteGo")) return null;
@@ -135,8 +148,8 @@
       setTimeout(() => { ov.querySelector(".lid animate").beginElement(); ov.classList.add("close"); }, 2100),
       setTimeout(() => ov.classList.add("rest"), 2900),
       setTimeout(() => { ov.classList.add("tagon"); dreamType(ov.querySelector(".ngtag span")); }, 4000),
-      setTimeout(() => ov.classList.add("leave"), 7500),
-      setTimeout(finish, 8100)
+      setTimeout(() => ov.classList.add("leave"), 7800),
+      setTimeout(finish, 8400)
     );
     ov.addEventListener("click", skip);
     addEventListener("keydown", skip);
