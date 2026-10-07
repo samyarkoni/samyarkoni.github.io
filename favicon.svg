@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="14" fill="#0f1b33"/>
+  <g fill="none" stroke="#d4ae66" stroke-width="1.6" opacity=".55">
+    <path d="M-4 50c14-8 24 4 36-4s22-14 36-6"/>
+    <path d="M-4 58c14-8 26 2 38-5s20-10 34-4"/>
+  </g>
+  <text x="32" y="41" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-weight="700" font-size="29" fill="#f3f5fa" letter-spacing="-1">SY</text>
+  <rect x="18" y="46" width="28" height="2.6" rx="1.3" fill="#d4ae66"/>
+</svg>

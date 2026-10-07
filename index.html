@@ -6,6 +6,10 @@
 <meta property="og:image" content="https://samyarkoni.github.io/images/headshot.jpg">
 <meta name="description" content="Samuel Yarkoni: Computer Science, Data Science and Economics at Rutgers Honors College. Bayesian modeling, research and software projects.">
 <title>Samuel Yarkoni</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon-32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#0f1b33">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
@@ -184,6 +188,58 @@ nav.links a[aria-current="true"] { color: var(--hero-ink); box-shadow: inset 0 -
 .langs strong { color: var(--ink); font-weight: 600; }
 @media (max-width: 860px) { .about { grid-template-columns: 1fr; gap: 28px; } .tiles { grid-template-columns: repeat(2, 1fr); } }
 
+/* football-field backdrop for the Quantum Route research */
+#research { position: relative; overflow: hidden; isolation: isolate; }
+#research > .wrap { position: relative; z-index: 1; }
+.gridiron { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; color: var(--accent); opacity: .11;
+  -webkit-mask-image: radial-gradient(ellipse 75% 70% at 50% 50%, #000 40%, transparent 100%); mask-image: radial-gradient(ellipse 75% 70% at 50% 50%, #000 40%, transparent 100%); }
+.gridiron text { font-family: var(--display); font-weight: 600; font-size: 34px; fill: currentColor; }
+.gridiron .ez { fill: currentColor; opacity: .25; }
+
+/* Nyte: a night-sky band */
+.nyte { position: relative; overflow: hidden; isolation: isolate; background: linear-gradient(180deg, #0b1326 0%, #121c3a 60%, #1b2550 100%); color: #eef1f8; border-top: 0; }
+.nyte .sky { position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background-image: radial-gradient(1.2px 1.2px at 12% 18%, #fff 50%, transparent 51%), radial-gradient(1px 1px at 28% 72%, #fff 50%, transparent 51%), radial-gradient(1.4px 1.4px at 46% 12%, #fff 50%, transparent 51%), radial-gradient(1px 1px at 63% 38%, #fff 50%, transparent 51%), radial-gradient(1.2px 1.2px at 81% 22%, #fff 50%, transparent 51%), radial-gradient(1px 1px at 90% 64%, #fff 50%, transparent 51%), radial-gradient(1px 1px at 7% 86%, #fff 50%, transparent 51%), radial-gradient(1.3px 1.3px at 55% 90%, #fff 50%, transparent 51%), radial-gradient(1px 1px at 36% 44%, #fff 50%, transparent 51%), radial-gradient(1px 1px at 74% 80%, #fff 50%, transparent 51%);
+  opacity: .55; animation: twinkle 6s ease-in-out infinite alternate; }
+.nyte .sky::after { content: ""; position: absolute; right: 4%; top: 5%; width: 90px; height: 90px; border-radius: 50%; box-shadow: -14px 10px 0 0 #e9d8a6; opacity: .5; }
+@keyframes twinkle { from { opacity: .35; } to { opacity: .7; } }
+.nyte-grid { position: relative; z-index: 1; display: grid; grid-template-columns: 1.25fr .85fr; gap: 56px; align-items: center; }
+.nyte-grid > * { min-width: 0; }
+.nyte .label { color: #d9b26a; }
+.nyte h2 { color: #fff; font-size: clamp(1.8rem, 3.6vw, 2.5rem); margin-top: 8px; }
+.nyte-lede { color: #c3cbe0; font-size: 1.08rem; margin-top: 14px; max-width: 54ch; }
+.nyte-features { list-style: none; padding: 0; margin: 22px 0 0; display: grid; gap: 12px; }
+.nyte-features li { color: #c3cbe0; padding-left: 22px; position: relative; max-width: 60ch; }
+.nyte-features li::before { content: ""; position: absolute; left: 0; top: .6em; width: 8px; height: 8px; border-radius: 50%; background: #d9b26a; box-shadow: 0 0 10px #d9b26a; }
+.nyte-features strong { color: #fff; font-weight: 600; }
+.callout { margin-top: 24px; padding: 16px 18px; border: 1px solid rgba(217, 178, 106, .45); background: rgba(217, 178, 106, .08); border-radius: 4px; }
+.callout p:not(.label) { color: #eef1f8; margin-top: 6px; }
+.callout em { font-family: var(--display); }
+.roadmap { list-style: none; padding: 0; margin: 24px 0 0; display: grid; align-items: start; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.roadmap li { display: grid; gap: 8px; color: #aab3cb; font-size: .88rem; min-width: 0; }
+.roadmap li span { height: 4px; border-radius: 2px; background: rgba(255, 255, 255, .15); }
+.roadmap li.done span { background: #d9b26a; }
+.roadmap li.next span { background: linear-gradient(90deg, #d9b26a 40%, rgba(255, 255, 255, .15) 40%); }
+.roadmap strong { display: block; color: #fff; font-weight: 600; font-size: .95rem; }
+.nyte .links-row a { color: #d9b26a; }
+.phone { margin: 0 auto; width: min(290px, 100%); display: grid; gap: 10px; justify-items: center; }
+.phone figcaption { font-size: .75rem; color: #8e98b3; letter-spacing: .08em; text-transform: uppercase; }
+.screen { width: 100%; aspect-ratio: 9 / 18.5; max-width: 100%; border-radius: 40px; border: 10px solid #05080f; background: radial-gradient(120% 70% at 50% 0%, #26306a 0%, #121a38 55%, #0a0f22 100%); box-shadow: 0 40px 80px -30px rgba(0, 0, 0, .8), 0 0 0 1px rgba(255, 255, 255, .08); padding: 34px 16px 18px; display: flex; flex-direction: column; gap: 12px; position: relative; overflow: hidden; }
+.notch { position: absolute; top: 8px; left: 50%; transform: translateX(-50%); width: 84px; height: 22px; border-radius: 12px; background: #05080f; }
+.app-top { display: flex; justify-content: space-between; align-items: center; margin: 4px 2px 6px; font-family: var(--display); font-size: 1.3rem; color: #fff; }
+.moon { width: 18px; height: 18px; border-radius: 50%; box-shadow: -5px 3px 0 0 #e9d8a6; }
+.bubble { font-size: .8rem; line-height: 1.45; padding: 10px 12px; border-radius: 14px; max-width: 88%; }
+.bubble.me { align-self: flex-end; background: #3a4a9a; color: #fff; border-bottom-right-radius: 4px; }
+.bubble.nyte-says { align-self: flex-start; background: rgba(255, 255, 255, .08); color: #dfe4f3; border-bottom-left-radius: 4px; }
+.bubble b { color: #e9c983; font-weight: 600; }
+.plan { margin-top: 4px; background: rgba(217, 178, 106, .1); border: 1px solid rgba(217, 178, 106, .3); border-radius: 12px; padding: 10px 12px; font-size: .78rem; color: #dfe4f3; display: grid; gap: 4px; }
+.plan .plan-h { font-weight: 600; color: #e9c983; text-transform: uppercase; letter-spacing: .08em; font-size: .68rem; }
+.plan span { display: inline-block; min-width: 40px; color: #9aa4c4; font-variant-numeric: tabular-nums; }
+.mic { margin-top: auto; align-self: center; width: 46px; height: 46px; border-radius: 50%; background: #d9b26a; box-shadow: 0 0 0 8px rgba(217, 178, 106, .15), 0 0 30px rgba(217, 178, 106, .5); animation: breathe 3.2s ease-in-out infinite; }
+@keyframes breathe { 50% { box-shadow: 0 0 0 14px rgba(217, 178, 106, .08), 0 0 40px rgba(217, 178, 106, .6); } }
+@media (max-width: 860px) { .nyte-grid { grid-template-columns: 1fr; gap: 36px; } .roadmap { grid-template-columns: 1fr; } .nyte .sky::after { display: none; } .phone { width: min(250px, 100%); } }
+@media (prefers-reduced-motion: reduce) { .nyte .sky, .mic { animation: none; } }
+
 /* sections */
 section.block { padding-block: 64px; border-top: 1px solid var(--rule); }
 .sechead h2::before { content: ""; display: block; width: 36px; height: 3px; background: var(--warm); margin-bottom: 14px; }
@@ -319,6 +375,7 @@ footer { padding-block: 28px 40px; color: var(--muted); font-size: .85rem; borde
       <a href="#projects">Projects</a>
       <a href="#research">Research</a>
       <a href="#lab">EV Lab</a>
+      <a href="#nyte">Nyte</a>
       <a href="#experience">Experience</a>
       <a href="#skills">Skills</a>
       <a href="#contact">Contact</a>
@@ -408,6 +465,7 @@ footer { padding-block: 28px 40px; color: var(--muted); font-size: .85rem; borde
   </section>
 
   <section class="block" id="research">
+    <svg class="gridiron" id="gridiron" viewBox="0 0 1200 533" preserveAspectRatio="xMidYMid slice" aria-hidden="true"></svg>
     <div class="wrap">
       <div class="sechead">
         <div>
@@ -486,6 +544,49 @@ footer { padding-block: 28px 40px; color: var(--muted); font-size: .85rem; borde
     </div>
   </section>
 
+  <section class="block nyte" id="nyte">
+    <div class="sky" aria-hidden="true"></div>
+    <div class="wrap nyte-grid">
+      <div class="nyte-text">
+        <p class="label">My app · Nyte</p>
+        <h2>Nyte listens before you sleep.</h2>
+        <p class="nyte-lede">I'm building Nyte for the hour before bed. You talk through whatever is on your mind, and Nyte helps you set it down so tomorrow starts clearer.</p>
+        <ul class="nyte-features">
+          <li><strong>Catches spirals.</strong> Notices rumination and catastrophizing, names the pattern gently, and offers a reframe and grounding steps.</li>
+          <li><strong>Plans tomorrow.</strong> Turns what you said into an intention, a timeline and concrete tasks.</li>
+          <li><strong>Does the work overnight.</strong> Hands research, drafts and study guides to a Claude agent with web search, ready by morning.</li>
+          <li><strong>Maps your dreams.</strong> Builds a knowledge graph of people, places and themes that connects across nights.</li>
+        </ul>
+        <div class="callout">
+          <p class="label">Early interest</p>
+          <p>After I pitched Nyte, the professor of my Honors seminar, <em>From Distractions to Mind Wandering</em>, wanted to bring it into her class.</p>
+        </div>
+        <ol class="roadmap" aria-label="Nyte roadmap">
+          <li class="done"><span></span><div><strong>Built</strong>SwiftUI iOS app with a Node, SQLite and Claude backend</div></li>
+          <li class="next"><span></span><div><strong>Next</strong>Keep expanding it and bring it into the seminar classroom</div></li>
+          <li><span></span><div><strong>Then</strong>Publish on the App Store</div></li>
+        </ol>
+        <div class="links-row"><a href="https://github.com/samyarkoni/Nyte" target="_blank" rel="noopener">See the code ↗</a></div>
+      </div>
+      <figure class="phone" aria-label="Illustration of the Nyte app's Tonight screen">
+        <div class="screen">
+          <div class="notch"></div>
+          <p class="app-top"><span>Tonight</span><span class="moon"></span></p>
+          <div class="bubble me">Can't stop replaying tomorrow's exam in my head.</div>
+          <div class="bubble nyte-says"><b>That sounds like a worry loop.</b> Let's park it: one small step tonight, the rest in the morning.</div>
+          <div class="plan">
+            <p class="plan-h">Tomorrow</p>
+            <p><span>9:00</span>Review chapter 4</p>
+            <p><span>11:00</span>Office hours</p>
+            <p><span>✓</span>Study guide drafted overnight</p>
+          </div>
+          <div class="mic"></div>
+        </div>
+        <figcaption>Illustrative screen</figcaption>
+      </figure>
+    </div>
+  </section>
+
   <section class="block" id="experience">
     <div class="wrap">
       <div class="sechead">
@@ -529,7 +630,7 @@ footer { padding-block: 28px 40px; color: var(--muted); font-size: .85rem; borde
       <p class="label">Beyond the code</p>
       <h2 style="margin-block:8px 22px">Leadership &amp; interests</h2>
       <div class="lead-row">
-        <span class="badge">RU Campus President</span><span class="badge">Founder, Quantum Route</span><span class="badge">Programming Instructor</span>
+        <span class="badge">RU Campus President</span><span class="badge">Founder, Quantum Route</span><span class="badge">Coder School Instructor, 2025–26</span>
         <span class="badge">Quant Finance Club</span><span class="badge">HackMIT &amp; MHacks</span><span class="badge">SEEDS2S</span><span class="badge">Chabad</span><span class="badge">Cheese Club</span>
       </div>
       <div class="tiles">
@@ -550,8 +651,8 @@ footer { padding-block: 28px 40px; color: var(--muted); font-size: .85rem; borde
     <div class="wrap contact">
       <div>
         <p class="label">Contact</p>
-        <h2>Let's talk data, research or football.</h2>
-        <p>I'm based in Hillsborough and New Brunswick, NJ, and always happy to compare notes on a model, a research question or Sunday's games. Email is the fastest way to reach me.</p>
+        <h2>Looking for internships in quant, data science and ML/AI.</h2>
+        <p>I'm open to software roles too. I'm based in Hillsborough and New Brunswick, NJ, and always happy to compare notes on a model, a research question or Sunday's games. Email is the fastest way to reach me.</p>
       </div>
       <div class="clist">
         <div class="citem"><span class="v" id="emailV">samyarkoni@gmail.com</span><button class="iconbtn" id="copyBtn" type="button">Copy</button></div>
@@ -570,7 +671,7 @@ const PROFILE = {
     "sampling NFL win probabilities with MCMC",
     "clustering 130+ yeast strains by evolutionary predictability",
     "writing a game-theory paper for the RECONS Review",
-    "teaching Python and Java at The Coder School"
+    "getting Nyte ready for the App Store"
   ],
   projects: [
     { title: "Quantum Route", role: "Founder & lead developer", cat: ["Quant", "Sports"], year: "2026",
@@ -599,7 +700,7 @@ const PROFILE = {
                "Turns the night's conversation into tomorrow's plan and hands research and drafting tasks to a Claude agent with web search, ready by morning.",
                "Maps dreams into a knowledge graph of people, places and themes that connects across nights, and tracks habit streaks."],
       skills: ["Swift", "SwiftUI", "TypeScript", "Node.js", "SQLite", "Claude API"],
-      links: [["Source", "https://github.com/samyarkoni/Nyte"]] }
+      links: [["Source", "https://github.com/samyarkoni/Nyte"], ["More on Nyte", "#nyte"]] }
   ],
   experience: [
     { title: "Research Fellow, Evolutionary Predictability", org: "Rutgers Chancellor Signature Initiatives (CSI) · Piscataway, NJ",
@@ -614,7 +715,7 @@ const PROFILE = {
                "Refining model specifications in weekly reviews with a faculty advisor and an interdisciplinary cohort.",
                "Writing up results as a formal paper for publication in the RECONS Review."] },
     { title: "Programming Instructor", org: "The Coder School · Montgomery, NJ",
-      when: "Jul 2025 – Present", live: true,
+      when: "Jul 2025 – May 2026", live: false,
       points: ["Mentored 100+ students through project-based work in Python, Java and Scratch.",
                "Wrote 10+ lesson plans tailored to student interests, raising participation and project completion."] }
   ],
@@ -908,13 +1009,28 @@ matchMedia("(prefers-color-scheme: dark)").addEventListener("change", drawSample
   make($("topoPage"), { token: "--accent", cell: 14, levels: 16, scale: 2.4, alpha: .07, speed: 0, z0: 5.7 });
 })();
 
+/* ---------- football field behind the Quantum Route research ---------- */
+(function gridiron() {
+  const svg = $("gridiron"); if (!svg) return;
+  let out = '<rect class="ez" x="0" y="0" width="100" height="533"/><rect class="ez" x="1100" y="0" width="100" height="533"/>';
+  out += '<g fill="none" stroke="currentColor"><rect x="1" y="1" width="1198" height="531" stroke-width="3"/>';
+  for (let yd = 0; yd <= 100; yd += 5) { const x = 100 + yd * 10; out += `<line x1="${x}" y1="0" x2="${x}" y2="533" stroke-width="${yd % 10 ? 1.2 : 2}"/>`; }
+  for (let yd = 1; yd < 100; yd++) { if (yd % 5 === 0) continue; const x = 100 + yd * 10; for (const y of [2, 223, 300, 521]) out += `<line x1="${x}" y1="${y}" x2="${x}" y2="${y + 10}" stroke-width="1"/>`; }
+  out += '</g>';
+  for (let yd = 10; yd <= 90; yd += 10) {
+    const x = 100 + yd * 10, n = yd <= 50 ? yd : 100 - yd;
+    out += `<text x="${x}" y="470" text-anchor="middle">${n}</text><text x="${x}" y="63" text-anchor="middle" transform="rotate(180 ${x} 52)">${n}</text>`;
+  }
+  svg.innerHTML = out;
+})();
+
 /* ---------- scroll motion ---------- */
 const REVEALS = [
   [".hero .who", "zoom"], [".hero h1", "up", 80], [".hero .lede", "up", 160], [".hero .rotator", "up", 220],
   [".hero .stats > div", "up", 260, 90], [".hero .cta", "up", 480], [".hero .sampler", "right", 200],
   [".sechead", "up"], [".steps li", "left", 0, 110, 5], [".finding", "right", 120], [".split", "up", 0, 140], [".proj", "zoom", 0, 90], [".lab > div:first-child", "left"], [".lab > div:last-child", "right", 120],
   [".role", "left", 0, 110], [".edu", "left"], ["#skills .two > div:last-child", "right", 120],
-  [".about-text", "left"], [".threads li", "right", 0, 90, 5], [".lead-row", "up"], [".tile", "zoom", 0, 70, 4], [".langs", "up"], ["section.block:not([id]) h2", "up"], [".contact > div:first-child", "left"], [".citem", "right", 0, 90]
+  [".nyte-text", "left"], [".phone", "zoom", 150], [".about-text", "left"], [".threads li", "right", 0, 90, 5], [".lead-row", "up"], [".tile", "zoom", 0, 70, 4], [".langs", "up"], ["section.block:not([id]) h2", "up"], [".contact > div:first-child", "left"], [".citem", "right", 0, 90]
 ];
 const revealObs = "IntersectionObserver" in window && document.documentElement.classList.contains("js-anim")
   ? new IntersectionObserver(es => es.forEach(e => e.target.classList.toggle("in", e.isIntersecting)), { threshold: 0.12, rootMargin: "0px 0px -6% 0px" })
