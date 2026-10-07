@@ -294,6 +294,12 @@ html { scroll-padding-top: 76px; }
 
 /* sections */
 section.block { padding-block: 64px; border-top: 1px solid var(--rule); }
+.qroute { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); gap: 28px; align-items: center; margin: 0 0 34px; padding: 18px; background: var(--panel); border: 1px solid var(--rule); border-radius: 4px; }
+.qroute canvas { display: block; width: 100%; height: 170px; }
+.qr-cap p:not(.label) { color: var(--muted); font-size: .94rem; margin-top: 6px; }
+.qr-cap .qr-tally { font-family: var(--mono); font-size: .8rem; color: var(--ink); margin-top: 12px; min-height: 2.6em; }
+.qr-tally b { color: var(--warm); font-weight: 600; }
+@media (max-width: 760px) { .qroute { grid-template-columns: 1fr; gap: 14px; padding: 14px; } .qroute canvas { height: 150px; } }
 .sechead h2::before { content: ""; display: block; width: 36px; height: 3px; background: var(--warm); margin-bottom: 14px; }
 .sechead { display: flex; margin-top: 0; justify-content: space-between; align-items: end; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; }
 .sechead p { color: var(--muted); max-width: 52ch; }
@@ -537,6 +543,14 @@ footer { padding-block: 28px 40px; color: var(--muted); font-size: .85rem; borde
           <h2>Who drives an NFL offense: the coach or the quarterback?</h2>
         </div>
         <p>A Bayesian variance decomposition over 4,254 team-games from the 2018–2025 regular seasons, built on the Quantum Route modeling stack.</p>
+      </div>
+      <div class="qroute">
+        <canvas id="qrCanvas" aria-label="Animation: many possible drive routes fan out from the line of scrimmage, then collapse into the one drive that happens"></canvas>
+        <div class="qr-cap">
+          <p class="label">Why “Quantum Route”</p>
+          <p>Before the snap, a drive could take any route. The model plays out many of them and weighs each by probability. The drive that actually happens is just one of them.</p>
+          <p class="qr-tally" id="qrTally" aria-live="polite"></p>
+        </div>
       </div>
       <div class="research">
         <div>
@@ -1140,7 +1154,7 @@ matchMedia("(prefers-color-scheme: dark)").addEventListener("change", drawSample
 const REVEALS = [
   [".hero .who", "zoom"], [".hero h1", "up", 80], [".hero .lede", "up", 160], [".hero .rotator", "up", 220],
   [".hero .stats > div", "up", 260, 90], [".hero .cta", "up", 480], [".hero .sampler", "right", 200],
-  [".sechead", "up"], [".steps li", "left", 0, 110, 5], [".finding", "right", 120], [".split", "up", 0, 140], [".proj", "zoom", 0, 90], [".lab > div:first-child", "left"], [".lab > div:last-child", "right", 120],
+  [".sechead", "up"], [".qroute", "up", 80], [".steps li", "left", 0, 110, 5], [".finding", "right", 120], [".split", "up", 0, 140], [".proj", "zoom", 0, 90], [".lab > div:first-child", "left"], [".lab > div:last-child", "right", 120],
   [".role", "left", 0, 110], [".edu", "left"], ["#skills .two > div:last-child", "right", 120],
   [".nyte-text", "left"], [".phone", "zoom", 150], [".about-text", "left"], [".threads li", "right", 0, 90, 5], [".lead-row", "up"], [".hacks figure", "up", 0, 90, 4], [".tile", "zoom", 0, 70, 4], [".langs", "up"], ["section.block:not([id]) h2", "up"], [".contact > div:first-child", "left"], [".citem", "right", 0, 90]
 ];
@@ -1269,6 +1283,99 @@ document.addEventListener("click", e => {
   el.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "start" });
   if (/^(proj|exp)-|^education$/.test(id)) { el.classList.remove("flash"); void el.offsetWidth; el.classList.add("flash"); }
 });
+
+/* "Quantum Route": every drive starts as a cloud of possible routes, then collapses to the likely outcome */
+(function () {
+  const cv = document.getElementById("qrCanvas"), tally = document.getElementById("qrTally");
+  if (!cv) return;
+  const ctx = cv.getContext("2d"), N = 44, DRAW = 2600, COLLAPSE = 1300, HOLD = 2600, CYCLE = DRAW + COLLAPSE + HOLD;
+  let W = 0, H = 0, routes = [], pick = null, raf = 0, t0 = 0, col = {};
+  const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  const size = () => { const d = devicePixelRatio || 1; W = cv.clientWidth; H = cv.clientHeight; cv.width = W * d; cv.height = H * d; ctx.setTransform(d, 0, 0, d, 0, 0); };
+  const x0 = () => W * .06, ez = () => W * .9;
+  /* one simulated drive: a handful of plays, each a noisy gain with some lateral drift */
+  const drive = () => {
+    const pts = [[x0(), H / 2]]; let x = x0(), y = H / 2, out = "Punt";
+    const span = ez() - x0();
+    for (let k = 0; k < 10; k++) {                     /* each play: a noisy gain; ~20% of the time the drive stalls */
+      x += (Math.random() * 1.5 - .3) * span * .24 / 1.0 * .95; y += (Math.random() - .5) * H * .2; y = Math.max(H * .12, Math.min(H * .88, y));
+      pts.push([Math.max(x0() * .6, x), y]);
+      if (x >= ez()) { out = "TD"; pts[pts.length - 1][0] = ez() + W * .03; break; }
+      if (Math.random() < .2) break;
+    }
+    if (out !== "TD" && x > x0() + span * .6) out = "FG";
+    let len = 0; for (let i = 1; i < pts.length; i++) len += Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]);
+    return { pts, out, len, delay: Math.random() * .35 };
+  };
+  const reroll = () => {
+    routes = Array.from({ length: N }, drive);
+    const c = { TD: 0, FG: 0, Punt: 0 }; routes.forEach(r => c[r.out]++);
+    pick = routes[Math.floor(Math.random() * N)];        /* the "measurement": one route, drawn with its probability */
+    const pct = k => Math.round(100 * c[k] / N);
+    tally.innerHTML = `${N} possible drives: TD ${pct("TD")}% · FG ${pct("FG")}% · punt ${pct("Punt")}%<br>This one: <b>${pick.out === "Punt" ? "punt" : pick.out === "TD" ? "touchdown" : "field goal"}</b>`;
+    col = { warm: css("--warm"), accent: css("--accent"), rule: css("--rule"), muted: css("--muted") };
+  };
+  /* trace a route up to fraction f of its length */
+  const trace = (r, f) => {
+    let left = f * r.len; ctx.moveTo(r.pts[0][0], r.pts[0][1]); let end = r.pts[0];
+    for (let i = 1; i < r.pts.length && left > 0; i++) {
+      const [ax, ay] = r.pts[i - 1], [bx, by] = r.pts[i], seg = Math.hypot(bx - ax, by - ay), u = Math.min(1, left / seg);
+      end = [ax + (bx - ax) * u, ay + (by - ay) * u, Math.atan2(by - ay, bx - ax)]; ctx.lineTo(end[0], end[1]); left -= seg;
+    }
+    return end;
+  };
+  const field = () => {
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = col.accent; ctx.globalAlpha = .07; ctx.fillRect(ez(), 0, W - ez(), H); ctx.globalAlpha = 1;
+    ctx.strokeStyle = col.rule; ctx.lineWidth = 1;
+    for (let i = 0; i <= 10; i++) { const x = x0() + (ez() - x0()) * i / 10; ctx.beginPath(); ctx.moveTo(x, 6); ctx.lineTo(x, H - 6); ctx.stroke(); }
+    ctx.strokeStyle = col.accent; ctx.globalAlpha = .5; ctx.setLineDash([4, 4]); ctx.beginPath(); ctx.moveTo(x0(), 4); ctx.lineTo(x0(), H - 4); ctx.stroke(); ctx.setLineDash([]); ctx.globalAlpha = 1;
+    ctx.fillStyle = col.accent; ctx.globalAlpha = .55; ctx.font = "600 10px " + css("--body"); ctx.textAlign = "center";
+    ctx.save(); ctx.translate(W - (W - ez()) / 2, H / 2); ctx.rotate(-Math.PI / 2); ctx.fillText("END ZONE", 0, 3); ctx.restore(); ctx.globalAlpha = 1;
+  };
+  const ball = (x, y, a) => {
+    ctx.save(); ctx.translate(x, y); ctx.rotate(a || 0); ctx.fillStyle = col.warm; ctx.beginPath(); ctx.ellipse(0, 0, 9, 5.5, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = "#fff"; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(-3.5, 0); ctx.lineTo(3.5, 0); for (const k of [-2, 0, 2]) { ctx.moveTo(k, -1.6); ctx.lineTo(k, 1.6); } ctx.stroke(); ctx.restore();
+  };
+  const endMark = (r, a) => {
+    const [x, y] = r.pts[r.pts.length - 1]; ctx.globalAlpha = a;
+    if (r.out === "TD") { ctx.fillStyle = col.warm; ctx.beginPath(); ctx.arc(x, y, 2.6, 0, Math.PI * 2); ctx.fill(); }
+    else if (r.out === "FG") { ctx.strokeStyle = col.warm; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.arc(x, y, 3, 0, Math.PI * 2); ctx.stroke(); }
+    else { ctx.strokeStyle = col.muted; ctx.lineWidth = 1.1; ctx.beginPath(); ctx.moveTo(x - 2.5, y - 2.5); ctx.lineTo(x + 2.5, y + 2.5); ctx.moveTo(x + 2.5, y - 2.5); ctx.lineTo(x - 2.5, y + 2.5); ctx.stroke(); }
+    ctx.globalAlpha = 1;
+  };
+  const ease = x => x < .5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2;
+  const frame = now => {
+    const t = (now - t0) % CYCLE;
+    if (t < 30 && !frame.fresh) { reroll(); frame.fresh = true; } if (t > 30) frame.fresh = false;
+    field();
+    const grow = Math.min(1, t / DRAW), fade = t < DRAW ? 0 : ease(Math.min(1, (t - DRAW) / COLLAPSE)), out = t > CYCLE - 400 ? (CYCLE - t) / 400 : 1;
+    ctx.lineWidth = 1.1; ctx.strokeStyle = col.warm;
+    routes.forEach(r => {
+      if (r === pick) return;
+      const f = Math.max(0, Math.min(1, (grow - r.delay) / (1 - r.delay)));
+      ctx.globalAlpha = (.28 - .22 * fade) * out; ctx.beginPath(); trace(r, f); ctx.stroke();
+      if (f >= 1) endMark(r, (.6 - .45 * fade) * out);
+    });
+    const fp = Math.max(0, Math.min(1, (grow - pick.delay) / (1 - pick.delay)));
+    ctx.globalAlpha = (.28 + .72 * fade) * out; ctx.lineWidth = 1.1 + 1.4 * fade; ctx.strokeStyle = fade > 0 ? col.accent : col.warm;
+    ctx.beginPath(); trace(pick, fp); ctx.stroke(); ctx.globalAlpha = 1;
+    if (fp >= 1) endMark(pick, out);
+    if (fade > 0) { ctx.beginPath(); const e = trace(pick, fade); ctx.globalAlpha = out; ball(e[0], e[1], e[2]); ctx.globalAlpha = 1; }
+    tally.style.opacity = t > DRAW + COLLAPSE * .6 ? out : 0;
+    raf = requestAnimationFrame(frame);
+  };
+  const still = () => { size(); reroll(); field(); ctx.strokeStyle = col.warm; ctx.lineWidth = 1.1;
+    routes.forEach(r => { if (r === pick) return; ctx.globalAlpha = .12; ctx.beginPath(); trace(r, 1); ctx.stroke(); endMark(r, .3); });
+    ctx.globalAlpha = 1; ctx.strokeStyle = col.accent; ctx.lineWidth = 2.5; ctx.beginPath(); const e = trace(pick, 1); ctx.stroke(); endMark(pick, 1); ball(e[0], e[1], e[2]); tally.style.opacity = 1; };
+  size(); reroll();
+  if (reduced || !("IntersectionObserver" in window)) { still(); addEventListener("resize", still); return; }
+  new IntersectionObserver(es => es.forEach(e => {
+    if (e.isIntersecting && !raf) { size(); t0 = performance.now(); raf = requestAnimationFrame(frame); }
+    else if (!e.isIntersecting && raf) { cancelAnimationFrame(raf); raf = 0; }
+  })).observe(cv);
+  addEventListener("resize", () => { size(); reroll(); });
+})();
 </script>
 </body>
 </html>
