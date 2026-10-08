@@ -231,12 +231,12 @@ html.arrive.go .hero > .lede { transition-delay: 1.25s; } html.arrive.go .hero >
 html.arrive.go .hero > .loop.rv { opacity: 1; transform: none; }
 @media (prefers-reduced-motion: reduce) { html.arrive #arrive { display: none; } html.arrive .hero > *, html.arrive:not(.landed) .hero .logo, html.arrive:not(.landed) .hero .tag { opacity: 1; transform: none; } }
 </style>
-<script>/* arrive: came through the main site's night transition. night: reached with back/forward, so replay the whole night here */
+<script>/* arrive: came through the main site's night transition. night: reached with back/forward, or a shared link ending in ?intro, so play the whole night here */
 try {
   const h = document.documentElement, t = +sessionStorage.getItem("nyteGo"), nav = performance.getEntriesByType("navigation")[0];
   sessionStorage.removeItem("nyteGo");
   if (t && Date.now() - t < 8000) h.classList.add("arrive");
-  else if (nav && nav.type === "back_forward") h.classList.add("arrive", "night");
+  else if ((nav && nav.type === "back_forward") || /[?&]intro\b/.test(location.search)) h.classList.add("arrive", "night");
 } catch (e) {}
 </script>
 </head>
@@ -500,7 +500,7 @@ const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (!e.persisted || reduced || !window.NyteNight) return;
     NyteNight.run({ wipe: false, onDone: ov => { ov.style.transition = "opacity .9s ease"; ov.style.opacity = 0; setTimeout(() => ov.remove(), 950); } });
   });
-  if (!html.classList.contains("arrive") || reduced) { html.classList.remove("night"); return; }
+  if (!html.classList.contains("arrive") || reduced) { html.classList.remove("night", "arrive"); return; }
   const ar = document.getElementById("arrive");
   ar.insertAdjacentHTML("afterbegin", `<svg class="sky" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice">${out.replace(/ class="tw"[^/]*/g, "")}</svg>`);
   /* the logo and the settled tagline each glide onto their twins in the hero */
