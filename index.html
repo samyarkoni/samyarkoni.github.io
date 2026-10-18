@@ -477,6 +477,63 @@ footer { padding-block: 28px 40px; color: var(--muted); font-size: .85rem; borde
 @media (max-width: 520px) { .nyte-cta { padding: 14px 16px 14px 12px; gap: 12px; } .nyte-cta .ce { width: 46px; height: 42px; } .nyte-cta .ct b { font-size: 1.05rem; } }
 @media (prefers-reduced-motion: reduce) { .nyte-cta, .nyte-pill, .nyte-cta .ce-st, .nyte-pill .ce-st { animation: none; } .nyte-cta:hover { transform: none; } }
 
+/* poker research: faint suits behind, two research questions, a luck demo, then data, approach and progress */
+#poker { position: relative; overflow: hidden; isolation: isolate; }
+#poker > .wrap { position: relative; z-index: 1; }
+.suits { position: absolute; inset: 0; z-index: 0; pointer-events: none; color: var(--warm); opacity: .13; }
+.suits svg { position: absolute; width: clamp(150px, 22vw, 300px); height: auto; fill: none; stroke: currentColor; stroke-width: .3; }
+.suits .s1 { left: -3%; top: -2%; transform: rotate(-14deg); } .suits .s2 { right: 2%; top: 4%; width: clamp(90px, 12vw, 170px); transform: rotate(10deg); }
+.suits .s3 { right: -3%; bottom: 3%; transform: rotate(12deg); } .suits .s4 { left: -2%; bottom: -3%; width: clamp(110px, 15vw, 210px); transform: rotate(-10deg); }
+.sechead .pk-sub { font-family: var(--display); font-style: italic; font-size: 1.15rem; color: var(--ink); margin-top: 6px; }
+.pk-qs { display: grid; grid-template-columns: 1.2fr 1fr; gap: 20px; align-items: stretch; }
+.pk-qs > * { min-width: 0; }
+.pk-q { background: var(--panel); border: 1px solid var(--rule); border-radius: 4px; padding: 22px; display: flex; flex-direction: column; }
+.pk-q h3 { font-size: 1.2rem; margin-top: 6px; }
+.pk-q > p:not(.label) { color: var(--muted); font-size: .94rem; margin-top: 10px; }
+.pk-hyp { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
+.pk-hyp > div { border-left: 3px solid var(--c); padding: 2px 0 2px 12px; font-size: .88rem; color: var(--muted); }
+.pk-hyp strong { display: block; color: var(--ink); font-weight: 600; font-size: .92rem; }
+.pk-luck { margin-top: 18px; padding-top: 16px; border-top: 1px dashed var(--rule); }
+.pk-eq { display: flex; height: 26px; border-radius: 4px; overflow: hidden; font: 600 .76rem var(--mono); margin-top: 8px; }
+.pk-eq span { display: flex; align-items: center; padding: 0 10px; white-space: nowrap; transition: width .45s cubic-bezier(.2, .7, .2, 1); }
+.pk-eq .you { background: var(--accent); color: var(--paper); }
+.pk-eq .opp { background: var(--accent-soft); color: var(--ink); justify-content: flex-end; flex: 1; }
+.pk-pot { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-size: .82rem; color: var(--muted); margin-top: 6px; }
+.pk-pot b { color: var(--ink); font-family: var(--mono); font-weight: 500; }
+.pk-strip { display: block; width: 100%; height: auto; margin-top: 12px; overflow: visible; }
+.pk-strip .axis { stroke: var(--rule); }
+.pk-strip .zero { stroke: var(--muted); stroke-dasharray: 3 3; }
+.pk-strip text { font: 11px var(--mono); fill: var(--muted); }
+.pk-strip .dots circle { fill: var(--accent); opacity: .45; }
+.pk-strip .dots circle.new { fill: var(--warm); opacity: 1; }
+.pk-strip .mean { stroke: var(--warm); stroke-width: 2.5; transition: transform .4s ease; }
+.pk-btns { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+.pk-btns .btn { padding: 8px 14px; font-size: .86rem; }
+.pk-out { font-size: .88rem; color: var(--ink); margin-top: 10px; min-height: 2.9em; }
+.pk-out b { font-family: var(--mono); font-weight: 600; white-space: nowrap; }
+.pk-out .up { color: var(--good); } .pk-out .down { color: var(--bad); }
+.pk-tri { display: block; width: 100%; max-width: 340px; height: auto; margin: 18px auto 0; overflow: visible; }
+.pk-tri .edge { fill: color-mix(in srgb, var(--accent) 5%, transparent); stroke: var(--rule); stroke-width: 1.2; }
+.pk-tri .pl { fill: var(--accent); opacity: .4; }
+.pk-tri text { font: 600 11px var(--body); letter-spacing: .1em; text-transform: uppercase; fill: var(--muted); }
+.pk-cap { font-size: .82rem; color: var(--muted); text-align: center; margin-top: 8px; }
+.pk-data { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
+.pk-data > div { background: var(--panel); border: 1px solid var(--rule); border-radius: 4px; padding: 18px 22px; display: grid; grid-template-columns: auto 1fr; gap: 4px 18px; align-items: baseline; min-width: 0; }
+.pk-data strong { font: 600 1.9rem var(--display); color: var(--warm); grid-row: span 2; line-height: 1.1; }
+.pk-data span { font-weight: 600; }
+.pk-data small { color: var(--muted); font-size: .86rem; }
+.pk-cols { display: grid; grid-template-columns: 1.2fr 1fr; gap: 36px; margin-top: 32px; }
+.pk-cols > * { min-width: 0; }
+.pk-list { list-style: none; margin: 12px 0 0; padding: 0; }
+.pk-list li { padding: 11px 0; border-top: 1px solid var(--rule); color: var(--muted); font-size: .92rem; }
+.pk-list li strong { color: var(--ink); font-weight: 600; }
+.pk-list.done li { display: grid; grid-template-columns: 20px 1fr; gap: 10px; }
+.pk-list.done li::before { content: "✓"; color: var(--good); font-weight: 700; }
+.pk-tools { margin-top: 16px; font-size: .9rem; color: var(--muted); }
+.pk-tools strong { color: var(--ink); font-weight: 600; }
+@media (max-width: 860px) { .pk-qs, .pk-cols, .pk-data { grid-template-columns: 1fr; } .pk-cols { gap: 24px; } }
+@media (max-width: 520px) { .pk-hyp { grid-template-columns: 1fr; } .pk-data > div { grid-template-columns: 1fr; } .pk-data strong { grid-row: auto; } }
+
 /* intro: the first visit of a session opens on the SY monogram; streaks of gold light gather into the letters, they flash and lock in, then the name rises into the header as the curtain lifts */
 #syIntro { display: none; }
 .syintro #syIntro { display: block; position: fixed; inset: 0; z-index: 100; cursor: pointer; color: var(--hero-ink); --sym: clamp(118px, 27vmin, 230px); }
@@ -688,6 +745,7 @@ try { const h = document.documentElement, nav = performance.getEntriesByType("na
       <a href="#projects">Projects</a>
       <a href="#research">Research</a>
       <a href="#lab">EV Lab</a>
+      <a href="#poker">Poker</a>
       <a href="#nyte">Nyte Nyte</a>
       <a href="#experience">Experience</a>
       <a href="#skills">Skills</a>
@@ -755,7 +813,7 @@ try { const h = document.documentElement, nav = performance.getEntriesByType("na
       </div>
       <ul class="threads" aria-label="Where my interests meet my work">
         <li><a href="#research"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="12" rx="9" ry="5.5" transform="rotate(-35 12 12)"/><path d="M9.5 14.5l5-5M10.5 11.5l2 2M12.5 9.5l2 2"/></svg><div><strong>Football</strong><span>Quantum Route models NFL games and scores them against the market.</span></div><b aria-hidden="true">→</b></a></li>
-        <li><a href="#lab"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M12 8c-2 2.2-3.5 3.3-3.5 4.8a1.8 1.8 0 003.2 1.1h.6a1.8 1.8 0 003.2-1.1C15.5 11.3 14 10.2 12 8zM12 14v3"/></svg><div><strong>Poker</strong><span>Expected value and bet sizing, the same math behind the EV Lab.</span></div><b aria-hidden="true">→</b></a></li>
+        <li><a href="#poker"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M12 8c-2 2.2-3.5 3.3-3.5 4.8a1.8 1.8 0 003.2 1.1h.6a1.8 1.8 0 003.2-1.1C15.5 11.3 14 10.2 12 8zM12 14v3"/></svg><div><strong>Poker</strong><span>My research on how luck shapes risk-taking, and which strategies survive.</span></div><b aria-hidden="true">→</b></a></li>
         <li><a href="#exp-csi"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3c0 6 10 6 10 12s-10 6-10 6M17 3c0 6-10 6-10 12M8.5 7h7M8.5 17h7M10 12h4"/></svg><div><strong>Evolution</strong><span>My CSI research asks how predictable evolution really is.</span></div><b aria-hidden="true">→</b></a></li>
         <li><a href="#exp-coder"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9l9-5 9 5-9 5-9-5z"/><path d="M7 11.5V16c3 2 7 2 10 0v-4.5M21 9v6"/></svg><div><strong>Teaching</strong><span>Explaining an idea clearly is the best test of knowing it.</span></div><b aria-hidden="true">→</b></a></li>
         <li><div class="plain"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/><path d="M4 7.5l8 4.5 8-4.5M12 12v9M8 5.2l8 4.6M16 5.2L8 9.8"/></svg><div><strong>The Rubik's Cube</strong><span>An algorithm you can hold in your hands.</span></div><span></span></div></li>
@@ -869,6 +927,81 @@ try { const h = document.documentElement, nav = performance.getEntriesByType("na
             <dt>Kelly fraction of bankroll</dt><dd id="oKelly">—</dd>
           </dl>
           <p class="note">A teaching demo with sample numbers, not betting advice.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="poker">
+    <div class="suits" aria-hidden="true">
+      <svg class="s1" viewBox="0 0 24 24"><path d="M12 2C9 6 4 9 4 13a4 4 0 0 0 7 2.6L10 21h4l-1-5.4A4 4 0 0 0 20 13c0-4-5-7-8-11z"/></svg>
+      <svg class="s2" viewBox="0 0 24 24"><path d="M12 2l7 10-7 10-7-10z"/></svg>
+      <svg class="s3" viewBox="0 0 24 24"><path d="M12 21s-8-5.2-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 5.8-8 11-8 11z"/></svg>
+      <svg class="s4" viewBox="0 0 24 24"><circle cx="12" cy="7" r="3.6"/><circle cx="7.6" cy="13" r="3.6"/><circle cx="16.4" cy="13" r="3.6"/><path d="M11 14.5h2l1.2 6.5h-4.4z"/></svg>
+    </div>
+    <div class="wrap">
+      <div class="sechead">
+        <div>
+          <p class="label">Research in progress · 2026</p>
+          <h2>How poker strategies evolve</h2>
+          <p class="pk-sub">Luck, risk-taking, and survival in online poker</p>
+        </div>
+        <p>Poker is a natural laboratory for decision-making under risk. Like trading, it involves real money and incomplete information, and in the short run luck dominates results, so skill is hard to tell apart from chance. This project uses millions of real online hands to study how players' strategies change over time: how they react to good and bad luck, and which styles of play survive.</p>
+      </div>
+      <div class="pk-qs">
+        <article class="pk-q">
+          <p class="label">Question 1 · A natural experiment</p>
+          <h3>Does bad luck change how people take risks?</h3>
+          <p>When two players go all-in, any amount won or lost beyond their expected share is pure luck. We use this as a natural experiment, comparing how players behave after lucky and unlucky outcomes.</p>
+          <div class="pk-hyp">
+            <div style="--c: var(--warm)"><strong>Break-even effect</strong>Losses push players to take bigger risks, as prospect theory predicts.</div>
+            <div style="--c: var(--accent)"><strong>Trailing stop-loss</strong>Players quit once they've fallen far enough below their session high, the way a trailing stop-loss works in trading.</div>
+          </div>
+          <div class="pk-luck" id="pkLuck">
+            <p class="label">Try it · how luck is measured</p>
+            <div class="pk-eq" aria-hidden="true"><span class="you" id="pkYou">You 62%</span><span class="opp" id="pkOpp">38%</span></div>
+            <div class="pk-pot"><span>Pot <b>$200</b></span><span>Your expected share <b id="pkExp">$124</b></span></div>
+            <svg class="pk-strip" viewBox="0 0 400 74" role="img" aria-label="Each dot is one all-in's luck, in dollars; the gold line is the average">
+              <line class="axis" x1="0" y1="56" x2="400" y2="56"/><line class="zero" x1="200" y1="4" x2="200" y2="56"/>
+              <text x="0" y="70">−$200</text><text x="200" y="70" text-anchor="middle">$0 luck</text><text x="400" y="70" text-anchor="end">+$200</text>
+              <g class="dots" id="pkDots"></g>
+              <line class="mean" id="pkMean" x1="200" y1="4" x2="200" y2="56" style="display:none"/>
+            </svg>
+            <div class="pk-btns"><button class="btn primary" type="button" id="pkOne">Run it out</button><button class="btn ghost" type="button" id="pkMany">Run 100 all-ins</button></div>
+            <p class="pk-out" id="pkOut" aria-live="polite">Both players are all-in. Deal the rest of the board to see how much of the result is luck.</p>
+          </div>
+        </article>
+        <article class="pk-q">
+          <p class="label">Question 2 · Evolutionary game theory</p>
+          <h3>Which strategies survive?</h3>
+          <p>We group players into strategy types based on how often they fold, call, and raise, and estimate how much each type wins against the others. We then use evolutionary game theory (replicator dynamics) to predict which mix of strategies is stable, and check whether losing styles fade from the player population over time.</p>
+          <svg class="pk-tri" id="pkTri" viewBox="0 0 300 250" aria-hidden="true"><polygon class="edge" points="150,22 280,226 20,226"/><text x="150" y="12" text-anchor="middle">Raise</text><text x="14" y="244">Fold</text><text x="286" y="244" text-anchor="end">Call</text><g id="pkPl"></g></svg>
+          <p class="pk-cap">Every player's style is a point in this triangle: how often they fold, call, and raise. Replicator dynamics predicts how the population moves across it. The dots are an illustration.</p>
+        </article>
+      </div>
+      <div class="pk-data">
+        <div><strong>21.6M</strong><span>No-limit Texas hold'em hands</span><small>From six online poker sites (July 2009), in the University of Toronto's public Poker Hand Histories dataset.</small></div>
+        <div><strong>10,000</strong><span>Hands played by Pluribus</span><small>The AI that beat elite professionals at six-player poker, with every player's cards recorded. A benchmark for near-optimal play.</small></div>
+      </div>
+      <div class="pk-cols">
+        <div>
+          <p class="label">Approach</p>
+          <ul class="pk-list">
+            <li><strong>Strategy profiles.</strong> Each player's probability of folding, calling, or raising in each situation. We use Bayesian shrinkage so players with few hands aren't overfit, and score the profiles by how well they predict held-out play.</li>
+            <li><strong>Luck-adjusted payoffs.</strong> We simulate the remaining cards to find each player's chance of winning at the moment of an all-in, which separates the expected result from the actual one.</li>
+            <li><strong>Performance metrics.</strong> Win rate in big blinds per 100 hands, volatility, risk-adjusted return, maximum drawdown, skewness, and confidence intervals: the toolkit used to evaluate trading strategies.</li>
+            <li><strong>Causal analysis.</strong> Regressions of later risk-taking on the size of each luck shock. Risk-taking is measured as bet size relative to stack, share of hands played, aggression, and quitting.</li>
+            <li><strong>Rigor.</strong> Pre-registered hypotheses, a held-out final week of data, and corrections for testing many players at once.</li>
+          </ul>
+        </div>
+        <div>
+          <p class="label">Progress so far</p>
+          <ul class="pk-list done">
+            <li><span>Confirmed that anonymized player IDs stay consistent across the three weeks, so individual players can be tracked over time.</span></li>
+            <li><span>Built a pipeline that converts raw hand histories into one row per decision, recording pot size, bet size, position, and pressure from the rest of the table. For example, 1,000 hands produced 8,021 decisions.</span></li>
+            <li><span>Found that the dataset's built-in “winnings” field is zero in about 75% of hands in a 30,000-hand sample, so we recompute each player's result by replaying every hand.</span></li>
+          </ul>
+          <p class="pk-tools"><strong>Tools:</strong> Python, PokerKit</p>
         </div>
       </div>
     </div>
@@ -1033,6 +1166,11 @@ const PROFILE = {
                "Paper in progress for the RECONS Review, with weekly faculty reviews."],
       skills: ["Econometrics", "R", "Game theory", "LaTeX"],
       links: [], status: "In progress" },
+    { title: "How Poker Strategies Evolve", role: "Research in progress", cat: ["Research", "Quant"], year: "2026",
+      points: ["Uses all-ins in 21.6 million online hands as a natural experiment: does bad luck push players to take bigger risks?",
+               "Groups players into strategy types and uses replicator dynamics to test which styles of play survive."],
+      skills: ["Python", "PokerKit", "Bayesian shrinkage", "Simulation", "Causal inference", "Game theory"],
+      links: [["Research", "#poker"]], status: "In progress" },
     { title: "Must-See NFL Trend", role: "Sports analytics", cat: ["Sports"], year: "2026",
       points: ["Measures home-field advantage and how stadium wind conditions change NFL game outcomes.",
                "Statistical analysis and visualization in R."],
@@ -1399,7 +1537,7 @@ matchMedia("(prefers-color-scheme: dark)").addEventListener("change", drawSample
 const REVEALS = [
   [".hero .who", "zoom"], [".hero h1", "up", 80], [".hero .lede", "up", 160], [".hero .rotator", "up", 220],
   [".hero .stats > div", "up", 260, 90], [".hero .cta", "up", 480], [".hero .sampler", "right", 200],
-  [".sechead", "up"], [".qroute", "up", 80], [".steps li", "left", 0, 110, 5], [".finding", "right", 120], [".split", "up", 0, 140], [".proj", "zoom", 0, 90], [".lab > div:first-child", "left"], [".lab > div:last-child", "right", 120],
+  [".sechead", "up"], [".qroute", "up", 80], [".steps li", "left", 0, 110, 5], [".finding", "right", 120], [".split", "up", 0, 140], [".proj", "zoom", 0, 90], [".lab > div:first-child", "left"], [".lab > div:last-child", "right", 120], [".pk-q", "up", 0, 120], [".pk-data > div", "up", 0, 90], [".pk-cols > div", "up", 0, 120],
   [".role", "left", 0, 110], [".edu", "left"], ["#skills .two > div:last-child", "right", 120],
   [".nyte-text", "left"], [".phone", "zoom", 150], [".about-text", "left"], [".threads li", "right", 0, 90, 5], [".lead-row", "up"], [".hacks figure", "up", 0, 90, 4], [".tile", "zoom", 0, 70, 4], [".langs", "up"], ["section.block:not([id]) h2", "up"], [".contact > div:first-child", "left"], [".citem", "right", 0, 90]
 ];
@@ -1414,6 +1552,41 @@ function applyReveals() {
     });
   });
 }
+/* Poker: run out all-ins to show luck as result minus expected share; it averages to zero, which is why it works like random assignment */
+(function pokerLuck() {
+  const one = $("pkOne"); if (!one) return;
+  const dots = $("pkDots"), mean = $("pkMean"), out = $("pkOut"), NS = "http://www.w3.org/2000/svg", POT = 200;
+  const money = v => (v < 0 ? "−$" : "+$") + Math.abs(Math.round(v));
+  let n = 0, sum = 0;
+  const deal = () => {
+    const eq = Math.round(20 + Math.random() * 60) / 100, exp = eq * POT, win = Math.random() < eq, luck = (win ? POT : 0) - exp;
+    n++; sum += luck;
+    const c = document.createElementNS(NS, "circle");
+    c.setAttribute("cx", (200 + luck).toFixed(1)); c.setAttribute("cy", (12 + Math.random() * 38).toFixed(1)); c.setAttribute("r", 3);
+    dots.appendChild(c); while (dots.childNodes.length > 300) dots.firstChild.remove();
+    return { eq, exp, win, luck };
+  };
+  const show = (r, many) => {
+    $("pkYou").style.width = r.eq * 100 + "%"; $("pkYou").textContent = `You ${Math.round(r.eq * 100)}%`; $("pkOpp").textContent = `${100 - Math.round(r.eq * 100)}%`;
+    $("pkExp").textContent = "$" + Math.round(r.exp);
+    dots.querySelectorAll(".new").forEach(c => c.classList.remove("new")); dots.lastChild.classList.add("new");
+    const avg = sum / n; mean.style.display = ""; mean.style.transform = `translateX(${avg}px)`;
+    const last = `${r.win ? "You won the pot" : "You lost the pot"}: <b class="${r.luck >= 0 ? "up" : "down"}">${money(r.luck)}</b> of luck.`;
+    out.innerHTML = (many ? `Last of ${n} all-ins. ` : "") + last + ` Average luck over ${n} all-in${n > 1 ? "s" : ""}: <b>${money(avg)}</b>${n >= 50 ? ", close to zero, so it acts like a coin flip assigned at random." : "."}`;
+  };
+  one.addEventListener("click", () => show(deal(), false));
+  $("pkMany").addEventListener("click", () => { let r; for (let i = 0; i < 100; i++) r = deal(); show(r, true); });
+  /* strategy triangle: a seeded scatter of example players, fold/call/raise mixes */
+  let s = 11; const rnd = () => (s = (s * 16807) % 2147483647) / 2147483647, pl = $("pkPl");
+  const T = [[20, 226], [280, 226], [150, 22]];
+  for (let i = 0; i < 70; i++) {
+    const cl = [[.62, .28, .1], [.3, .55, .15], [.35, .25, .4]][i % 3];
+    let w = cl.map(v => Math.max(.02, v + (rnd() - .5) * .3)); const t = w[0] + w[1] + w[2]; w = w.map(v => v / t);
+    const c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    c.setAttribute("cx", (w[0] * T[0][0] + w[1] * T[1][0] + w[2] * T[2][0]).toFixed(1)); c.setAttribute("cy", (w[0] * T[0][1] + w[1] * T[1][1] + w[2] * T[2][1]).toFixed(1));
+    c.setAttribute("r", 2.6 + rnd() * 1.6); c.setAttribute("class", "pl"); pl.appendChild(c);
+  }
+})();
 (function scrollChrome() {
   const prog = $("prog"), top = $("totop"), links = [...document.querySelectorAll("nav.links a")];
   let ticking = false;
