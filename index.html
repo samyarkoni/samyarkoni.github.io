@@ -477,24 +477,63 @@ footer { padding-block: 28px 40px; color: var(--muted); font-size: .85rem; borde
 @media (max-width: 520px) { .nyte-cta { padding: 14px 16px 14px 12px; gap: 12px; } .nyte-cta .ce { width: 46px; height: 42px; } .nyte-cta .ct b { font-size: 1.05rem; } }
 @media (prefers-reduced-motion: reduce) { .nyte-cta, .nyte-pill, .nyte-cta .ce-st, .nyte-pill .ce-st { animation: none; } .nyte-cta:hover { transform: none; } }
 
-/* poker research: faint suits behind, two research questions, a luck demo, then data, approach and progress */
-#poker { position: relative; overflow: hidden; isolation: isolate; }
+/* poker research, dealt as playing cards: a fanned royal flush by the title, suit-cornered panels, a hand of five for the approach, and a real run-it-out demo */
+#poker { position: relative; overflow: hidden; isolation: isolate; --face: #fbf8f1; --face-ink: #0f1b33; --face-red: #b3261e; }
 #poker > .wrap { position: relative; z-index: 1; }
-.suits { position: absolute; inset: 0; z-index: 0; pointer-events: none; color: var(--warm); opacity: .13; }
+.suits { position: absolute; inset: 0; z-index: 0; pointer-events: none; color: var(--warm); opacity: .12; }
 .suits svg { position: absolute; width: clamp(150px, 22vw, 300px); height: auto; fill: none; stroke: currentColor; stroke-width: .3; }
-.suits .s1 { left: -3%; top: -2%; transform: rotate(-14deg); } .suits .s2 { right: 2%; top: 4%; width: clamp(90px, 12vw, 170px); transform: rotate(10deg); }
-.suits .s3 { right: -3%; bottom: 3%; transform: rotate(12deg); } .suits .s4 { left: -2%; bottom: -3%; width: clamp(110px, 15vw, 210px); transform: rotate(-10deg); }
-.sechead .pk-sub { font-family: var(--display); font-style: italic; font-size: 1.15rem; color: var(--ink); margin-top: 6px; }
+.suits .s1 { left: -3%; top: -2%; transform: rotate(-14deg); } .suits .s2 { right: 2%; top: 30%; width: clamp(90px, 12vw, 170px); transform: rotate(10deg); }
+.suits .s3 { right: -3%; bottom: 3%; transform: rotate(12deg); } .suits .s4 { left: -2%; bottom: 30%; width: clamp(110px, 15vw, 210px); transform: rotate(-10deg); }
+/* a playing card */
+.pc { position: relative; display: inline-grid; place-items: center; width: var(--w, 46px); aspect-ratio: 5 / 7; border-radius: calc(var(--w, 46px) * .1); background: var(--face); color: var(--face-ink); box-shadow: 0 1px 0 rgba(15, 27, 51, .08), 0 8px 18px -10px rgba(0, 0, 0, .55); font-family: var(--display); font-weight: 600; line-height: 1; flex: none; }
+.pc.red { color: var(--face-red); }
+.pc .i { position: absolute; left: 9%; top: 7%; display: grid; justify-items: center; font-size: calc(var(--w, 46px) * .26); gap: 1px; }
+.pc .i i { font-style: normal; font-size: .8em; }
+.pc .i.b { left: auto; top: auto; right: 9%; bottom: 7%; transform: rotate(180deg); }
+.pc .pip { font-size: calc(var(--w, 46px) * .5); }
+.pc::after { content: ""; position: absolute; inset: 5%; border-radius: calc(var(--w, 46px) * .06); border: 1px solid rgba(212, 174, 102, .45); pointer-events: none; }
+.pc.back { background: repeating-linear-gradient(45deg, rgba(212, 174, 102, .25) 0 1px, transparent 1px 7px), repeating-linear-gradient(-45deg, rgba(212, 174, 102, .25) 0 1px, transparent 1px 7px), #13224a; }
+.pc.back::after { border-color: rgba(212, 174, 102, .7); }
+.pc.back::before { content: "SY"; font: 700 calc(var(--w, 46px) * .26) var(--display); color: var(--gold); background: #13224a; padding: 2px 3px; border-radius: 3px; position: relative; z-index: 1; }
+/* header: title on the left, a royal flush fanned on the right */
+.pk-head { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 32px; align-items: center; margin-bottom: 30px; }
+.pk-head .sechead { margin-bottom: 0; }
+.pk-head .sechead > div > p:not(.label) { color: var(--muted); margin-top: 14px; max-width: 60ch; }
+.sechead .pk-sub { font-family: var(--display); font-style: italic; font-size: 1.15rem; color: var(--ink) !important; margin-top: 6px !important; }
+.pk-fan { position: relative; height: 210px; }
+.pk-fan .pc { --w: 104px; position: absolute; left: 50%; bottom: 0; margin-left: -52px; transform-origin: 50% 230%; transform: rotate(var(--r)) translateY(var(--y, 0)); transition: transform .9s cubic-bezier(.2, .7, .2, 1); transition-delay: var(--dl, 0ms); }
+.pk-fan:hover .pc { transform: rotate(calc(var(--r) * 1.25)) translateY(var(--y, 0)); transition-delay: 0ms; transition-duration: .45s; }
+.js-anim .pk-fan:not(.in) .pc { transform: rotate(0deg) translateY(30px); }
+.pk-fan .pc:nth-child(5) { box-shadow: 0 1px 0 rgba(15, 27, 51, .08), 0 14px 30px -14px rgba(0, 0, 0, .6), 0 0 0 1px rgba(212, 174, 102, .5); }
+/* panels styled as card faces, a suit in two corners */
 .pk-qs { display: grid; grid-template-columns: 1.2fr 1fr; gap: 20px; align-items: stretch; }
 .pk-qs > * { min-width: 0; }
-.pk-q { background: var(--panel); border: 1px solid var(--rule); border-radius: 4px; padding: 22px; display: flex; flex-direction: column; }
+.pk-q, .pk-data > div { position: relative; background: var(--panel); border: 1px solid var(--rule); border-radius: 12px; padding: 26px 30px; transition: border-color .2s, box-shadow .2s; }
+.pk-q::before, .pk-data > div::before { content: ""; position: absolute; inset: 7px; border: 1px solid color-mix(in srgb, var(--warm) 35%, transparent); border-radius: 8px; pointer-events: none; }
+.pk-q:hover, .pk-data > div:hover { border-color: var(--warm); box-shadow: 0 16px 30px -22px var(--shadow); }
+.pk-corner { position: absolute; left: 14px; top: 12px; font: 600 1rem/1 var(--display); color: var(--ink); display: grid; justify-items: center; gap: 2px; }
+.pk-corner.b { left: auto; top: auto; right: 14px; bottom: 12px; transform: rotate(180deg); }
+.pk-corner.red { color: var(--bad); }
+.pk-q { display: flex; flex-direction: column; padding-top: 30px; }
+.pk-q > .label, .pk-q > h3, .pk-q > p { padding-left: 14px; }
 .pk-q h3 { font-size: 1.2rem; margin-top: 6px; }
 .pk-q > p:not(.label) { color: var(--muted); font-size: .94rem; margin-top: 10px; }
 .pk-hyp { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
 .pk-hyp > div { border-left: 3px solid var(--c); padding: 2px 0 2px 12px; font-size: .88rem; color: var(--muted); }
 .pk-hyp strong { display: block; color: var(--ink); font-weight: 600; font-size: .92rem; }
+/* the run-it-out table */
 .pk-luck { margin-top: 18px; padding-top: 16px; border-top: 1px dashed var(--rule); }
-.pk-eq { display: flex; height: 26px; border-radius: 4px; overflow: hidden; font: 600 .76rem var(--mono); margin-top: 8px; }
+.pk-table { margin-top: 10px; padding: 16px; border-radius: 90px / 60px; background: radial-gradient(ellipse at 50% 40%, #1b3263, #0f1b33 75%); border: 2px solid rgba(212, 174, 102, .55); box-shadow: inset 0 0 0 6px #0b1428, inset 0 0 0 7px rgba(212, 174, 102, .25); display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: center; color: #f3f5fa; }
+.pk-seat { display: grid; justify-items: center; gap: 6px; font-size: .74rem; letter-spacing: .08em; text-transform: uppercase; color: #b3bdd1; }
+.pk-seat b { font: 600 .95rem var(--mono); letter-spacing: 0; color: #f3f5fa; text-transform: none; }
+.pk-seat.win b { color: var(--gold); }
+.pk-hole { display: flex; gap: 4px; }
+.pk-board { display: flex; gap: 5px; justify-content: center; perspective: 600px; }
+.pk-table .pc { --w: 40px; }
+.pk-board .pc { transition: transform .5s cubic-bezier(.3, .7, .2, 1); transform-style: preserve-3d; }
+.pk-board .pc.flip { animation: pkFlip .5s cubic-bezier(.3, .7, .2, 1) both; animation-delay: var(--dl, 0ms); }
+@keyframes pkFlip { 0% { transform: rotateY(90deg) translateY(-6px); } 100% { transform: none; } }
+.pk-eq { display: flex; height: 26px; border-radius: 4px; overflow: hidden; font: 600 .76rem var(--mono); margin-top: 12px; }
 .pk-eq span { display: flex; align-items: center; padding: 0 10px; white-space: nowrap; transition: width .45s cubic-bezier(.2, .7, .2, 1); }
 .pk-eq .you { background: var(--accent); color: var(--paper); }
 .pk-eq .opp { background: var(--accent-soft); color: var(--ink); justify-content: flex-end; flex: 1; }
@@ -518,21 +557,34 @@ footer { padding-block: 28px 40px; color: var(--muted); font-size: .85rem; borde
 .pk-tri text { font: 600 11px var(--body); letter-spacing: .1em; text-transform: uppercase; fill: var(--muted); }
 .pk-cap { font-size: .82rem; color: var(--muted); text-align: center; margin-top: 8px; }
 .pk-data { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
-.pk-data > div { background: var(--panel); border: 1px solid var(--rule); border-radius: 4px; padding: 18px 22px; display: grid; grid-template-columns: auto 1fr; gap: 4px 18px; align-items: baseline; min-width: 0; }
+.pk-data > div { display: grid; grid-template-columns: auto 1fr; gap: 4px 18px; align-items: baseline; min-width: 0; padding-left: 46px; }
 .pk-data strong { font: 600 1.9rem var(--display); color: var(--warm); grid-row: span 2; line-height: 1.1; }
 .pk-data span { font-weight: 600; }
 .pk-data small { color: var(--muted); font-size: .86rem; }
-.pk-cols { display: grid; grid-template-columns: 1.2fr 1fr; gap: 36px; margin-top: 32px; }
+/* the approach, dealt as a hand of five */
+.pk-hand { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px; margin-top: 14px; }
+.pk-step { position: relative; background: var(--face); color: var(--face-ink); border-radius: 12px; padding: 40px 16px 34px; box-shadow: 0 2px 0 rgba(15, 27, 51, .06), 0 18px 30px -22px rgba(0, 0, 0, .6); transition: translate .3s cubic-bezier(.2, .7, .2, 1), box-shadow .3s; }
+.pk-step::after { content: ""; position: absolute; inset: 6px; border: 1px solid rgba(212, 174, 102, .55); border-radius: 8px; pointer-events: none; }
+.js-anim .pk-step[data-reveal] { transition: opacity .7s ease, transform .9s cubic-bezier(.2, .7, .2, 1), translate .3s cubic-bezier(.2, .7, .2, 1), box-shadow .3s; transition-delay: var(--d, 0ms), var(--d, 0ms), 0s, 0s; }
+.pk-step:hover { translate: 0 -6px; box-shadow: 0 2px 0 rgba(15, 27, 51, .06), 0 26px 34px -22px rgba(0, 0, 0, .65); }
+.pk-step .pk-corner { color: var(--face-ink); font-size: .95rem; }
+.pk-step .pk-corner.red { color: var(--face-red); }
+.pk-step strong { display: block; font: 600 1rem/1.25 var(--display); }
+.pk-step p { margin: 8px 0 0; font-size: .84rem; line-height: 1.5; color: #4a5672; }
+.js-anim [data-reveal="deal"] { transform: translate(var(--dx, 0), -60px) rotate(var(--rot, -10deg)) scale(.94); }
+.pk-cols { display: grid; grid-template-columns: 1.6fr 1fr; gap: 36px; margin-top: 36px; }
 .pk-cols > * { min-width: 0; }
 .pk-list { list-style: none; margin: 12px 0 0; padding: 0; }
-.pk-list li { padding: 11px 0; border-top: 1px solid var(--rule); color: var(--muted); font-size: .92rem; }
-.pk-list li strong { color: var(--ink); font-weight: 600; }
-.pk-list.done li { display: grid; grid-template-columns: 20px 1fr; gap: 10px; }
-.pk-list.done li::before { content: "✓"; color: var(--good); font-weight: 700; }
-.pk-tools { margin-top: 16px; font-size: .9rem; color: var(--muted); }
+.pk-list li { padding: 11px 0; border-top: 1px solid var(--rule); color: var(--muted); font-size: .92rem; display: grid; grid-template-columns: 22px 1fr; gap: 10px; }
+.pk-list li::before { content: "✓"; color: var(--good); font-weight: 700; }
+.pk-tools { margin-top: 12px; font-size: .9rem; color: var(--muted); }
 .pk-tools strong { color: var(--ink); font-weight: 600; }
-@media (max-width: 860px) { .pk-qs, .pk-cols, .pk-data { grid-template-columns: 1fr; } .pk-cols { gap: 24px; } }
-@media (max-width: 520px) { .pk-hyp { grid-template-columns: 1fr; } .pk-data > div { grid-template-columns: 1fr; } .pk-data strong { grid-row: auto; } }
+.pk-chips { display: flex; gap: 10px; margin-top: 12px; }
+.pk-chip { width: 76px; height: 76px; border-radius: 50%; display: grid; place-items: center; font: 600 .64rem var(--mono); color: #f3f5fa; background: radial-gradient(circle, var(--cc) 0 46%, transparent 47%), repeating-conic-gradient(var(--cc) 0 22.5deg, #f3f5fa 22.5deg 45deg); box-shadow: inset 0 0 0 3px var(--cc), 0 6px 14px -8px rgba(0, 0, 0, .6); }
+@media (max-width: 1080px) { .pk-hand { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 860px) { .pk-head, .pk-qs, .pk-cols, .pk-data { grid-template-columns: 1fr; } .pk-fan { height: 190px; } .pk-fan .pc { --w: 86px; margin-left: -43px; } .pk-cols { gap: 24px; } .pk-hand { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 520px) { .pk-hyp { grid-template-columns: 1fr; } .pk-data > div { grid-template-columns: 1fr; } .pk-data strong { grid-row: auto; } .pk-hand { grid-template-columns: 1fr; } .pk-q, .pk-data > div { padding: 30px 20px 26px 22px; } .pk-q > .label, .pk-q > h3, .pk-q > p { padding-left: 10px; } .pk-q { padding-top: 46px; } .pk-data > div { padding-left: 40px; } .pk-table { grid-template-columns: 1fr 1fr; border-radius: 40px; padding: 14px; } .pk-board { grid-column: 1 / -1; grid-row: 2; } .pk-table .pc { --w: 38px; } }
+.pk-corner i { font-style: normal; font-size: .85em; }
 
 /* intro: the first visit of a session opens on the SY monogram; streaks of gold light gather into the letters, they flash and lock in, then the name rises into the header as the curtain lifts */
 #syIntro { display: none; }
@@ -940,16 +992,26 @@ try { const h = document.documentElement, nav = performance.getEntriesByType("na
       <svg class="s4" viewBox="0 0 24 24"><circle cx="12" cy="7" r="3.6"/><circle cx="7.6" cy="13" r="3.6"/><circle cx="16.4" cy="13" r="3.6"/><path d="M11 14.5h2l1.2 6.5h-4.4z"/></svg>
     </div>
     <div class="wrap">
-      <div class="sechead">
-        <div>
-          <p class="label">Research in progress · 2026</p>
-          <h2>How poker strategies evolve</h2>
-          <p class="pk-sub">Luck, risk-taking, and survival in online poker</p>
+      <div class="pk-head">
+        <div class="sechead">
+          <div>
+            <p class="label">Research in progress · 2026</p>
+            <h2>How poker strategies evolve</h2>
+            <p class="pk-sub">Luck, risk-taking, and survival in online poker</p>
+            <p>Poker is a natural laboratory for decision-making under risk. Like trading, it involves real money and incomplete information, and in the short run luck dominates results, so skill is hard to tell apart from chance. This project uses millions of real online hands to study how players' strategies change over time: how they react to good and bad luck, and which styles of play survive.</p>
+          </div>
         </div>
-        <p>Poker is a natural laboratory for decision-making under risk. Like trading, it involves real money and incomplete information, and in the short run luck dominates results, so skill is hard to tell apart from chance. This project uses millions of real online hands to study how players' strategies change over time: how they react to good and bad luck, and which styles of play survive.</p>
+        <div class="pk-fan" aria-hidden="true">
+          <span class="pc" style="--r:-20deg;--y:0px;--dl:0ms"><span class="i">10<i>♠</i></span><span class="pip">♠</span><span class="i b">10<i>♠</i></span></span>
+          <span class="pc" style="--r:-10deg;--y:0px;--dl:70ms"><span class="i">J<i>♠</i></span><span class="pip">♠</span><span class="i b">J<i>♠</i></span></span>
+          <span class="pc" style="--r:0deg;--dl:140ms"><span class="i">Q<i>♠</i></span><span class="pip">♠</span><span class="i b">Q<i>♠</i></span></span>
+          <span class="pc" style="--r:10deg;--y:0px;--dl:210ms"><span class="i">K<i>♠</i></span><span class="pip">♠</span><span class="i b">K<i>♠</i></span></span>
+          <span class="pc" style="--r:20deg;--y:0px;--dl:280ms"><span class="i">A<i>♠</i></span><span class="pip">♠</span><span class="i b">A<i>♠</i></span></span>
+        </div>
       </div>
       <div class="pk-qs">
         <article class="pk-q">
+          <span class="pk-corner" aria-hidden="true">1<i>♠</i></span><span class="pk-corner b" aria-hidden="true">1<i>♠</i></span>
           <p class="label">Question 1 · A natural experiment</p>
           <h3>Does bad luck change how people take risks?</h3>
           <p>When two players go all-in, any amount won or lost beyond their expected share is pure luck. We use this as a natural experiment, comparing how players behave after lucky and unlucky outcomes.</p>
@@ -959,8 +1021,13 @@ try { const h = document.documentElement, nav = performance.getEntriesByType("na
           </div>
           <div class="pk-luck" id="pkLuck">
             <p class="label">Try it · how luck is measured</p>
-            <div class="pk-eq" aria-hidden="true"><span class="you" id="pkYou">You 62%</span><span class="opp" id="pkOpp">38%</span></div>
-            <div class="pk-pot"><span>Pot <b>$200</b></span><span>Your expected share <b id="pkExp">$124</b></span></div>
+            <div class="pk-table">
+              <div class="pk-seat" id="pkSeatA">You<div class="pk-hole" id="pkHoleA"></div><b id="pkEqA">–</b></div>
+              <div class="pk-board" id="pkBoard"></div>
+              <div class="pk-seat" id="pkSeatB">Opponent<div class="pk-hole" id="pkHoleB"></div><b id="pkEqB">–</b></div>
+            </div>
+            <div class="pk-eq" aria-hidden="true"><span class="you" id="pkYou">You</span><span class="opp" id="pkOpp"></span></div>
+            <div class="pk-pot"><span>Pot <b>$200</b></span><span>Your expected share <b id="pkExp">–</b></span></div>
             <svg class="pk-strip" viewBox="0 0 400 74" role="img" aria-label="Each dot is one all-in's luck, in dollars; the gold line is the average">
               <line class="axis" x1="0" y1="56" x2="400" y2="56"/><line class="zero" x1="200" y1="4" x2="200" y2="56"/>
               <text x="0" y="70">−$200</text><text x="200" y="70" text-anchor="middle">$0 luck</text><text x="400" y="70" text-anchor="end">+$200</text>
@@ -968,10 +1035,11 @@ try { const h = document.documentElement, nav = performance.getEntriesByType("na
               <line class="mean" id="pkMean" x1="200" y1="4" x2="200" y2="56" style="display:none"/>
             </svg>
             <div class="pk-btns"><button class="btn primary" type="button" id="pkOne">Run it out</button><button class="btn ghost" type="button" id="pkMany">Run 100 all-ins</button></div>
-            <p class="pk-out" id="pkOut" aria-live="polite">Both players are all-in. Deal the rest of the board to see how much of the result is luck.</p>
+            <p class="pk-out" id="pkOut" aria-live="polite">Both players are all-in. Your chance of winning comes from simulating the cards still to come. Run it out to see how much of the result is luck.</p>
           </div>
         </article>
         <article class="pk-q">
+          <span class="pk-corner red" aria-hidden="true">2<i>♥</i></span><span class="pk-corner b red" aria-hidden="true">2<i>♥</i></span>
           <p class="label">Question 2 · Evolutionary game theory</p>
           <h3>Which strategies survive?</h3>
           <p>We group players into strategy types based on how often they fold, call, and raise, and estimate how much each type wins against the others. We then use evolutionary game theory (replicator dynamics) to predict which mix of strategies is stable, and check whether losing styles fade from the player population over time.</p>
@@ -980,28 +1048,31 @@ try { const h = document.documentElement, nav = performance.getEntriesByType("na
         </article>
       </div>
       <div class="pk-data">
-        <div><strong>21.6M</strong><span>No-limit Texas hold'em hands</span><small>From six online poker sites (July 2009), in the University of Toronto's public Poker Hand Histories dataset.</small></div>
-        <div><strong>10,000</strong><span>Hands played by Pluribus</span><small>The AI that beat elite professionals at six-player poker, with every player's cards recorded. A benchmark for near-optimal play.</small></div>
+        <div><span class="pk-corner red" aria-hidden="true">♦</span><strong>21.6M</strong><span>No-limit Texas hold'em hands</span><small>From six online poker sites (July 2009), in the University of Toronto's public Poker Hand Histories dataset.</small></div>
+        <div><span class="pk-corner" aria-hidden="true">♣</span><strong>10,000</strong><span>Hands played by Pluribus</span><small>The AI that beat elite professionals at six-player poker, with every player's cards recorded. A benchmark for near-optimal play.</small></div>
+      </div>
+      <div style="margin-top:40px">
+        <p class="label">Approach · a hand of five</p>
+        <div class="pk-hand">
+          <div class="pk-step" style="--rot:-14deg;--dx:-30px"><span class="pk-corner" aria-hidden="true">A<i>♠</i></span><span class="pk-corner b" aria-hidden="true">A<i>♠</i></span><strong>Strategy profiles</strong><p>Each player's probability of folding, calling, or raising in each situation. We use Bayesian shrinkage so players with few hands aren't overfit, and score the profiles by how well they predict held-out play.</p></div>
+          <div class="pk-step" style="--rot:-7deg;--dx:-15px"><span class="pk-corner red" aria-hidden="true">K<i>♥</i></span><span class="pk-corner b red" aria-hidden="true">K<i>♥</i></span><strong>Luck-adjusted payoffs</strong><p>We simulate the remaining cards to find each player's chance of winning at the moment of an all-in, which separates the expected result from the actual one.</p></div>
+          <div class="pk-step" style="--rot:0deg"><span class="pk-corner" aria-hidden="true">Q<i>♣</i></span><span class="pk-corner b" aria-hidden="true">Q<i>♣</i></span><strong>Performance metrics</strong><p>Win rate in big blinds per 100 hands, volatility, risk-adjusted return, maximum drawdown, skewness, and confidence intervals: the toolkit used to evaluate trading strategies.</p></div>
+          <div class="pk-step" style="--rot:7deg;--dx:15px"><span class="pk-corner red" aria-hidden="true">J<i>♦</i></span><span class="pk-corner b red" aria-hidden="true">J<i>♦</i></span><strong>Causal analysis</strong><p>Regressions of later risk-taking on the size of each luck shock. Risk-taking is measured as bet size relative to stack, share of hands played, aggression, and quitting.</p></div>
+          <div class="pk-step" style="--rot:14deg;--dx:30px"><span class="pk-corner" aria-hidden="true">10<i>♠</i></span><span class="pk-corner b" aria-hidden="true">10<i>♠</i></span><strong>Rigor</strong><p>Pre-registered hypotheses, a held-out final week of data, and corrections for testing many players at once.</p></div>
+        </div>
       </div>
       <div class="pk-cols">
         <div>
-          <p class="label">Approach</p>
-          <ul class="pk-list">
-            <li><strong>Strategy profiles.</strong> Each player's probability of folding, calling, or raising in each situation. We use Bayesian shrinkage so players with few hands aren't overfit, and score the profiles by how well they predict held-out play.</li>
-            <li><strong>Luck-adjusted payoffs.</strong> We simulate the remaining cards to find each player's chance of winning at the moment of an all-in, which separates the expected result from the actual one.</li>
-            <li><strong>Performance metrics.</strong> Win rate in big blinds per 100 hands, volatility, risk-adjusted return, maximum drawdown, skewness, and confidence intervals: the toolkit used to evaluate trading strategies.</li>
-            <li><strong>Causal analysis.</strong> Regressions of later risk-taking on the size of each luck shock. Risk-taking is measured as bet size relative to stack, share of hands played, aggression, and quitting.</li>
-            <li><strong>Rigor.</strong> Pre-registered hypotheses, a held-out final week of data, and corrections for testing many players at once.</li>
-          </ul>
-        </div>
-        <div>
           <p class="label">Progress so far</p>
-          <ul class="pk-list done">
+          <ul class="pk-list">
             <li><span>Confirmed that anonymized player IDs stay consistent across the three weeks, so individual players can be tracked over time.</span></li>
             <li><span>Built a pipeline that converts raw hand histories into one row per decision, recording pot size, bet size, position, and pressure from the rest of the table. For example, 1,000 hands produced 8,021 decisions.</span></li>
             <li><span>Found that the dataset's built-in “winnings” field is zero in about 75% of hands in a 30,000-hand sample, so we recompute each player's result by replaying every hand.</span></li>
           </ul>
-          <p class="pk-tools"><strong>Tools:</strong> Python, PokerKit</p>
+        </div>
+        <div>
+          <p class="label">Tools</p>
+          <div class="pk-chips"><span class="pk-chip" style="--cc:#1d3a78">Python</span><span class="pk-chip" style="--cc:#a8792b">PokerKit</span></div>
         </div>
       </div>
     </div>
@@ -1537,7 +1608,7 @@ matchMedia("(prefers-color-scheme: dark)").addEventListener("change", drawSample
 const REVEALS = [
   [".hero .who", "zoom"], [".hero h1", "up", 80], [".hero .lede", "up", 160], [".hero .rotator", "up", 220],
   [".hero .stats > div", "up", 260, 90], [".hero .cta", "up", 480], [".hero .sampler", "right", 200],
-  [".sechead", "up"], [".qroute", "up", 80], [".steps li", "left", 0, 110, 5], [".finding", "right", 120], [".split", "up", 0, 140], [".proj", "zoom", 0, 90], [".lab > div:first-child", "left"], [".lab > div:last-child", "right", 120], [".pk-q", "up", 0, 120], [".pk-data > div", "up", 0, 90], [".pk-cols > div", "up", 0, 120],
+  [".sechead", "up"], [".qroute", "up", 80], [".steps li", "left", 0, 110, 5], [".finding", "right", 120], [".split", "up", 0, 140], [".proj", "zoom", 0, 90], [".lab > div:first-child", "left"], [".lab > div:last-child", "right", 120], [".pk-fan", "fan"], [".pk-q", "up", 0, 120], [".pk-data > div", "up", 0, 90], [".pk-step", "deal", 0, 90, 5], [".pk-cols > div", "up", 0, 120],
   [".role", "left", 0, 110], [".edu", "left"], ["#skills .two > div:last-child", "right", 120],
   [".nyte-text", "left"], [".phone", "zoom", 150], [".about-text", "left"], [".threads li", "right", 0, 90, 5], [".lead-row", "up"], [".hacks figure", "up", 0, 90, 4], [".tile", "zoom", 0, 70, 4], [".langs", "up"], ["section.block:not([id]) h2", "up"], [".contact > div:first-child", "left"], [".citem", "right", 0, 90]
 ];
@@ -1552,37 +1623,89 @@ function applyReveals() {
     });
   });
 }
-/* Poker: run out all-ins to show luck as result minus expected share; it averages to zero, which is why it works like random assignment */
+/* Poker: deal two hands, simulate the board to get each player's chance of winning, then run it out.
+   Luck is the result minus the expected share; it averages to zero, which is why it works like random assignment. */
 (function pokerLuck() {
   const one = $("pkOne"); if (!one) return;
+  const RANKS = "23456789TJQKA", SUITS = "♠♥♦♣", NAMES = ["Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Jack", "Queen", "King", "Ace"], SN = ["spades", "hearts", "diamonds", "clubs"];
+  const straightHi = mask => { for (let h = 12; h >= 3; h--) { const need = h === 3 ? 0b1111 | 1 << 12 : 0b11111 << (h - 4); if ((mask & need) === need) return h; } return -1; };
+  const enc = rs => rs.reduce((a, r) => a * 13 + r, 0);
+  /* best 7-card hand as one comparable number; card = rank * 4 + suit */
+  function score(cs) {
+    const rc = new Array(13).fill(0), sc = [0, 0, 0, 0], sm = [0, 0, 0, 0]; let m = 0, flush = -1;
+    for (const c of cs) { const r = c >> 2, s = c & 3; rc[r]++; sc[s]++; sm[s] |= 1 << r; m |= 1 << r; }
+    for (let s = 0; s < 4; s++) if (sc[s] >= 5) { const h = straightHi(sm[s]); if (h >= 0) return 8e6 + h; flush = s; }
+    let q = -1; const t = [], p = [];
+    for (let r = 12; r >= 0; r--) { if (rc[r] === 4) q = r; else if (rc[r] === 3) t.push(r); else if (rc[r] === 2) p.push(r); }
+    const kick = (ex, n) => { const o = []; for (let r = 12; r >= 0 && o.length < n; r--) if (rc[r] && !ex.includes(r)) o.push(r); return o; };
+    if (q >= 0) return 7e6 + q * 13 + kick([q], 1)[0];
+    if (t.length && (t.length > 1 || p.length)) return 6e6 + t[0] * 13 + (t.length > 1 ? Math.max(t[1], p.length ? p[0] : -1) : p[0]);
+    if (flush >= 0) { const o = []; for (let r = 12; r >= 0 && o.length < 5; r--) if (sm[flush] >> r & 1) o.push(r); return 5e6 + enc(o); }
+    const sh = straightHi(m); if (sh >= 0) return 4e6 + sh;
+    if (t.length) return 3e6 + t[0] * 169 + enc(kick([t[0]], 2));
+    if (p.length >= 2) return 2e6 + p[0] * 169 + p[1] * 13 + kick([p[0], p[1]], 1)[0];
+    if (p.length) return 1e6 + p[0] * 2197 + enc(kick([p[0]], 3));
+    return enc(kick([], 5));
+  }
+  const shuffle = (d, n) => { for (let j = 0; j < n; j++) { const k = j + Math.floor(Math.random() * (d.length - j)); [d[j], d[k]] = [d[k], d[j]]; } return d; };
+  const versus = (a, b, bd) => { const x = score([...a, ...bd]), y = score([...b, ...bd]); return x > y ? 1 : x === y ? .5 : 0; };
+  function hand(sims) {
+    const d = shuffle([...Array(52).keys()], 9), a = d.slice(0, 2), b = d.slice(2, 4), board = d.slice(4, 9), rest = d.slice(4);
+    let w = 0; for (let i = 0; i < sims; i++) w += versus(a, b, shuffle(rest, 5).slice(0, 5));
+    return { a, b, board, eq: w / sims, res: versus(a, b, board) };
+  }
+  const card = c => { const r = c >> 2, s = c & 3, k = RANKS[r] === "T" ? "10" : RANKS[r];
+    return `<span class="pc${s === 1 || s === 2 ? " red" : ""}" role="img" aria-label="${NAMES[r]} of ${SN[s]}"><span class="i">${k}<i>${SUITS[s]}</i></span><span class="pip">${SUITS[s]}</span></span>`; };
+  const back = () => `<span class="pc back" aria-hidden="true"></span>`;
   const dots = $("pkDots"), mean = $("pkMean"), out = $("pkOut"), NS = "http://www.w3.org/2000/svg", POT = 200;
   const money = v => (v < 0 ? "−$" : "+$") + Math.abs(Math.round(v));
-  let n = 0, sum = 0;
-  const deal = () => {
-    const eq = Math.round(20 + Math.random() * 60) / 100, exp = eq * POT, win = Math.random() < eq, luck = (win ? POT : 0) - exp;
-    n++; sum += luck;
+  let n = 0, sum = 0, cur = null, shown = false, busy = false;
+  const seat = h => {
+    $("pkHoleA").innerHTML = h.a.map(card).join(""); $("pkHoleB").innerHTML = h.b.map(card).join("");
+    const pa = Math.round(h.eq * 100);
+    $("pkEqA").textContent = pa + "%"; $("pkEqB").textContent = 100 - pa + "%";
+    $("pkYou").style.width = Math.max(14, Math.min(86, pa)) + "%"; $("pkYou").textContent = `You ${pa}%`; $("pkOpp").textContent = `${100 - pa}%`;
+    $("pkExp").textContent = "$" + Math.round(h.eq * POT);
+    $("pkSeatA").classList.remove("win"); $("pkSeatB").classList.remove("win");
+  };
+  const plot = h => {
+    const luck = h.res * POT - h.eq * POT; n++; sum += luck;
     const c = document.createElementNS(NS, "circle");
     c.setAttribute("cx", (200 + luck).toFixed(1)); c.setAttribute("cy", (12 + Math.random() * 38).toFixed(1)); c.setAttribute("r", 3);
     dots.appendChild(c); while (dots.childNodes.length > 300) dots.firstChild.remove();
-    return { eq, exp, win, luck };
+    return luck;
   };
-  const show = (r, many) => {
-    $("pkYou").style.width = r.eq * 100 + "%"; $("pkYou").textContent = `You ${Math.round(r.eq * 100)}%`; $("pkOpp").textContent = `${100 - Math.round(r.eq * 100)}%`;
-    $("pkExp").textContent = "$" + Math.round(r.exp);
+  const report = (h, luck, many) => {
     dots.querySelectorAll(".new").forEach(c => c.classList.remove("new")); dots.lastChild.classList.add("new");
+    if (h.res === 1) $("pkSeatA").classList.add("win"); else if (h.res === 0) $("pkSeatB").classList.add("win");
     const avg = sum / n; mean.style.display = ""; mean.style.transform = `translateX(${avg}px)`;
-    const last = `${r.win ? "You won the pot" : "You lost the pot"}: <b class="${r.luck >= 0 ? "up" : "down"}">${money(r.luck)}</b> of luck.`;
-    out.innerHTML = (many ? `Last of ${n} all-ins. ` : "") + last + ` Average luck over ${n} all-in${n > 1 ? "s" : ""}: <b>${money(avg)}</b>${n >= 50 ? ", close to zero, so it acts like a coin flip assigned at random." : "."}`;
+    const what = h.res === 1 ? "You won the pot" : h.res === 0 ? "You lost the pot" : "You split the pot";
+    out.innerHTML = (many ? `Last of ${n} all-ins. ` : "") + `${what} with a ${Math.round(h.eq * 100)}% chance: <b class="${luck >= 0 ? "up" : "down"}">${money(luck)}</b> of luck. Average luck over ${n} all-in${n > 1 ? "s" : ""}: <b>${money(avg)}</b>${n >= 50 ? ", close to zero, so it acts like a coin flip assigned at random." : "."}`;
   };
-  one.addEventListener("click", () => show(deal(), false));
-  $("pkMany").addEventListener("click", () => { let r; for (let i = 0; i < 100; i++) r = deal(); show(r, true); });
+  const runOut = (h, instant) => {
+    const b = $("pkBoard"); b.innerHTML = h.board.map(card).join("");
+    if (!instant) [...b.children].forEach((el, i) => { el.style.setProperty("--dl", (i < 3 ? i * 90 : i === 3 ? 650 : 1100) + "ms"); el.classList.add("flip"); });
+    shown = true;
+  };
+  const fresh = () => { cur = hand(3000); seat(cur); $("pkBoard").innerHTML = [0, 0, 0, 0, 0].map(back).join(""); shown = false; };
+  one.addEventListener("click", () => {
+    if (busy) return; busy = true;
+    const go = () => { runOut(cur, reduced); const h = cur; setTimeout(() => { report(h, plot(h), false); busy = false; }, reduced ? 0 : 1500); };
+    if (shown) { fresh(); setTimeout(go, reduced ? 0 : 450); } else go();
+  });
+  $("pkMany").addEventListener("click", () => {
+    if (busy) return;
+    let h; for (let i = 0; i < 100; i++) { h = hand(400); plot(h); }
+    cur = h; seat(h); runOut(h, true); report(h, h.res * POT - h.eq * POT, true);
+  });
+  fresh();
   /* strategy triangle: a seeded scatter of example players, fold/call/raise mixes */
   let s = 11; const rnd = () => (s = (s * 16807) % 2147483647) / 2147483647, pl = $("pkPl");
   const T = [[20, 226], [280, 226], [150, 22]];
   for (let i = 0; i < 70; i++) {
     const cl = [[.62, .28, .1], [.3, .55, .15], [.35, .25, .4]][i % 3];
     let w = cl.map(v => Math.max(.02, v + (rnd() - .5) * .3)); const t = w[0] + w[1] + w[2]; w = w.map(v => v / t);
-    const c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    const c = document.createElementNS(NS, "circle");
     c.setAttribute("cx", (w[0] * T[0][0] + w[1] * T[1][0] + w[2] * T[2][0]).toFixed(1)); c.setAttribute("cy", (w[0] * T[0][1] + w[1] * T[1][1] + w[2] * T[2][1]).toFixed(1));
     c.setAttribute("r", 2.6 + rnd() * 1.6); c.setAttribute("class", "pl"); pl.appendChild(c);
   }
